@@ -1,9 +1,19 @@
 extern crate iron;
+extern crate router;
+extern crate staticfile;
+extern crate mount;
 extern crate time;
 
+use std::path::Path;
 use iron::prelude::*;
+use iron::status;
+use staticfile::Static;
+use mount::Mount;
+
 use iron::{BeforeMiddleware, AfterMiddleware, typemap};
 use time::precise_time_ns;
+
+use router::Router;
 
 struct ResponseTime;
 
@@ -29,8 +39,17 @@ fn hello_world(_: &mut Request) -> IronResult<Response> {
 }
 
 fn main() {
-    let mut chain = Chain::new(hello_world);
-    chain.link_before(ResponseTime);
-    chain.link_after(ResponseTime);
-    Iron::new(chain).http("localhost:3000").unwrap();
+    let mut mount = Mount::new();
+    mount.mount("/abi", Static::new(Path::new("index.html")));
+
+    let mut router = Router::new();
+    router.get("/abi/:query", handler, "query");
+
+    fn handler(req: &mut Request) -> IronResult<Response> {
+        let ref query = req.extensions.get::<Router>().unwrap().find("query").unwrap_or("/");
+        // Ok(Response::with((status::Ok, *query)))
+        Ok(Response::with((status::Ok, "nyan")))
+    }
+
+    Iron::new(mount).http("localhost:3000").unwrap();
 }
