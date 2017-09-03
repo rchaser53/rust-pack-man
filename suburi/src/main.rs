@@ -4,6 +4,7 @@ use std::process;
 use sdl2::rect::{Rect};
 use sdl2::event::{Event};
 use sdl2::keyboard::Keycode;
+use sdl2::messagebox;
 
 fn main() {
     let ctx = sdl2::init().unwrap();
@@ -26,6 +27,13 @@ fn main() {
         };
 
     let mut rect = Rect::new(10, 10, 10, 10);
+
+    let mut nyanChu = messagebox::show_simple_message_box(
+        sdl2::messagebox::MESSAGEBOX_ERROR,
+        "title",
+        "message",
+        None
+    );
 
     let black = sdl2::pixels::Color::RGB(0, 0, 0);
     let white = sdl2::pixels::Color::RGB(255, 255, 255);
