@@ -11,6 +11,11 @@ version = "0.7.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 
 [[package]]
+name = "c_vec"
+version = "1.0.12"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+
+[[package]]
 name = "conv"
 version = "0.3.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -97,6 +102,7 @@ version = "0.29.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
  "bitflags 0.7.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "c_vec 1.0.12 (registry+https://github.com/rust-lang/crates.io-index)",
  "lazy_static 0.2.8 (registry+https://github.com/rust-lang/crates.io-index)",
  "libc 0.2.30 (registry+https://github.com/rust-lang/crates.io-index)",
  "num 0.1.40 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -114,6 +120,7 @@ dependencies = [
 
 [metadata]
 "checksum bitflags 0.7.0 (registry+https://github.com/rust-lang/crates.io-index)" = "aad18937a628ec6abcd26d1489012cc0e18c21798210f491af69ded9b881106d"
+"checksum c_vec 1.0.12 (registry+https://github.com/rust-lang/crates.io-index)" = "aa9e1d9f7d49e289f36f19effbf3d5a5e30163ecf9c7a3c9be94d5374dec5b9a"
 "checksum conv 0.3.3 (registry+https://github.com/rust-lang/crates.io-index)" = "78ff10625fd0ac447827aa30ea8b861fead473bb60aeb73af6c1c58caf0d1299"
 "checksum custom_derive 0.1.7 (registry+https://github.com/rust-lang/crates.io-index)" = "ef8ae57c4978a2acd8b869ce6b9ca1dfe817bff704c220209fdef2c0b75a01b9"
 "checksum lazy_static 0.2.8 (registry+https://github.com/rust-lang/crates.io-index)" = "3b37545ab726dd833ec6420aaba8231c5b320814b9029ad585555d2a03e94fbf"
