@@ -69,6 +69,7 @@ fn main() {
         let _ = renderer.clear();
         let _ = renderer.set_draw_color(white);
         let _ = renderer.fill_rect(rect);
+        let _ = renderer.filled_circle(100, 200, 50, white);
         let _ = renderer.present();
     };
 
