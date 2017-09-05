@@ -10,6 +10,22 @@ use sdl2::gfx::primitives::DrawRenderer;
 pub mod messagebox;
 use messagebox::showMessage;
 
+struct CirclePosition {
+    x: i16,
+    y: i16,
+    color: sdl2::pixels::Color
+}
+
+impl CirclePosition {
+    pub fn movePosition(&self, renderer: &sdl2::render::Renderer) -> std::result::Result<(), String> {
+      return renderer.filled_circle(self.x, self.y, 50, self.color);
+    }
+
+    pub fn setX(&mut self, x: i16) -> () {
+        self.x += x;
+    }
+}
+
 fn createWindow(video_ctx: sdl2::VideoSubsystem , width: u32, height: u32) -> video::Window {
     return match video_ctx
         .window("rust_to_js", width, height)
@@ -40,7 +56,13 @@ fn main() {
 
     let mut events = ctx.event_pump().unwrap();
 
-    let mut circle = renderer.circle(100, 200, 50, black);
+    let mut circlePosition = CirclePosition{
+        x: 100, y:200, color: white
+    };
+    circlePosition.movePosition(&renderer);
+
+
+    // let mut circle = renderer.circle(100, 200, 50, black);
 
     let mut main_loop = || {
         for event in events.poll_iter() {
@@ -69,7 +91,11 @@ fn main() {
         let _ = renderer.clear();
         let _ = renderer.set_draw_color(white);
         let _ = renderer.fill_rect(rect);
-        let _ = renderer.filled_circle(100, 200, 50, white);
+        // let _ = renderer.filled_circle(100, 200, 50, white);
+        let _ = circlePosition.movePosition(&renderer);
+        circlePosition.setX(200);
+
+        let _ = circlePosition.movePosition(&renderer);
         let _ = renderer.present();
     };
 
