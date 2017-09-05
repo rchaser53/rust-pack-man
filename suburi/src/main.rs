@@ -18,11 +18,11 @@ struct CirclePosition {
 
 impl CirclePosition {
     pub fn movePosition(&self, renderer: &sdl2::render::Renderer) -> std::result::Result<(), String> {
-      return renderer.filled_circle(self.x, self.y, 50, self.color);
+      return renderer.aa_circle(self.x, self.y, 50, self.color);
     }
 
     pub fn setX(&mut self, x: i16) -> () {
-        self.x += x;
+        self.x = x;
     }
 }
 
@@ -57,12 +57,8 @@ fn main() {
     let mut events = ctx.event_pump().unwrap();
 
     let mut circlePosition = CirclePosition{
-        x: 100, y:200, color: white
+        x: 300, y:200, color: white
     };
-    circlePosition.movePosition(&renderer);
-
-
-    // let mut circle = renderer.circle(100, 200, 50, black);
 
     let mut main_loop = || {
         for event in events.poll_iter() {
@@ -72,10 +68,10 @@ fn main() {
                     process::exit(1);
                 },
                 Event::KeyDown { keycode: Some(Keycode::Left), ..} => {
-                    showMessage("nyanTitle", "pyaaMessage");
+                    let _ = circlePosition.setX(100);
                 },
                 Event::KeyDown { keycode: Some(Keycode::Right), ..} => {
-                    rect.x += 10;
+                    let _ = circlePosition.setX(500);
                 },
                 Event::KeyDown { keycode: Some(Keycode::Up), ..} => {
                     rect.y -= 10;
@@ -91,10 +87,6 @@ fn main() {
         let _ = renderer.clear();
         let _ = renderer.set_draw_color(white);
         let _ = renderer.fill_rect(rect);
-        // let _ = renderer.filled_circle(100, 200, 50, white);
-        let _ = circlePosition.movePosition(&renderer);
-        circlePosition.setX(200);
-
         let _ = circlePosition.movePosition(&renderer);
         let _ = renderer.present();
     };
