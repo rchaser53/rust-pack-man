@@ -11,26 +11,8 @@ use sdl2::gfx::primitives::DrawRenderer;
 pub mod messagebox;
 use messagebox::showMessage;
 
-struct CirclePosition {
-    x: i16,
-    y: i16,
-    radius: i16,
-    color: sdl2::pixels::Color
-}
-
-impl CirclePosition {
-    pub fn movePosition(&self, renderer: &sdl2::render::Renderer) -> std::result::Result<(), String> {
-      return renderer.filled_pie(self.x, self.y, 50, self.radius, 0, self.color);
-    }
-
-    pub fn setX(&mut self, x: i16) -> () {
-        self.x = x;
-    }
-
-    pub fn addRadius(&mut self, radius: i16) -> () {
-        self.radius += radius;
-    }
-}
+pub mod circle;
+use circle::CirclePosition;
 
 fn createWindow(video_ctx: sdl2::VideoSubsystem , width: u32, height: u32) -> video::Window {
     return match video_ctx
