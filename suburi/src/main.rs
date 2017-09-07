@@ -1,5 +1,6 @@
 extern crate sdl2;
 
+use std::{thread, time};
 use std::process;
 use sdl2::video;
 use sdl2::rect::{Rect};
@@ -13,16 +14,21 @@ use messagebox::showMessage;
 struct CirclePosition {
     x: i16,
     y: i16,
+    radius: i16,
     color: sdl2::pixels::Color
 }
 
 impl CirclePosition {
     pub fn movePosition(&self, renderer: &sdl2::render::Renderer) -> std::result::Result<(), String> {
-      return renderer.aa_circle(self.x, self.y, 50, self.color);
+      return renderer.filled_pie(self.x, self.y, 50, self.radius, 0, self.color);
     }
 
     pub fn setX(&mut self, x: i16) -> () {
         self.x = x;
+    }
+
+    pub fn addRadius(&mut self, radius: i16) -> () {
+        self.radius += radius;
     }
 }
 
@@ -57,10 +63,14 @@ fn main() {
     let mut events = ctx.event_pump().unwrap();
 
     let mut circlePosition = CirclePosition{
-        x: 300, y:200, color: white
+        x: 300, y:200, color: white, radius: 0
     };
 
+    let fifty_millis = time::Duration::from_millis(50);
+
     let mut main_loop = || {
+        thread::sleep(fifty_millis);
+        let _ = circlePosition.addRadius(10);
         for event in events.poll_iter() {
             match event {
                 Event::Quit {..} | Event::KeyDown {keycode: Some(Keycode::Escape), ..} => {
@@ -92,4 +102,5 @@ fn main() {
     };
 
     loop { main_loop(); }
+    loop { }
 }
