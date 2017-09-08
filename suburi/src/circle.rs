@@ -14,10 +14,6 @@ impl CirclePosition {
       return renderer.filled_pie(self.x, self.y, 50, self.radius, 0, self.color);
     }
 
-    pub fn setX(&mut self, x: i16) -> () {
-        self.x = x;
-    }
-
     pub fn addRadius(&mut self, radius: i16) -> () {
         self.radius += radius;
     }

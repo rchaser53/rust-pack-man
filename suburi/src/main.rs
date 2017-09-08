@@ -37,8 +37,6 @@ fn main() {
                                     Err(err) => panic!("failed to create renderer: {}", err)
                                 };
 
-    let mut rect = Rect::new(10, 10, 10, 10);
-
     let black = sdl2::pixels::Color::RGB(0, 0, 0);
     let white = sdl2::pixels::Color::RGB(255, 255, 255);
 
@@ -47,42 +45,38 @@ fn main() {
     let mut circlePosition = CirclePosition{
         x: 300, y:200, color: white, radius: 0
     };
-
     let fifty_millis = time::Duration::from_millis(50);
 
     let mut main_loop = || {
         thread::sleep(fifty_millis);
         let _ = circlePosition.addRadius(10);
+
         for event in events.poll_iter() {
             match event {
                 Event::Quit {..} | Event::KeyDown {keycode: Some(Keycode::Escape), ..} => {
-                    println!("nya-n");
                     process::exit(1);
                 },
                 Event::KeyDown { keycode: Some(Keycode::Left), ..} => {
-                    let _ = circlePosition.setX(100);
+                    circlePosition.x -= 10;
                 },
                 Event::KeyDown { keycode: Some(Keycode::Right), ..} => {
-                    let _ = circlePosition.setX(500);
+                    circlePosition.x += 10;
                 },
                 Event::KeyDown { keycode: Some(Keycode::Up), ..} => {
-                    rect.y -= 10;
+                    circlePosition.y -= 10;
                 },
                 Event::KeyDown { keycode: Some(Keycode::Down), ..} => {
-                    rect.y += 10;
+                    circlePosition.y += 10;
                 },
                 _ => {}
             }
         }
-
         let _ = renderer.set_draw_color(black);
         let _ = renderer.clear();
         let _ = renderer.set_draw_color(white);
-        let _ = renderer.fill_rect(rect);
         let _ = circlePosition.movePosition(&renderer);
         let _ = renderer.present();
     };
 
     loop { main_loop(); }
-    loop { }
 }
