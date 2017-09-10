@@ -11,10 +11,14 @@ pub struct CirclePosition {
 
 impl CirclePosition {
     pub fn movePosition(&self, renderer: &sdl2::render::Renderer) -> std::result::Result<(), String> {
-      return renderer.filled_pie(self.x, self.y, 50, self.radius, 0, self.color);
+      return renderer.filled_pie(self.x, self.y, 50, self.radius, 10, self.color);
     }
 
-    pub fn addRadius(&mut self, radius: i16) -> () {
-        self.radius += radius;
+    pub fn isFullOpenMouth(&mut self) -> bool {
+        return 80 <= self.radius;
+    }
+
+    pub fn isClosedMouth(&mut self) -> bool {
+        return self.radius <= 20;
     }
 }
