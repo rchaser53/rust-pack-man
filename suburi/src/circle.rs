@@ -6,7 +6,8 @@ pub struct CirclePosition {
     pub x: i16,
     pub y: i16,
     pub radius: i16,
-    pub color: sdl2::pixels::Color
+    pub color: sdl2::pixels::Color,
+    pub isOpeningMouth: bool
 }
 
 impl CirclePosition {
@@ -20,5 +21,17 @@ impl CirclePosition {
 
     pub fn isClosedMouth(&mut self) -> bool {
         return self.radius <= 20;
+    }
+
+    pub fn moveMouth(&mut self) -> () {
+        if (self.isOpeningMouth) {
+            self.radius += 10;
+        } else {
+            self.radius -= 10;
+        }
+
+        if (self.isFullOpenMouth() || self.isClosedMouth()) {
+            self.isOpeningMouth = !self.isOpeningMouth;
+        }
     }
 }

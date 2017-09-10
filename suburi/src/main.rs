@@ -43,23 +43,14 @@ fn main() {
     let mut events = ctx.event_pump().unwrap();
 
     let mut circlePosition = CirclePosition{
-        x: 300, y:200, color: white, radius: 30
+        x: 300, y:200, color: white,
+        radius: 30, isOpeningMouth: true
     };
     let fifty_millis = time::Duration::from_millis(50);
-    let mut flag = true;
 
     let mut main_loop = || {
         thread::sleep(fifty_millis);
-
-        if (flag) {
-            circlePosition.radius += 10;
-        } else {
-            circlePosition.radius -= 10;
-        }
-
-        if (circlePosition.isFullOpenMouth() || circlePosition.isClosedMouth()) {
-            flag = !flag;
-        }
+        circlePosition.moveMouth();
 
         for event in events.poll_iter() {
             match event {
