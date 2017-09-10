@@ -6,4 +6,4 @@ version = "0.1.0"
 [dependencies.sdl2]
 version = "0.29"
 default-features = false
-features = ["gfx"]
+features = ["gfx", "image"]
