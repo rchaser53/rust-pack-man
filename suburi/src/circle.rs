@@ -11,8 +11,8 @@ pub struct CirclePosition {
 }
 
 impl CirclePosition {
-    pub fn movePosition(&self, renderer: &sdl2::render::Canvas<Self>) -> std::result::Result<(), String> {
-      return renderer.filled_pie(self.x, self.y, 50, self.radius, 10, self.color);
+    pub fn movePosition(&self, renderer: &sdl2::render::Canvas<sdl2::video::Window>) -> () {
+      renderer.filled_pie(self.x, self.y, 50, self.radius, 10, self.color);
     }
 
     pub fn isFullOpenMouth(&mut self) -> bool {
