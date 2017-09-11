@@ -75,9 +75,10 @@ fn main() {
         canvas.clear();
         canvas.set_draw_color(white);
         canvas.copy(&texture, None, None).expect("Render failed");
-        canvas.filled_pie(circlePosition.x, circlePosition.y, 50, circlePosition.radius, 10, circlePosition.color);
-
         circlePosition.movePosition(&canvas);
+
+        canvas.copy_ex(&texture, None,
+                         Some(Rect::new(50, 50, 50, 50)), 30.0, None, false, false).unwrap();
 
         canvas.present();
     };
