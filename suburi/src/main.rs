@@ -31,10 +31,11 @@ impl AudioCallback for Sound {
             *dst = (*self.data.get(self.pos).unwrap_or(&0) as f32 * self.volume) as u8;
             self.pos += 1;
         }
+        self.pos = 0;
     }
 }
 
-fn createDeviceMusic(audio_subsystem: &sdl2::AudioSubsystem) -> sdl2::audio::AudioDevice<Sound> {
+fn createDeviceMusic(audio_subsystem: &sdl2::AudioSubsystem, pos: usize) -> sdl2::audio::AudioDevice<Sound> {
     let wav_file : Cow<'static, Path> = match std::env::args().nth(1) {
         None => Cow::from(Path::new("./sine.wav")),
         Some(s) => Cow::from(PathBuf::from(s))
@@ -61,7 +62,7 @@ fn createDeviceMusic(audio_subsystem: &sdl2::AudioSubsystem) -> sdl2::audio::Aud
         Sound {
             data: data,
             volume: 0.25,
-            pos: 0,
+            pos: 0
         }
     }).unwrap();
 }
@@ -95,7 +96,7 @@ fn main() {
         color: white, isOpeningMouth: true
     };
 
-    let device = createDeviceMusic(&audio_subsystem);
+    let mut device = createDeviceMusic(&audio_subsystem);
 
     let fifty_millis = time::Duration::from_millis(50);
     let mut main_loop = || {
@@ -103,6 +104,7 @@ fn main() {
         circlePosition.moveMouth();
 
         for event in events.poll_iter() {
+            device.pause();
             match event {
                 Event::Quit {..} | Event::KeyDown {keycode: Some(Keycode::Escape), ..} => {
                     process::exit(1);
@@ -115,14 +117,17 @@ fn main() {
                 Event::KeyDown { keycode: Some(Keycode::Right), ..} => {
                     circlePosition.x += 10;
                     circlePosition.direction = Direction::east as i16;
+                    device.resume();
                 },
                 Event::KeyDown { keycode: Some(Keycode::Up), ..} => {
                     circlePosition.y -= 10;
                     circlePosition.direction = Direction::north as i16;
+                    device.resume();
                 },
                 Event::KeyDown { keycode: Some(Keycode::Down), ..} => {
                     circlePosition.y += 10;
                     circlePosition.direction = Direction::south as i16;
+                    device.resume();
                 },
                 _ => {}
             }
