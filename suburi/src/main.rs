@@ -15,6 +15,7 @@ use messagebox::showMessage;
 
 pub mod circle;
 use circle::CirclePosition;
+use circle::Direction;
 
 fn createWindow(video_ctx: sdl2::VideoSubsystem , width: u32, height: u32) -> video::Window {
     return video_ctx
@@ -42,11 +43,11 @@ fn main() {
     let mut events = ctx.event_pump().unwrap();
 
     let mut circlePosition = CirclePosition{
-        x: 300, y:200, color: white,
-        radius: 30, isOpeningMouth: true
+        x: 300, y:200, direction: Direction::east as i16, radius: 30,
+        color: white, isOpeningMouth: true
     };
-    let fifty_millis = time::Duration::from_millis(50);
 
+    let fifty_millis = time::Duration::from_millis(50);
     let mut main_loop = || {
         thread::sleep(fifty_millis);
         circlePosition.moveMouth();
@@ -58,15 +59,19 @@ fn main() {
                 },
                 Event::KeyDown { keycode: Some(Keycode::Left), ..} => {
                     circlePosition.x -= 10;
+                    circlePosition.direction = Direction::west as i16;
                 },
                 Event::KeyDown { keycode: Some(Keycode::Right), ..} => {
                     circlePosition.x += 10;
+                    circlePosition.direction = Direction::east as i16;
                 },
                 Event::KeyDown { keycode: Some(Keycode::Up), ..} => {
                     circlePosition.y -= 10;
+                    circlePosition.direction = Direction::north as i16;
                 },
                 Event::KeyDown { keycode: Some(Keycode::Down), ..} => {
                     circlePosition.y += 10;
+                    circlePosition.direction = Direction::south as i16;
                 },
                 _ => {}
             }
@@ -74,11 +79,11 @@ fn main() {
         canvas.set_draw_color(black);
         canvas.clear();
         canvas.set_draw_color(white);
-        canvas.copy(&texture, None, None).expect("Render failed");
+        // canvas.copy(&texture, None, None).expect("Render failed");
         circlePosition.movePosition(&canvas);
 
-        canvas.copy_ex(&texture, None,
-                         Some(Rect::new(50, 50, 50, 50)), 30.0, None, false, false).unwrap();
+        // canvas.copy_ex(&texture, None,
+        //                  Some(Rect::new(50, 50, 50, 50)), 30.0, None, false, false).unwrap();
 
         canvas.present();
     };
