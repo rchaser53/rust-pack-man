@@ -24,9 +24,9 @@ impl AudioCallback for Sound {
     }
 }
 
-pub fn createDeviceMusic(audio_subsystem: &sdl2::AudioSubsystem) -> sdl2::audio::AudioDevice<Sound> {
+pub fn createDeviceMusic(audio_subsystem: &sdl2::AudioSubsystem, path: &'static Path) -> sdl2::audio::AudioDevice<Sound> {
     let wav_file: Cow<'static, Path> = match std::env::args().nth(1) {
-        None => Cow::from(Path::new("./sine.wav")),
+        None => Cow::from(path),
         Some(s) => Cow::from(PathBuf::from(s))
     };
 

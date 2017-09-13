@@ -1,6 +1,7 @@
 extern crate sdl2;
 
 use std::{thread, process, time};
+use std::path::Path;
 
 use sdl2::video;
 use sdl2::rect::{Rect};
@@ -44,8 +45,8 @@ fn main() {
         color: white, isOpeningMouth: true
     };
 
-    
-    let mut device = createDeviceMusic(&audio_subsystem);
+    let path: &'static Path = Path::new("./sine.wav");
+    let mut device = createDeviceMusic(&audio_subsystem, path);
 
     let fifty_millis = time::Duration::from_millis(50);
     let mut main_loop = || {
