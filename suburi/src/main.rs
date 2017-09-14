@@ -1,5 +1,9 @@
 extern crate sdl2;
 
+#[macro_use]
+extern crate log;
+extern crate env_logger;
+
 use std::{thread, process, time};
 use std::path::Path;
 
@@ -25,7 +29,12 @@ fn createWindow(video_ctx: sdl2::VideoSubsystem , width: u32, height: u32) -> vi
         .unwrap();
 }
 
+
 fn main() {
+    env_logger::init();
+
+    info!("starting up");
+
     let ctx = sdl2::init().unwrap();
     let video_ctx = ctx.video().unwrap();
     let audio_subsystem = ctx.audio().unwrap();

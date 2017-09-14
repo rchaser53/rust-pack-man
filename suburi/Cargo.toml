@@ -3,7 +3,16 @@ authors = ["rchaser53 <tayoshizawa29@gmail.com>"]
 name = "suburi"
 version = "0.1.0"
 
+[dependencies]
+env_logger = "0.4.3"
+log = "0.3.8"
+
 [dependencies.sdl2]
-version = "0.30"
 default-features = false
-features = ["ttf","image","gfx","mixer"]
+features = [
+    "ttf",
+    "image",
+    "gfx",
+    "mixer",
+]
+version = "0.30"
