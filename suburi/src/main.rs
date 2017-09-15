@@ -68,23 +68,19 @@ fn main() {
                     process::exit(1);
                 },
                 Event::KeyDown { keycode: Some(Keycode::Left), ..} => {
-                    circle_position.x -= 10;
-                    circle_position.direction = West.value();
+                    circle_position.set_position(-10, 0, West);
                     device.resume();
                 },
                 Event::KeyDown { keycode: Some(Keycode::Right), ..} => {
-                    circle_position.x += 10;
-                    circle_position.direction = East.value();
+                    circle_position.set_position(10, 0, East);
                     device.resume();
                 },
                 Event::KeyDown { keycode: Some(Keycode::Up), ..} => {
-                    circle_position.y -= 10;
-                    circle_position.direction = North.value();
+                    circle_position.set_position(0, -10, North);
                     device.resume();
                 },
                 Event::KeyDown { keycode: Some(Keycode::Down), ..} => {
-                    circle_position.y += 10;
-                    circle_position.direction = South.value();
+                    circle_position.set_position(0, 10, South);
                     device.resume();
                 },
                 _ => {}
@@ -94,7 +90,7 @@ fn main() {
         canvas.clear();
         canvas.copy(&texture, None, None).expect("Background Image Render failed");
         canvas.set_draw_color(White.value());
-        circle_position.move_position(&canvas);
+        circle_position.draw_circle(&canvas);
         canvas.present();
     };
 

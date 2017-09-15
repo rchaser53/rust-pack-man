@@ -29,9 +29,8 @@ pub struct CirclePosition {
 }
 
 impl CirclePosition {
-    pub fn move_position(&self, renderer: &sdl2::render::Canvas<sdl2::video::Window>) -> () {
-        let _ = renderer.filled_pie(self.x, self.y, 20,
-                            self.radius + self.direction, self.direction, self.color);
+    pub fn draw_circle(&self, renderer: &sdl2::render::Canvas<sdl2::video::Window>) -> () {
+        let _ = renderer.filled_pie(self.x, self.y, 20, self.radius + self.direction, self.direction, self.color);
     }
 
     pub fn is_full_opened_mouth(&mut self) -> bool {
@@ -52,5 +51,11 @@ impl CirclePosition {
         if self.is_full_opened_mouth() || self.is_closed_mouth() {
             self.is_opening_mouth = !self.is_opening_mouth;
         }
+    }
+
+    pub fn set_position(&mut self, x_amount: i16, y_amount: i16, direction: Direction) -> () {
+        self.x += x_amount;
+        self.y += y_amount;
+        self.direction = direction.value();
     }
 }
