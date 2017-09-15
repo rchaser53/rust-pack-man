@@ -3,10 +3,21 @@ use sdl2::gfx::primitives::DrawRenderer;
 use std;
 
 pub enum Direction {
-    east = 0,
-    south = 90,
-    west = 180,
-    north = 270
+    east,
+    south,
+    west,
+    north
+}
+
+impl Direction {
+    pub fn value(&self) -> i16 {
+        match *self {
+            Direction::east => 0,
+            Direction::south => 90,
+            Direction::west => 180,
+            Direction::north => 270
+        }
+    }
 }
 
 pub struct CirclePosition {

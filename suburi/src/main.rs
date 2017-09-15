@@ -65,27 +65,30 @@ fn main() {
         for event in events.poll_iter() {
             device.pause();
             match event {
-                Event::Quit {..} | Event::KeyDown {keycode: Some(Keycode::Escape), ..} => {
+                Event::Quit {..} => {
+                    process::exit(1);
+                },
+                Event::KeyDown {keycode: Some(Keycode::Escape), ..} => {
                     process::exit(1);
                 },
                 Event::KeyDown { keycode: Some(Keycode::Left), ..} => {
                     circlePosition.x -= 10;
-                    circlePosition.direction = Direction::west as i16;
+                    circlePosition.direction = Direction::west.value();
                     device.resume();
                 },
                 Event::KeyDown { keycode: Some(Keycode::Right), ..} => {
                     circlePosition.x += 10;
-                    circlePosition.direction = Direction::east as i16;
+                    circlePosition.direction = Direction::east.value();
                     device.resume();
                 },
                 Event::KeyDown { keycode: Some(Keycode::Up), ..} => {
                     circlePosition.y -= 10;
-                    circlePosition.direction = Direction::north as i16;
+                    circlePosition.direction = Direction::north.value();
                     device.resume();
                 },
                 Event::KeyDown { keycode: Some(Keycode::Down), ..} => {
                     circlePosition.y += 10;
-                    circlePosition.direction = Direction::south as i16;
+                    circlePosition.direction = Direction::south.value();
                     device.resume();
                 },
                 _ => {}
@@ -93,6 +96,7 @@ fn main() {
         }
         canvas.set_draw_color(black);
         canvas.clear();
+        canvas.copy(&texture, None, None).expect("Background Image Render failed");
         canvas.set_draw_color(white);
         circlePosition.movePosition(&canvas);
         canvas.present();
