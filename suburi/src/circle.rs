@@ -1,21 +1,20 @@
 extern crate sdl2;
 use sdl2::gfx::primitives::DrawRenderer;
-use std;
 
 pub enum Direction {
-    east,
-    south,
-    west,
-    north
+    East,
+    South,
+    West,
+    North
 }
 
 impl Direction {
     pub fn value(&self) -> i16 {
         match *self {
-            Direction::east => 0,
-            Direction::south => 90,
-            Direction::west => 180,
-            Direction::north => 270
+            Direction::East => 0,
+            Direction::South => 90,
+            Direction::West => 180,
+            Direction::North => 270
         }
     }
 }
@@ -26,32 +25,32 @@ pub struct CirclePosition {
     pub radius: i16,
     pub direction: i16,
     pub color: sdl2::pixels::Color,
-    pub isOpeningMouth: bool
+    pub is_opening_mouth: bool
 }
 
 impl CirclePosition {
-    pub fn movePosition(&self, renderer: &sdl2::render::Canvas<sdl2::video::Window>) -> () {
-        renderer.filled_pie(self.x, self.y, 20,
+    pub fn move_position(&self, renderer: &sdl2::render::Canvas<sdl2::video::Window>) -> () {
+        let _ = renderer.filled_pie(self.x, self.y, 20,
                             self.radius + self.direction, self.direction, self.color);
     }
 
-    pub fn isFullOpenMouth(&mut self) -> bool {
+    pub fn is_full_opened_mouth(&mut self) -> bool {
         return 80 <= self.radius;
     }
 
-    pub fn isClosedMouth(&mut self) -> bool {
+    pub fn is_closed_mouth(&mut self) -> bool {
         return self.radius <= 10;
     }
 
-    pub fn moveMouth(&mut self) -> () {
-        if self.isOpeningMouth {
+    pub fn move_mouth(&mut self) -> () {
+        if self.is_opening_mouth {
             self.radius += 10;
         } else {
             self.radius -= 10;
         }
 
-        if self.isFullOpenMouth() || self.isClosedMouth() {
-            self.isOpeningMouth = !self.isOpeningMouth;
+        if self.is_full_opened_mouth() || self.is_closed_mouth() {
+            self.is_opening_mouth = !self.is_opening_mouth;
         }
     }
 }
