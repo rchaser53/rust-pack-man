@@ -24,7 +24,9 @@ impl AudioCallback for Sound {
     }
 }
 
-pub fn createDeviceMusic(audio_subsystem: &sdl2::AudioSubsystem, path: &'static Path) -> sdl2::audio::AudioDevice<Sound> {
+pub fn createDeviceMusic(ctx: &sdl2::Sdl, path: &'static Path) -> sdl2::audio::AudioDevice<Sound> {
+    let audio_subsystem = ctx.audio().unwrap();
+
     let wav_file: Cow<'static, Path> = match std::env::args().nth(1) {
         None => Cow::from(path),
         Some(s) => Cow::from(PathBuf::from(s))

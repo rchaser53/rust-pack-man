@@ -36,7 +36,6 @@ fn main() {
 
     let ctx = sdl2::init().unwrap();
     let video_ctx = ctx.video().unwrap();
-    let audio_subsystem = ctx.audio().unwrap();
     let mut events = ctx.event_pump().unwrap();
 
     let window = createWindow(video_ctx, 640, 640);
@@ -52,7 +51,7 @@ fn main() {
     };
 
     let path: &'static Path = Path::new("./sine.wav");
-    let mut device = createDeviceMusic(&audio_subsystem, path);
+    let mut device = createDeviceMusic(&ctx, path);
 
     let fifty_millis = time::Duration::from_millis(50);
     let mut main_loop = || {
