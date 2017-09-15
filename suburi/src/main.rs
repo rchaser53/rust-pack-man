@@ -22,6 +22,9 @@ pub mod circle;
 use circle::{CirclePosition, Direction};
 use Direction::{East, West, South, North};
 
+pub mod collision_handler;
+use collision_handler::{CollisionFrame};
+
 fn create_window(video_ctx: sdl2::VideoSubsystem , width: u32, height: u32) -> video::Window {
     return video_ctx
         .window("Window", width, height)
@@ -31,15 +34,20 @@ fn create_window(video_ctx: sdl2::VideoSubsystem , width: u32, height: u32) -> v
         .unwrap();
 }
 
+const SCREEN_WIDTH: i16 = 640;
+const SCREEN_HEIGHT: i16 = 640;
+
 fn main() {
-    // env_logger::init();
-    // info!("starting up");
+    let mut collision_frame = CollisionFrame {
+                            screen_width: SCREEN_WIDTH,
+                            screen_height: SCREEN_HEIGHT
+                        };
 
     let ctx = sdl2::init().unwrap();
     let video_ctx = ctx.video().unwrap();
     let mut events = ctx.event_pump().unwrap();
 
-    let window = create_window(video_ctx, 640, 640);
+    let window = create_window(video_ctx, SCREEN_WIDTH as u32, SCREEN_HEIGHT as u32);
 
     let mut canvas = window.into_canvas().software().build().unwrap();
 
@@ -61,10 +69,7 @@ fn main() {
         for event in events.poll_iter() {
             device.pause();
             match event {
-                Event::Quit {..} => {
-                    process::exit(1);
-                },
-                Event::KeyDown {keycode: Some(Keycode::Escape), ..} => {
+                Event::Quit {..} | Event::KeyDown {keycode: Some(Keycode::Escape), ..} => {
                     process::exit(1);
                 },
                 Event::KeyDown { keycode: Some(Keycode::Left), ..} => {
@@ -86,6 +91,8 @@ fn main() {
                 _ => {}
             }
         }
+        collision_frame.is_out_frame(&circle_position);
+
         canvas.set_draw_color(Black.value());
         canvas.clear();
         canvas.copy(&texture, None, None).expect("Background Image Render failed");
