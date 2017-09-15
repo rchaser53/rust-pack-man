@@ -51,8 +51,7 @@ fn main() {
         color: White.value(), is_opening_mouth: true
     };
 
-    let path: &'static Path = Path::new("./sine.wav");
-    let device = create_device_music(&ctx, path);
+    let device = create_device_music(&ctx, Path::new("./sine.wav") as &'static Path);
 
     let fifty_millis = time::Duration::from_millis(50);
     let mut main_loop = || {
