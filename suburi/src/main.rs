@@ -8,11 +8,12 @@ use std::{thread, process, time};
 use std::path::Path;
 
 use sdl2::video;
-use sdl2::rect::{Rect};
 use sdl2::event::{Event};
 use sdl2::keyboard::Keycode;
-use sdl2::gfx::primitives::DrawRenderer;
 use sdl2::image::{LoadTexture, INIT_PNG, INIT_JPG};
+
+pub mod constants;
+use constants::BackgroundColor::{white, black};
 
 pub mod deviceMusic;
 use deviceMusic::createDeviceMusic;
@@ -29,29 +30,25 @@ fn createWindow(video_ctx: sdl2::VideoSubsystem , width: u32, height: u32) -> vi
         .unwrap();
 }
 
-
 fn main() {
-    env_logger::init();
-
-    info!("starting up");
+    // env_logger::init();
+    // info!("starting up");
 
     let ctx = sdl2::init().unwrap();
     let video_ctx = ctx.video().unwrap();
     let audio_subsystem = ctx.audio().unwrap();
-    let _image_context = sdl2::image::init(INIT_PNG | INIT_JPG).unwrap();
+    let mut events = ctx.event_pump().unwrap();
 
     let window = createWindow(video_ctx, 640, 640);
 
     let mut canvas = window.into_canvas().software().build().unwrap();
+
     let texture_creator = canvas.texture_creator();
     let texture = texture_creator.load_texture("./hoge.jpg").unwrap();
-    let black = sdl2::pixels::Color::RGB(0, 0, 0);
-    let white = sdl2::pixels::Color::RGB(255, 255, 255);
-    let mut events = ctx.event_pump().unwrap();
 
     let mut circlePosition = CirclePosition{
-        x: 300, y:200, direction: Direction::east as i16, radius: 30,
-        color: white, isOpeningMouth: true
+        x: 300, y:200, direction: Direction::east.value(), radius: 30,
+        color: white.value(), isOpeningMouth: true
     };
 
     let path: &'static Path = Path::new("./sine.wav");
@@ -94,10 +91,10 @@ fn main() {
                 _ => {}
             }
         }
-        canvas.set_draw_color(black);
+        canvas.set_draw_color(black.value());
         canvas.clear();
         canvas.copy(&texture, None, None).expect("Background Image Render failed");
-        canvas.set_draw_color(white);
+        canvas.set_draw_color(white.value());
         circlePosition.movePosition(&canvas);
         canvas.present();
     };
