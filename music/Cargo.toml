@@ -1,0 +1,14 @@
+[package]
+name = "music"
+version = "0.1.0"
+authors = ["rchaser53 <tayoshizawa29@gmail.com>"]
+
+[dependencies.sdl2]
+default-features = false
+features = [
+    "ttf",
+    "image",
+    "gfx",
+    "mixer",
+]
+version = "0.30"
