@@ -5,10 +5,9 @@ use std::path::Path;
 use sdl2::mixer::{  DEFAULT_CHANNELS, INIT_MP3, INIT_FLAC, INIT_MOD,
                     INIT_FLUIDSYNTH, INIT_MODPLUG, INIT_OGG, AUDIO_S16LSB};
 
-// fn demo(music_file: &Path, sound_file: Option<&Path>) {
 fn main() {
     let music_file = Path::new("nyan.mp3");
-    let sound_file = Path::new("poyo.mp3");
+    let sound_file = Some(Path::new("poyo.mp3"));
 
     let sdl = sdl2::init().unwrap();
     let _audio = sdl.audio().unwrap();
@@ -47,9 +46,8 @@ fn main() {
 
     music.play(1);
 
-    // if let Some(sound_file_path) = sound_file {
-        // let sound_chunk_res = sdl2::mixer::Chunk::from_file(sound_file_path);
-        let sound_chunk_res = sdl2::mixer::Chunk::from_file(sound_file);
+    if let Some(sound_file_path) = sound_file {
+        let sound_chunk_res = sdl2::mixer::Chunk::from_file(sound_file_path);
 
         match sound_chunk_res {
             Ok(sound_chunk) => {
@@ -69,7 +67,7 @@ fn main() {
             }
             Err(e) => println!("Cannot load sound file: {:?}", e),
         }
-    // }
+    }
 }
 
 
