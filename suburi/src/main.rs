@@ -15,9 +15,6 @@ use sdl2::image::{LoadTexture};
 pub mod constants;
 use constants::BackgroundColor::{White, Black};
 
-pub mod device_music;
-use device_music::create_device_music;
-
 pub mod circle;
 use circle::{CirclePosition, Direction};
 use Direction::{East, West, South, North};
@@ -26,7 +23,7 @@ pub mod collision_handler;
 use collision_handler::{CollisionFrame};
 
 pub mod mixer_music;
-use mixer_music::play_bgm;
+use mixer_music::{setup_sdl2_mixier, play_bgm, play_sound_effect};
 
 fn create_window(video_ctx: sdl2::VideoSubsystem , width: u32, height: u32) -> video::Window {
     return video_ctx
@@ -62,8 +59,9 @@ fn main() {
         color: White.value(), is_opening_mouth: true
     };
 
-    let device = create_device_music(&ctx, Path::new("./sine.wav") as &'static Path);
+    setup_sdl2_mixier(2);
     let music = play_bgm(Path::new("nyan.mp3"));
+    let sound_chunk = play_sound_effect(Path::new("sine.wav"));
     let _ = music.play(1);
 
     let fifty_millis = time::Duration::from_millis(50);
@@ -72,26 +70,25 @@ fn main() {
         circle_position.move_mouth();
 
         for event in events.poll_iter() {
-            device.pause();
             match event {
                 Event::Quit {..} | Event::KeyDown {keycode: Some(Keycode::Escape), ..} => {
                     process::exit(1);
                 },
                 Event::KeyDown { keycode: Some(Keycode::Left), ..} => {
                     circle_position.set_position(-10, 0, West);
-                    device.resume();
+                    let _ = sdl2::mixer::Channel::all().play(&sound_chunk, 0);
                 },
                 Event::KeyDown { keycode: Some(Keycode::Right), ..} => {
                     circle_position.set_position(10, 0, East);
-                    device.resume();
+                    let _ = sdl2::mixer::Channel::all().play(&sound_chunk, 0);
                 },
                 Event::KeyDown { keycode: Some(Keycode::Up), ..} => {
                     circle_position.set_position(0, -10, North);
-                    device.resume();
+                    let _ = sdl2::mixer::Channel::all().play(&sound_chunk, 0);
                 },
                 Event::KeyDown { keycode: Some(Keycode::Down), ..} => {
                     circle_position.set_position(0, 10, South);
-                    device.resume();
+                    let _ = sdl2::mixer::Channel::all().play(&sound_chunk, 0);
                 },
                 _ => {}
             }

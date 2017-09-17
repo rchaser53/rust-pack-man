@@ -1,26 +1,22 @@
 extern crate sdl2;
 
-use std::env;
 use std::path::Path;
-use sdl2::mixer::{DEFAULT_CHANNELS, INIT_MP3, INIT_FLAC, INIT_MOD, INIT_FLUIDSYNTH, INIT_MODPLUG,
-                  INIT_OGG, AUDIO_S16LSB};
+use sdl2::mixer::{DEFAULT_CHANNELS, AUDIO_S16LSB};
 
-fn setup_sdl2_mixier() -> () {
+pub fn setup_sdl2_mixier(permit_channels_number: i32) -> () {
     let frequency = 44100;
     let format = AUDIO_S16LSB;          // signed 16 bit samples, in little-endian byte order
     let channels = DEFAULT_CHANNELS;    // Stereo
     let chunk_size = 1024;
 
     sdl2::mixer::open_audio(frequency, format, channels, chunk_size).unwrap();
-
-    // Number of mixing channels available for sound effect `Chunk`s to play
-    // simultaneously.
-    sdl2::mixer::allocate_channels(4);
+    sdl2::mixer::allocate_channels(permit_channels_number);
 }
 
-pub fn play_bgm<'a>(path: &'a Path) -> sdl2::mixer::Music {
-    let _mixer_context = sdl2::mixer::init(INIT_MP3 | INIT_FLAC | INIT_MOD | INIT_FLUIDSYNTH |
-                                           INIT_MODPLUG | INIT_OGG).unwrap();
-    setup_sdl2_mixier();
+pub fn play_bgm(path: &Path) -> sdl2::mixer::Music {
     return sdl2::mixer::Music::from_file(path).unwrap();
+}
+
+pub fn play_sound_effect(path: &Path) -> sdl2::mixer::Chunk {
+    return sdl2::mixer::Chunk::from_file(path).unwrap();
 }
