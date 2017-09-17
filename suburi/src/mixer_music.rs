@@ -18,10 +18,9 @@ fn setup_sdl2_mixier() -> () {
     sdl2::mixer::allocate_channels(4);
 }
 
-pub fn play_bgm(ctx: &sdl2::Sdl) -> sdl2::mixer::Music {
-    let mut timer = ctx.timer().unwrap();
+pub fn play_bgm<'a>(path: &'a Path) -> sdl2::mixer::Music {
     let _mixer_context = sdl2::mixer::init(INIT_MP3 | INIT_FLAC | INIT_MOD | INIT_FLUIDSYNTH |
                                            INIT_MODPLUG | INIT_OGG).unwrap();
     setup_sdl2_mixier();
-    return sdl2::mixer::Music::from_file(Path::new("nyan.mp3")).unwrap();
+    return sdl2::mixer::Music::from_file(path).unwrap();
 }

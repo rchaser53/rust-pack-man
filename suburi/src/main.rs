@@ -63,8 +63,8 @@ fn main() {
     };
 
     let device = create_device_music(&ctx, Path::new("./sine.wav") as &'static Path);
-    let music = play_bgm(&ctx);
-    music.play(1);
+    let music = play_bgm(Path::new("nyan.mp3"));
+    let _ = music.play(1);
 
     let fifty_millis = time::Duration::from_millis(50);
     let mut main_loop = || {
