@@ -9,9 +9,9 @@
       "type": "lldb",
       "request": "launch",
       "name": "Debug",
-      "program": "${workspaceRoot}/suburi/target/debug/suburi",
+      "program": "${workspaceRoot}/city-pop/target/debug/city-pop",
       "sourceLanguages": ["rust"],
-      "args": [],
+      "args": ["-f", "test.csv"],
       "cwd": "${workspaceRoot}"
     }
   ]
