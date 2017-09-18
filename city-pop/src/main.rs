@@ -7,7 +7,8 @@ use std::path::Path;
 use std::{fs, env, io, fmt, process};
 use std::error::{Error};
 
-// use std::io::prelude::*;
+use std::fs::File;
+use std::io::prelude::*;
 
 impl fmt::Display for CliError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
@@ -100,7 +101,25 @@ fn search<P: AsRef<Path>>
     }
 }
 
+fn cat(path: &Path) -> io::Result<String> {
+    let mut f = try!(File::open(path));
+    let mut s = String::new();
+    match f.read_to_string(&mut s) {
+        Ok(_) => Ok(s),
+        Err(e) => panic!(e),
+    }
+}
+
 fn main() {
+    let ab = match cat(Path::new("test.csv")) {
+        Err(why) => {
+            println!("! {:?}", why.kind());
+            panic!("nya");
+        },
+        Ok(s) => s
+    };
+    println!("{}", ab);
+
     // let args: Vec<String> = env::args().collect();
     // let program = args[0].clone();
 
@@ -127,21 +146,8 @@ fn main() {
 
             // let mut contents = String::new();
             // let mut aaa;
-    match fs::File::open("test.csv") {
-        Ok(file) => {
-            // aaa = file.read_to_string(&mut contents)?;
-            // println!("the file ks of {} bytes", aaa);
-                        println!("the file ks of {} bytes", file.metadata().unwrap().len());
-        },
 
 
-        Err(ref e) => 
-            println!("nya-n"),
-        Err(e) => 
-            panic!("{:?}", e)
-    }
-
-    let hogea = 2;
 
     // println!("{}", hoge);
     // let args: Vec<String> = env::args().collect();
