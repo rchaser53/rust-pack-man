@@ -101,13 +101,11 @@ fn search<P: AsRef<Path>>
     }
 }
 
-fn cat(path: &Path) -> io::Result<String> {
+fn cat(path: &Path) -> Result<String, std::io::Error> {
     let mut f = try!(File::open(path));
     let mut s = String::new();
-    match f.read_to_string(&mut s) {
-        Ok(_) => Ok(s),
-        Err(e) => panic!(e),
-    }
+    f.read_to_string(&mut s);
+    return Ok(s);
 }
 
 fn main() {
