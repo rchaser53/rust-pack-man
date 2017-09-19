@@ -10,10 +10,13 @@ use std::path::Path;
 use sdl2::video;
 use sdl2::event::{Event};
 use sdl2::keyboard::Keycode;
-use sdl2::image::{LoadTexture};
+// use sdl2::image::{LoadTexture};
+
+pub mod map;
+use map::Background;
 
 pub mod constants;
-use constants::BackgroundColor::{White, Black};
+use constants::BackgroundColor::{White, Black, Aqua};
 
 pub mod circle;
 use circle::{CirclePosition, Direction};
@@ -51,8 +54,10 @@ fn main() {
 
     let mut canvas = window.into_canvas().software().build().unwrap();
 
-    let texture_creator = canvas.texture_creator();
-    let texture = texture_creator.load_texture("./hoge.jpg").unwrap();
+    // let texture = texture_creator.load_texture("./hoge.jpg").unwrap();
+    let background = Background{
+        x: 500, y: 500, border_color: Aqua.value()
+    };
 
     let mut circle_position = CirclePosition{
         x: 300, y:200, direction: East.value(), radius: 30,
@@ -97,7 +102,7 @@ fn main() {
 
         canvas.set_draw_color(Black.value());
         canvas.clear();
-        canvas.copy(&texture, None, None).expect("Background Image Render failed");
+        background.draw(&canvas );
         canvas.set_draw_color(White.value());
         circle_position.draw_circle(&canvas);
         canvas.present();

@@ -11,7 +11,7 @@
       "name": "Debug",
       "program": "${workspaceRoot}/city-pop/target/debug/city-pop",
       "sourceLanguages": ["rust"],
-      "args": ["-f", "test.csv"],
+      "args": ["-f", "./test.csv", "city"],
       "cwd": "${workspaceRoot}"
     }
   ]

@@ -5,7 +5,9 @@ extern crate rustc_serialize;
 use getopts::Options;
 use std::path::Path;
 use std::{fs, env, io, fmt, process};
-use std::error::Error;
+use std::error::{Error};
+
+// use std::io::prelude::*;
 
 impl fmt::Display for CliError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
@@ -120,37 +122,63 @@ fn main() {
     // for pop in search(&data_path, &city) {
     //     println!("{}, {}: {:?}", pop.city, pop.country, pop.count);
     // }
+    // let file_path = Path::new("test.csv");
+    // file_path.display();
 
-    let args: Vec<String> = env::args().collect();
-    let program = args[0].clone();
+            // let mut contents = String::new();
+            // let mut aaa;
+    match fs::File::open("test.csv") {
+        Ok(file) => {
+            // aaa = file.read_to_string(&mut contents)?;
+            // println!("the file ks of {} bytes", aaa);
+                        println!("the file ks of {} bytes", file.metadata().unwrap().len());
+        },
 
-    let mut opts = Options::new();
-    opts.optopt("f", "file", "Choose an input file, instead of using STDIN.", "NAME");
-    opts.optflag("h", "help", "Show this usage message.");
 
-    let matches = match opts.parse(&args[1..]) {
-        Ok(m)  => { m }
-        Err(e) => { panic!(e.to_string()) }
-    };
-    if matches.opt_present("h") {
-        print_usage(&program, opts);
-        return;
+        Err(ref e) => 
+            println!("nya-n"),
+        Err(e) => 
+            panic!("{:?}", e)
     }
 
-    let file = matches.opt_str("f");
-    let data_file = file.as_ref().map(Path::new);
+    let hogea = 2;
 
-    let city = if !matches.free.is_empty() {
-        matches.free[0].clone()
-    } else {
-        print_usage(&program, opts);
-        return;
-    };
+    // println!("{}", hoge);
+    // let args: Vec<String> = env::args().collect();
+    // let program = args[0].clone();
 
-    for pop in search(&data_file, &city) {
-        println!("aa");
+    // let mut opts = Options::new();
+    // opts.optopt("f", "file", "Choose an input file, instead of using STDIN.", "NAME");
+    // opts.optflag("h", "help", "Show this usage message.");
+
+    // let matches = match opts.parse(&args[1..]) {
+    //     Ok(m)  => { m }
+    //     Err(e) => { panic!(e.to_string()) }
+    // };
+    // if matches.opt_present("h") {
+    //     print_usage(&program, opts);
+    //     return;
+    // }
+
+    // let file = matches.opt_str("f");
+    // let data_file = file.as_ref().map(Path::new);
+
+    // let city = if !matches.free.is_empty() {
+    //     matches.free[0].clone()
+    // } else {
+    //     print_usage(&program, opts);
+    //     return;
+    // };
+
+    // for pop in search(&data_file, &city) {
+        // println!("aa");
+        // println!(pop);
+        
         // println!("{}, {}: {:?}", pop.city, pop.country, pop.count);
-    }
+    // }
+
+    // let hoge = search(Path::new("test.csv"), "city");
+
 
     process::exit(0);
 }
