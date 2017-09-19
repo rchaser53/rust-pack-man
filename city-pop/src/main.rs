@@ -2,13 +2,13 @@ extern crate csv;
 extern crate getopts;
 extern crate rustc_serialize;
 
-use getopts::Options;
-use std::path::Path;
-use std::{fs, env, io, fmt, process};
-use std::error::{Error};
+// use getopts::Options;
+// use std::path::Path;
+// use std::{fs, env, io, fmt, process};
+// use std::error::{Error};
 
-use std::fs::File;
-use std::io::prelude::*;
+// use std::fs::File;
+// use std::io::prelude::*;
 
 pub mod error_handling;
 use error_handling::{double_first, print_double_first};

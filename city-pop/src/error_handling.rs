@@ -1,12 +1,17 @@
 use std;
-use std::error::{Error};
+// use std::error::{Error};
 use std::num::ParseIntError;
-use std::{fmt};
+use std::fmt;
 
 pub type Result<T> = std::result::Result<T, DoubleError>;
 
+trait Error: fmt::Debug + fmt::Display {
+    fn description(&self) -> &str;
+    fn cause(&self) -> Option<&Error>;
+}
+
 #[derive(Debug)]
-enum DoubleError {
+pub enum DoubleError {
     EmptyVec,
     Parse(ParseIntError),
 }
@@ -18,7 +23,7 @@ impl From<ParseIntError> for DoubleError {
 }
 
 impl fmt::Display for DoubleError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result<> {
         match *self {
             DoubleError::EmptyVec =>
                 write!(f, "please use a vector with at least one element"),
