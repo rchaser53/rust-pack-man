@@ -48,3 +48,13 @@ pub fn print_double_first(result: Result<i32>) -> () {
         Err(e) => println!("Error: {}", e),
     };
 }
+
+// fn main() {
+//     let numbers = vec!["93", "18"];
+//     let empty = vec![];
+//     let strings = vec!["tofu", "93", "18"];
+
+//     print_double_first(double_first(numbers));
+//     print_double_first(double_first(empty));
+//     print_double_first(double_first(strings));
+// }
