@@ -3,11 +3,12 @@ extern crate getopts;
 extern crate rustc_serialize;
 
 // use getopts::Options;
-// use std::path::Path;
-// use std::{fs, env, io, fmt, process};
-// use std::error::{Error};
+use std::path::Path;
+use std::{fs, env, io, fmt, process};
+use std::error::{Error};
 
-// use std::fs::File;
+use std::fs::File;
+use std::io::Read;
 // use std::io::prelude::*;
 
 pub mod error_handling;
@@ -104,35 +105,41 @@ use error_handling::{double_first, print_double_first};
 //     }
 // }
 
-fn main() {
-    let numbers = vec!["93", "18"];
-    let empty = vec![];
-    let strings = vec!["tofu", "93", "18"];
+// fn main() {
+//     let numbers = vec!["93", "18"];
+//     let empty = vec![];
+//     let strings = vec!["tofu", "93", "18"];
 
-    print_double_first(double_first(numbers));
-    print_double_first(double_first(empty));
-    print_double_first(double_first(strings));
+//     print_double_first(double_first(numbers));
+//     print_double_first(double_first(empty));
+//     print_double_first(double_first(strings));
+// }
+
+fn cat(path: &Path) -> Result<String, std::io::Error> {
+    // let mut f = try!(File::open(path));
+    // let mut f = File::open(path)?;
+    let mut f = match File::open(path) {
+        Err(why) => panic!("nya-n {}", why.description()),
+        Ok(f) => f
+    };
+
+    let mut s = String::new();
+    let _ = f.read_to_string(&mut s);
+    return Ok(s);
 }
 
-// fn cat(path: &Path) -> Result<String, std::io::Error> {
-//     let mut f = try!(File::open(path));
-//     let mut s = String::new();
-//     f.read_to_string(&mut s);
-//     return Ok(s);
-// }
+fn main() {
+    let ab = match cat(Path::new("test.csv")) {
+        Err(why) => {
+            println!("! {:?}", why.kind());
+            panic!("nya");
+        },
+        Ok(s) => s
+    };
+    println!("{}", ab);
 
-// fn main() {
-//     let ab = match cat(Path::new("test.csv")) {
-//         Err(why) => {
-//             println!("! {:?}", why.kind());
-//             panic!("nya");
-//         },
-//         Ok(s) => s
-//     };
-//     println!("{}", ab);
-
-//     process::exit(0);
-// }
+    process::exit(0);
+}
 
 
 
