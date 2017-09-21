@@ -4,24 +4,24 @@ use std::fs::File;
 use std::io::prelude::*;
 use std::path::Path;
 
-fn extract_file_data(path: &Path) -> String {
-    let mut file = match File::open(&path) {
-        Err(why) => panic!(why),
-        Ok(file) => file
-    };
 
+fn extract_file_data(path: &Path) -> Result<String, std::io::Error> {
+    let mut file = File::open(&path)?;
     let mut s = String::new();
-    match file.read_to_string(&mut s) {
-        Err(why) => panic!(why),
-        Ok(_) => {}
-    };
-
-    return s;
+    file.read_to_string(&mut s)?;
+    return Ok(s);
 }
 
 fn main() {
-    let csv = extract_file_data(Path::new("test.csv"));
-    let v: Vec<&str> = csv.split(",").collect();
+    let csv = match extract_file_data(Path::new("test.csv")){
+                Err(why) => panic!(why),
+                Ok(file) => file
+            };
 
-    println!("{}", v[0]);
-}
+    let _vec: Vec<&str> = csv.lines().collect();
+    // let _vec: Vec<&str> = csv.split("\n").collect();
+
+    for v in _vec {
+        println!("{} ___", v);
+    }
+ }
