@@ -3,6 +3,7 @@ use std::error::Error;
 use std::fs::File;
 use std::io::prelude::*;
 use std::path::Path;
+use std::num::ParseIntError;
 
 
 fn extract_file_data(path: &Path) -> Result<String, std::io::Error> {
@@ -12,16 +13,32 @@ fn extract_file_data(path: &Path) -> Result<String, std::io::Error> {
     return Ok(s);
 }
 
+fn extractDataFromLine(a: i16) -> Result<i16, String> {
+    return match a {
+        a if a < 10 => Err(a.to_string()),
+        _ => Ok(a)
+    };
+}
+
 fn main() {
     let csv = match extract_file_data(Path::new("test.csv")){
-                Err(why) => panic!(why),
+                Err(why) => panic!("{}", why),
                 Ok(file) => file
             };
 
-    let _vec: Vec<&str> = csv.lines().collect();
+    let lines: Vec<&str> = csv.lines().collect();
     // let _vec: Vec<&str> = csv.split("\n").collect();
 
-    for v in _vec {
-        println!("{} ___", v);
-    }
+    // let aaa: i16 = match extractDataFromLine(9) {
+    let aaa: i16 = match extractDataFromLine(10) {
+                        Err(why) => panic!("{} is less than 10.", why),
+                        Ok(data) => data
+                    };
+
+    println!("{:?}", aaa);
+
+    // for line in lines {
+    //     let _vec: Vec<&str> = line.split(",").collect();
+    //     println!("{:?}", _vec);
+    // }
  }
