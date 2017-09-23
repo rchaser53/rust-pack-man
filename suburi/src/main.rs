@@ -28,13 +28,15 @@ use collision_handler::{CollisionFrame};
 pub mod mixer_music;
 use mixer_music::{setup_sdl2_mixier, play_bgm, play_sound_effect};
 
-fn create_window(video_ctx: sdl2::VideoSubsystem , width: u32, height: u32) -> video::Window {
+pub mod error_handling;
+
+fn create_window(video_ctx: sdl2::VideoSubsystem , width: u32, height: u32)
+                    -> Result<video::Window, sdl2::video::WindowBuildError> {
     return video_ctx
-        .window("Window", width, height)
-        .position_centered()
-        .opengl()
-        .build()
-        .unwrap();
+                .window("Window", width, height)
+                .position_centered()
+                .opengl()
+                .build();
 }
 
 const SCREEN_WIDTH: i16 = 640;
@@ -46,13 +48,15 @@ fn main() {
                             screen_height: SCREEN_HEIGHT
                         };
 
-    let ctx = sdl2::init().unwrap();
+    let ctx = sdl2::init().unwrap_or_else(|err| panic!("{}", err));
     let video_ctx = ctx.video().unwrap();
     let mut events = ctx.event_pump().unwrap();
 
-    let window = create_window(video_ctx, SCREEN_WIDTH as u32, SCREEN_HEIGHT as u32);
+    let window = create_window(video_ctx, SCREEN_WIDTH as u32, SCREEN_HEIGHT as u32)
+                        .unwrap_or_else(|err| panic!("{}", err));
 
-    let mut canvas = window.into_canvas().software().build().unwrap();
+    let mut canvas = window.into_canvas().software().build()
+                            .unwrap_or_else(|err| panic!("{}", err));
 
     // let texture = texture_creator.load_texture("./hoge.jpg").unwrap();
     let background = Background{
