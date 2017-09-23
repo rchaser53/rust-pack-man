@@ -29,14 +29,16 @@ pub mod mixer_music;
 use mixer_music::{setup_sdl2_mixier, play_bgm, play_sound_effect};
 
 pub mod error_handling;
+use error_handling::{Result, CustomError};
 
 fn create_window(video_ctx: sdl2::VideoSubsystem , width: u32, height: u32)
-                    -> Result<video::Window, sdl2::video::WindowBuildError> {
+                    -> Result<video::Window> {
     return video_ctx
                 .window("Window", width, height)
                 .position_centered()
                 .opengl()
-                .build();
+                .build()
+                .map_err(|err| CustomError::ParseWindowBuildError(err));
 }
 
 const SCREEN_WIDTH: i16 = 640;
