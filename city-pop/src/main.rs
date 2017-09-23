@@ -71,7 +71,9 @@ fn is_over_twenty(num: i16) -> Result<i16> {
 }
 
 fn extract_data_from_line(num: i16) -> Result<i16> {
-    return is_below_ten(num).and_then(is_over_twenty);
+    let _ = is_below_ten(num)?;
+    let _ = is_over_twenty(num)?;
+    return Ok(num);
     // return is_below_ten(num)
     //             .map(|n| n)
     //             .map_err(|err| err);
