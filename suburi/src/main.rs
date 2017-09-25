@@ -44,7 +44,16 @@ fn create_window(video_ctx: sdl2::VideoSubsystem , width: u32, height: u32)
 const SCREEN_WIDTH: i16 = 640;
 const SCREEN_HEIGHT: i16 = 640;
 
+fn create_game_screen<'a>() -> Box<FnMut() -> () + 'a> {
+    return Box::new(|| {
+    });
+}
+
 fn main() {
+    let background = Background {
+        x: 500, y: 500, border_color: Aqua.value()
+    };
+    
     let mut collision_frame = CollisionFrame {
                             screen_width: SCREEN_WIDTH,
                             screen_height: SCREEN_HEIGHT
@@ -59,10 +68,6 @@ fn main() {
 
     let mut canvas = window.into_canvas().software().build()
                             .unwrap_or_else(|err| panic!("{}", err));
-
-    let background = Background{
-        x: 500, y: 500, border_color: Aqua.value()
-    };
 
     let mut circle_position = CirclePosition{
         x: 300, y:200, direction: East.value(), radius: 30,
