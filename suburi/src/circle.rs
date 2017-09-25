@@ -19,6 +19,8 @@ impl Direction {
     }
 }
 
+const MOVE_SPEED: i16 = 5;
+
 pub struct CirclePosition {
     pub x: i16,
     pub y: i16,
@@ -53,9 +55,16 @@ impl CirclePosition {
         }
     }
 
-    pub fn set_position(&mut self, x_amount: i16, y_amount: i16, direction: Direction) -> () {
+    pub fn move_circle(&mut self) -> () {
+        let direction = self.direction;
+        let (x_amount, y_amount) = match direction {
+            num if num == Direction::East.value() => (MOVE_SPEED, 0),
+            num if num == Direction::South.value() => (0, MOVE_SPEED),
+            num if num == Direction::West.value() => (-1 * MOVE_SPEED, 0),
+            num if num == Direction::North.value() => (0, -1 * MOVE_SPEED),
+            _ => (0, 0)
+        };
         self.x += x_amount;
         self.y += y_amount;
-        self.direction = direction.value();
     }
 }

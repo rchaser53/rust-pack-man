@@ -60,7 +60,6 @@ fn main() {
     let mut canvas = window.into_canvas().software().build()
                             .unwrap_or_else(|err| panic!("{}", err));
 
-    // let texture = texture_creator.load_texture("./hoge.jpg").unwrap();
     let background = Background{
         x: 500, y: 500, border_color: Aqua.value()
     };
@@ -72,13 +71,13 @@ fn main() {
 
     setup_sdl2_mixier(2);
     let music = play_bgm(Path::new("nyan.mp3"));
-    let sound_chunk = play_sound_effect(Path::new("sine.wav"));
     let _ = music.play(1);
 
-    let fifty_millis = time::Duration::from_millis(50);
+    let fifteen_millis = time::Duration::from_millis(15);
     let mut main_loop = || {
-        thread::sleep(fifty_millis);
+        thread::sleep(fifteen_millis);
         circle_position.move_mouth();
+        circle_position.move_circle();
 
         for event in events.poll_iter() {
             match event {
@@ -86,20 +85,16 @@ fn main() {
                     process::exit(1);
                 },
                 Event::KeyDown { keycode: Some(Keycode::Left), ..} => {
-                    circle_position.set_position(-10, 0, West);
-                    let _ = sdl2::mixer::Channel::all().play(&sound_chunk, 0);
+                    circle_position.direction = West.value();
                 },
                 Event::KeyDown { keycode: Some(Keycode::Right), ..} => {
-                    circle_position.set_position(10, 0, East);
-                    let _ = sdl2::mixer::Channel::all().play(&sound_chunk, 0);
+                    circle_position.direction = East.value();
                 },
                 Event::KeyDown { keycode: Some(Keycode::Up), ..} => {
-                    circle_position.set_position(0, -10, North);
-                    let _ = sdl2::mixer::Channel::all().play(&sound_chunk, 0);
+                    circle_position.direction = North.value();
                 },
                 Event::KeyDown { keycode: Some(Keycode::Down), ..} => {
-                    circle_position.set_position(0, 10, South);
-                    let _ = sdl2::mixer::Channel::all().play(&sound_chunk, 0);
+                    circle_position.direction = South.value();
                 },
                 _ => {}
             }
@@ -108,7 +103,7 @@ fn main() {
 
         canvas.set_draw_color(Black.value());
         canvas.clear();
-        background.draw(&canvas );
+        background.draw(&canvas);
         canvas.set_draw_color(White.value());
         circle_position.draw_circle(&canvas);
         canvas.present();
@@ -116,3 +111,7 @@ fn main() {
 
     loop { main_loop(); }
 }
+
+// let texture = texture_creator.load_texture("./hoge.jpg").unwrap();
+// let sound_chunk = play_sound_effect(Path::new("sine.wav"));
+// let _ = sdl2::mixer::Channel::all().play(&sound_chunk, 0);
