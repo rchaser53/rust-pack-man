@@ -31,6 +31,9 @@ use mixer_music::{setup_sdl2_mixier, play_bgm, play_sound_effect};
 pub mod error_handling;
 use error_handling::{Result, CustomError};
 
+pub mod fields;
+use fields::{create_field_row};
+
 fn create_window(video_ctx: sdl2::VideoSubsystem , width: u32, height: u32)
                     -> Result<video::Window> {
     return video_ctx
@@ -43,6 +46,14 @@ fn create_window(video_ctx: sdl2::VideoSubsystem , width: u32, height: u32)
 
 const SCREEN_WIDTH: i16 = 640;
 const SCREEN_HEIGHT: i16 = 640;
+const collision_frame: CollisionFrame = CollisionFrame {
+                                            screen_width: SCREEN_WIDTH,
+                                            screen_height: SCREEN_HEIGHT
+                                        };
+// let background = Background {
+//     x: 500, y: 500, border_color: Aqua.value()
+// };
+// background.draw(&canvas);
 
 fn create_game_screen<'a>() -> Box<FnMut() -> () + 'a> {
     return Box::new(|| {
@@ -50,14 +61,15 @@ fn create_game_screen<'a>() -> Box<FnMut() -> () + 'a> {
 }
 
 fn main() {
-    let background = Background {
-        x: 500, y: 500, border_color: Aqua.value()
+    // cannnot use fn for const in stable version
+    // perhaps i need to try to use nightly version?
+    let mut circle_position = CirclePosition{
+        x: 300, y:200, direction: East.value(), radius: 30,
+        color: White.value(), is_opening_mouth: true
     };
-    
-    let mut collision_frame = CollisionFrame {
-                            screen_width: SCREEN_WIDTH,
-                            screen_height: SCREEN_HEIGHT
-                        };
+    let fifteen_millis = time::Duration::from_millis(15);
+
+    let hoge = create_field_row();
 
     let ctx = sdl2::init().unwrap_or_else(|err| panic!("{}", err));
     let video_ctx = ctx.video().unwrap();
@@ -65,20 +77,14 @@ fn main() {
 
     let window = create_window(video_ctx, SCREEN_WIDTH as u32, SCREEN_HEIGHT as u32)
                         .unwrap_or_else(|err| panic!("{}", err));
-
     let mut canvas = window.into_canvas().software().build()
                             .unwrap_or_else(|err| panic!("{}", err));
 
-    let mut circle_position = CirclePosition{
-        x: 300, y:200, direction: East.value(), radius: 30,
-        color: White.value(), is_opening_mouth: true
-    };
 
     setup_sdl2_mixier(2);
     let music = play_bgm(Path::new("nyan.mp3"));
     let _ = music.play(1);
 
-    let fifteen_millis = time::Duration::from_millis(15);
     let mut main_loop = || {
         thread::sleep(fifteen_millis);
         circle_position.move_mouth();
@@ -108,7 +114,7 @@ fn main() {
 
         canvas.set_draw_color(Black.value());
         canvas.clear();
-        background.draw(&canvas);
+
         canvas.set_draw_color(White.value());
         circle_position.draw_circle(&canvas);
         canvas.present();
