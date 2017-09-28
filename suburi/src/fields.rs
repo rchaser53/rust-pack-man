@@ -7,16 +7,15 @@ pub struct Field {
 impl Field {
   // pub fn draw(&self, renderer: &sdl2::render::Canvas<sdl2::video::Window>) -> () {
   pub fn draw(&self){
-    let mut i: i8 = 0;
     let mut rows = self.field_rows.iter();
 
-    for row in rows {
+    for (rowIndex, row) in rows.enumerate() {
       let mut cells = row.field_cells.iter();
       for cell in cells {
-        i += 1;
-        println!("{}", i);
+        println!("{} in row {}", cell.data, rowIndex);
       }
     }
+
   }
 }
 
