@@ -1,4 +1,5 @@
 extern crate sdl2;
+extern crate rand;
 
 // #[macro_use]
 // extern crate log;

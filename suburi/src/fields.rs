@@ -1,4 +1,7 @@
 extern crate sdl2;
+extern crate rand;
+
+use rand::{thread_rng, Rng};
 
 pub struct Field {
     field_rows: Vec<FieldRow>,
@@ -43,7 +46,7 @@ pub fn create_field_row() -> FieldRow {
     let mut cells: Vec<FieldCell> = Vec::new();
     for n in 0 .. 10 {
         let cell = FieldCell {
-            data: n
+            data: thread_rng().gen_range(1, 3)
         };
         cells.push(cell);
     }
@@ -58,5 +61,3 @@ pub fn create_field_cell(data: i16) -> FieldCell {
         data: data
     };
 }
-
-// rand::thread_rng().gen_range(1, 101);
