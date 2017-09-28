@@ -1,10 +1,10 @@
-extern crate sdl2;
 use sdl2::gfx::primitives::DrawRenderer;
+use sdl2::{render, pixels, video};
 
 pub struct Background {
     pub x: i16,
     pub y: i16,
-    pub border_color: sdl2::pixels::Color,
+    pub border_color: pixels::Color,
 }
 
 struct Hoge {
@@ -13,7 +13,7 @@ struct Hoge {
 }
 
 impl Background {
-    pub fn draw(&self, renderer: &sdl2::render::Canvas<sdl2::video::Window>) -> () {
+    pub fn draw(&self, renderer: &render::Canvas<video::Window>) -> () {
 
         let nyan = [Hoge{x:0, x2:30}, Hoge{x:50, x2:130}];
 

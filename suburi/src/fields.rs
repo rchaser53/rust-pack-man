@@ -1,6 +1,3 @@
-extern crate sdl2;
-extern crate rand;
-
 use rand::{thread_rng, Rng};
 
 pub struct Field {

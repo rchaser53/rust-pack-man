@@ -1,5 +1,3 @@
-extern crate sdl2;
-
 use std;
 use std::borrow::Cow;
 use std::path::{PathBuf, Path};

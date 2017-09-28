@@ -1,5 +1,5 @@
-extern crate sdl2;
 use sdl2::gfx::primitives::DrawRenderer;
+use sdl2::{render, pixels, video};
 
 pub enum Direction {
     East,
@@ -26,12 +26,12 @@ pub struct CirclePosition {
     pub y: i16,
     pub radius: i16,
     pub direction: i16,
-    pub color: sdl2::pixels::Color,
+    pub color: pixels::Color,
     pub is_opening_mouth: bool
 }
 
 impl CirclePosition {
-    pub fn draw_circle(&self, renderer: &sdl2::render::Canvas<sdl2::video::Window>) -> () {
+    pub fn draw_circle(&self, renderer: &render::Canvas<video::Window>) -> () {
         let _ = renderer.filled_pie(self.x, self.y, 20, self.radius + self.direction, self.direction, self.color);
     }
 
