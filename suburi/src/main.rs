@@ -13,9 +13,6 @@ use sdl2::event::{Event};
 use sdl2::keyboard::Keycode;
 // use sdl2::image::{LoadTexture};
 
-pub mod map;
-use map::Background;
-
 pub mod constants;
 use constants::BackgroundColor::{White, Black, Aqua};
 
@@ -33,7 +30,7 @@ pub mod error_handling;
 use error_handling::{Result, CustomError};
 
 pub mod fields;
-use fields::{create_field_row};
+use fields::{Field};
 
 fn create_window(video_ctx: sdl2::VideoSubsystem , width: u32, height: u32)
                     -> Result<video::Window> {
@@ -51,10 +48,6 @@ const collision_frame: CollisionFrame = CollisionFrame {
                                             screen_width: SCREEN_WIDTH,
                                             screen_height: SCREEN_HEIGHT
                                         };
-// let background = Background {
-//     x: 500, y: 500, border_color: Aqua.value()
-// };
-// background.draw(&canvas);
 
 fn create_game_screen<'a>() -> Box<FnMut() -> () + 'a> {
     return Box::new(|| {
@@ -70,7 +63,7 @@ fn main() {
     };
     let fifteen_millis = time::Duration::from_millis(15);
 
-    let hoge = create_field_row();
+    let hoge = Field::new();
 
     let ctx = sdl2::init().unwrap_or_else(|err| panic!("{}", err));
     let video_ctx = ctx.video().unwrap();
