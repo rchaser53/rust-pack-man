@@ -1,4 +1,9 @@
+use sdl2::{render, video, rect, pixels};
 use rand::{thread_rng, Rng};
+
+use constants::{BackgroundColor, Direction};
+use constants::BackgroundColor::{Black, Aqua, White};
+use constants::Direction::{East, West, South, North};
 
 pub struct Field {
     field_rows: Vec<FieldRow>,
@@ -15,14 +20,16 @@ impl Field {
         };
     }
 
-    // pub fn draw(&self, renderer: &sdl2::render::Canvas<sdl2::video::Window>) -> () {
-    pub fn draw(&self){
+    pub fn draw(&self, renderer: &mut render::Canvas<video::Window>) -> () {
         let mut rows = self.field_rows.iter();
 
         for (rowIndex, row) in rows.enumerate() {
             let mut cells = row.field_cells.iter();
             for cell in cells {
-               println!("{} in row {}", cell.data, rowIndex);
+
+                let _ = renderer.set_draw_color(White.value() as pixels::Color);
+                let rect = rect::Rect::new(10, 10, 10, 10);
+                let _ = renderer.fill_rect(rect);
             }
         }
     }
@@ -47,12 +54,17 @@ impl FieldRow {
 }
 
 pub struct FieldCell {
-    data: i16
+    width: i16,
+    height: i16,
+    color: pixels::Color
 }
+
 impl FieldCell {
     pub fn new(n: i16) -> FieldCell {
         FieldCell {
-            data: n
+            width: 30,
+            height: 30,
+            color: White.value() as pixels::Color
         }
     }
 }

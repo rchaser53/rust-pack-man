@@ -15,10 +15,10 @@ use sdl2::keyboard::Keycode;
 
 pub mod constants;
 use constants::BackgroundColor::{White, Black, Aqua};
+use constants::Direction::{East, West, South, North};
 
 pub mod circle;
-use circle::{CirclePosition, Direction};
-use Direction::{East, West, South, North};
+use circle::{CirclePosition};
 
 pub mod collision_handler;
 use collision_handler::{CollisionFrame};
@@ -68,6 +68,8 @@ fn main() {
     let music = play_bgm(Path::new("nyan.mp3"));
     let _ = music.play(1);
 
+    let hoge = Field::new();
+
     let mut main_loop = || {
         thread::sleep(fifteen_millis);
         circle_position.move_mouth();
@@ -98,12 +100,13 @@ fn main() {
         canvas.set_draw_color(Black.value());
         canvas.clear();
 
+        // hoge.draw(&mut canvas);
+
         canvas.set_draw_color(White.value());
         circle_position.draw_circle(&canvas);
         canvas.present();
     };
 
-    let hoge = Field::new();
 
     loop { main_loop(); }
 }

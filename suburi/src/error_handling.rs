@@ -1,9 +1,8 @@
 use sdl2::video::WindowBuildError;
 
-use std;
-use std::fmt;
+use std::{fmt, result};
 
-pub type Result<T> = std::result::Result<T, CustomError>;
+pub type Result<T> = result::Result<T, CustomError>;
 trait Error: fmt::Debug + fmt::Display {
     fn description(&self) -> &str;
     fn cause(&self) -> Option<&Error>;

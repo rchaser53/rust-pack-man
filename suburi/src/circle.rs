@@ -1,6 +1,7 @@
 use sdl2::gfx::primitives::DrawRenderer;
 use sdl2::{render, pixels, video};
 use constants::BackgroundColor::{White};
+use constants::Direction::{East, West, South, North};
 
 const MOVE_SPEED: i16 = 5;
 
@@ -16,7 +17,7 @@ pub struct CirclePosition {
 impl CirclePosition {
     pub fn new() -> CirclePosition {
         return CirclePosition {
-            x: 300, y:200, direction: Direction::East.value(),
+            x: 300, y:200, direction: East.value(),
             radius: 30, color: White.value(), is_opening_mouth: true
         };
     }
@@ -48,10 +49,10 @@ impl CirclePosition {
     pub fn move_circle(&mut self) -> () {
         let direction = self.direction;
         let (x_amount, y_amount) = match direction {
-            num if num == Direction::East.value() => (MOVE_SPEED, 0),
-            num if num == Direction::South.value() => (0, MOVE_SPEED),
-            num if num == Direction::West.value() => (-1 * MOVE_SPEED, 0),
-            num if num == Direction::North.value() => (0, -1 * MOVE_SPEED),
+            num if num == East.value() => (MOVE_SPEED, 0),
+            num if num == South.value() => (0, MOVE_SPEED),
+            num if num == West.value() => (-1 * MOVE_SPEED, 0),
+            num if num == North.value() => (0, -1 * MOVE_SPEED),
             _ => (0, 0)
         };
         self.x += x_amount;
