@@ -1,23 +1,6 @@
 use sdl2::gfx::primitives::DrawRenderer;
 use sdl2::{render, pixels, video};
-
-pub enum Direction {
-    East,
-    South,
-    West,
-    North
-}
-
-impl Direction {
-    pub fn value(&self) -> i16 {
-        match *self {
-            Direction::East => 0,
-            Direction::South => 90,
-            Direction::West => 180,
-            Direction::North => 270
-        }
-    }
-}
+use constants::BackgroundColor::{White};
 
 const MOVE_SPEED: i16 = 5;
 
@@ -31,6 +14,13 @@ pub struct CirclePosition {
 }
 
 impl CirclePosition {
+    pub fn new() -> CirclePosition {
+        return CirclePosition {
+            x: 300, y:200, direction: Direction::East.value(),
+            radius: 30, color: White.value(), is_opening_mouth: true
+        };
+    }
+
     pub fn draw_circle(&self, renderer: &render::Canvas<video::Window>) -> () {
         let _ = renderer.filled_pie(self.x, self.y, 20, self.radius + self.direction, self.direction, self.color);
     }

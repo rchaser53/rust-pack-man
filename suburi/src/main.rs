@@ -49,21 +49,11 @@ const collision_frame: CollisionFrame = CollisionFrame {
                                             screen_height: SCREEN_HEIGHT
                                         };
 
-fn create_game_screen<'a>() -> Box<FnMut() -> () + 'a> {
-    return Box::new(|| {
-    });
-}
-
 fn main() {
     // cannnot use fn for const in stable version
     // perhaps i need to try to use nightly version?
-    let mut circle_position = CirclePosition{
-        x: 300, y:200, direction: East.value(), radius: 30,
-        color: White.value(), is_opening_mouth: true
-    };
+    let mut circle_position = CirclePosition::new();
     let fifteen_millis = time::Duration::from_millis(15);
-
-    let hoge = Field::new();
 
     let ctx = sdl2::init().unwrap_or_else(|err| panic!("{}", err));
     let video_ctx = ctx.video().unwrap();
@@ -73,7 +63,6 @@ fn main() {
                         .unwrap_or_else(|err| panic!("{}", err));
     let mut canvas = window.into_canvas().software().build()
                             .unwrap_or_else(|err| panic!("{}", err));
-
 
     setup_sdl2_mixier(2);
     let music = play_bgm(Path::new("nyan.mp3"));
@@ -114,8 +103,15 @@ fn main() {
         canvas.present();
     };
 
+    let hoge = Field::new();
+
     loop { main_loop(); }
 }
+
+// fn create_game_screen<'a>() -> Box<FnMut() -> () + 'a> {
+//     return Box::new(|| {
+//     });
+// }
 
 // let texture = texture_creator.load_texture("./hoge.jpg").unwrap();
 // let sound_chunk = play_sound_effect(Path::new("sine.wav"));
