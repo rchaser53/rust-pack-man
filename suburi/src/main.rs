@@ -32,6 +32,17 @@ use error_handling::{Result, CustomError};
 pub mod fields;
 use fields::{Field, SCREEN_WIDTH, SCREEN_HEIGHT};
 
+trait CanvasBackground {
+    fn setup_draw_background(&mut self) -> ();
+}
+impl CanvasBackground for sdl2::render::WindowCanvas {
+    fn setup_draw_background(&mut self) -> () {
+        self.set_draw_color(Black.value());
+        self.clear();
+        self.set_draw_color(White.value());
+    }
+}
+
 fn create_window(video_ctx: sdl2::VideoSubsystem , width: u32, height: u32)
                     -> Result<video::Window> {
     return video_ctx
@@ -50,7 +61,7 @@ const collision_frame: CollisionFrame = CollisionFrame {
 fn main() {
     // cannnot use fn for const in stable version
     // perhaps i need to try to use nightly version?
-    let mut circle_position = CirclePosition::new();
+    let mut circle = CirclePosition::new();
     let fifteen_millis = time::Duration::from_millis(15);
 
     let ctx = sdl2::init().unwrap_or_else(|err| panic!("{}", err));
@@ -70,8 +81,6 @@ fn main() {
 
     let mut main_loop = || {
         thread::sleep(fifteen_millis);
-        circle_position.move_mouth();
-        circle_position.move_circle();
 
         for event in events.poll_iter() {
             match event {
@@ -79,29 +88,25 @@ fn main() {
                     process::exit(1);
                 },
                 Event::KeyDown { keycode: Some(Keycode::Left), ..} => {
-                    circle_position.direction = West.value();
+                    circle.direction = West.value();
                 },
                 Event::KeyDown { keycode: Some(Keycode::Right), ..} => {
-                    circle_position.direction = East.value();
+                    circle.direction = East.value();
                 },
                 Event::KeyDown { keycode: Some(Keycode::Up), ..} => {
-                    circle_position.direction = North.value();
+                    circle.direction = North.value();
                 },
                 Event::KeyDown { keycode: Some(Keycode::Down), ..} => {
-                    circle_position.direction = South.value();
+                    circle.direction = South.value();
                 },
                 _ => {}
             }
         }
-        collision_frame.is_out_frame(&circle_position);
-
-        canvas.set_draw_color(Black.value());
-        canvas.clear();
-
         // hoge.draw(&mut canvas);
+        collision_frame.is_out_frame(&circle);
 
-        canvas.set_draw_color(White.value());
-        circle_position.draw_circle(&canvas);
+        canvas.setup_draw_background();
+        circle.draw(&canvas);
         canvas.present();
     };
 

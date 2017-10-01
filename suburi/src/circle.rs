@@ -22,7 +22,9 @@ impl CirclePosition {
         };
     }
 
-    pub fn draw_circle(&self, renderer: &render::Canvas<video::Window>) -> () {
+    pub fn draw(&mut self, renderer: &render::Canvas<video::Window>) -> () {
+        self.move_mouth();
+        self.move_circle();
         let _ = renderer.filled_pie(self.x, self.y, 20, self.radius + self.direction, self.direction, self.color);
     }
 
