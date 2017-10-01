@@ -30,7 +30,7 @@ pub mod error_handling;
 use error_handling::{Result, CustomError};
 
 pub mod fields;
-use fields::{Field};
+use fields::{Field, SCREEN_WIDTH, SCREEN_HEIGHT};
 
 fn create_window(video_ctx: sdl2::VideoSubsystem , width: u32, height: u32)
                     -> Result<video::Window> {
@@ -42,8 +42,6 @@ fn create_window(video_ctx: sdl2::VideoSubsystem , width: u32, height: u32)
                 .map_err(|err| CustomError::ParseWindowBuildError(err));
 }
 
-const SCREEN_WIDTH: i16 = 640;
-const SCREEN_HEIGHT: i16 = 640;
 const collision_frame: CollisionFrame = CollisionFrame {
                                             screen_width: SCREEN_WIDTH,
                                             screen_height: SCREEN_HEIGHT
