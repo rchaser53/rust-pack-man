@@ -9,6 +9,7 @@ use std::{thread, process, time};
 use std::path::Path;
 
 use sdl2::video;
+use sdl2::EventPump;
 use sdl2::event::{Event};
 use sdl2::keyboard::Keycode;
 // use sdl2::image::{LoadTexture};
@@ -53,7 +54,30 @@ fn create_window(video_ctx: sdl2::VideoSubsystem , width: u32, height: u32)
                 .map_err(|err| CustomError::ParseWindowBuildError(err));
 }
 
-const collision_frame: CollisionFrame = CollisionFrame {
+fn handle_event(events: &mut EventPump, circle: &mut CirclePosition) -> () {
+    for event in events.poll_iter() {
+        match event {
+            Event::Quit {..} | Event::KeyDown {keycode: Some(Keycode::Escape), ..} => {
+                process::exit(1);
+            },
+            Event::KeyDown { keycode: Some(Keycode::Left), ..} => {
+                circle.direction = West.value();
+            },
+            Event::KeyDown { keycode: Some(Keycode::Right), ..} => {
+                circle.direction = East.value();
+            },
+            Event::KeyDown { keycode: Some(Keycode::Up), ..} => {
+                circle.direction = North.value();
+            },
+            Event::KeyDown { keycode: Some(Keycode::Down), ..} => {
+                circle.direction = South.value();
+            },
+            _ => {}
+        }
+    }
+}
+
+const COLLISION_FRAME: CollisionFrame = CollisionFrame {
                                             screen_width: SCREEN_WIDTH,
                                             screen_height: SCREEN_HEIGHT
                                         };
@@ -82,30 +106,10 @@ fn main() {
     let mut main_loop = || {
         thread::sleep(fifteen_millis);
 
-        for event in events.poll_iter() {
-            match event {
-                Event::Quit {..} | Event::KeyDown {keycode: Some(Keycode::Escape), ..} => {
-                    process::exit(1);
-                },
-                Event::KeyDown { keycode: Some(Keycode::Left), ..} => {
-                    circle.direction = West.value();
-                },
-                Event::KeyDown { keycode: Some(Keycode::Right), ..} => {
-                    circle.direction = East.value();
-                },
-                Event::KeyDown { keycode: Some(Keycode::Up), ..} => {
-                    circle.direction = North.value();
-                },
-                Event::KeyDown { keycode: Some(Keycode::Down), ..} => {
-                    circle.direction = South.value();
-                },
-                _ => {}
-            }
-        }
-        // hoge.draw(&mut canvas);
-        collision_frame.is_out_frame(&circle);
-
+        handle_event(&mut events, &mut circle);
+        COLLISION_FRAME.is_out_frame(&circle);
         canvas.setup_draw_background();
+
         circle.draw(&canvas);
         canvas.present();
     };

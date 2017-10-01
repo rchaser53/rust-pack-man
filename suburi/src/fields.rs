@@ -3,7 +3,6 @@ use rand::{thread_rng, Rng};
 
 use constants::{BackgroundColor, Direction};
 use constants::BackgroundColor::{Black, Aqua, White};
-use constants::Direction::{East, West, South, North};
 
 pub const SCREEN_WIDTH: i16 = 600;
 pub const SCREEN_HEIGHT: i16 = 600;
@@ -18,7 +17,7 @@ pub struct Field {
 impl Field {
     pub fn new() -> Field {
         let mut rows: Vec<FieldRow> = Vec::new();
-        for n in 0 .. COLUMUNS_NUMBER {
+        for _ in 0 .. COLUMUNS_NUMBER {
             rows.push(FieldRow::new());
         }
         
@@ -28,15 +27,15 @@ impl Field {
     }
 
     pub fn draw(&self, renderer: &mut render::Canvas<video::Window>) -> () {
-        let mut rows = self.field_rows.iter();
+        let rows = self.field_rows.iter();
 
-        for (rowIndex, row) in rows.enumerate() {
-            let mut cells = row.field_cells.iter();
-            for (cellIndex, cell) in cells.enumerate() {
+        for (row_index, row) in rows.enumerate() {
+            let cells = row.field_cells.iter();
+            for (cell_index, cell) in cells.enumerate() {
                 let _ = renderer.set_draw_color(White.value() as pixels::Color);
 
-                let x = (cellIndex * cell.width as usize) as i32;
-                let y = (rowIndex * cell.height as usize) as i32;
+                let x = (cell_index * cell.width as usize) as i32;
+                let y = (row_index * cell.height as usize) as i32;
 
                 let rect = rect::Rect::new(x, y, cell.width, cell.height);
                 let _ = renderer.fill_rect(rect);
@@ -51,7 +50,7 @@ pub struct FieldRow {
 impl FieldRow {
     pub fn new() -> FieldRow {
         let mut cells: Vec<FieldCell> = Vec::new();
-        for n in 0 .. ROWS_NUMBER {
+        for _ in 0 .. ROWS_NUMBER {
             cells.push(FieldCell::new(
                 thread_rng().gen_range(1, 3)
             ));
