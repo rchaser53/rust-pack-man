@@ -5,7 +5,7 @@ use constants::Direction::{East, West, South, North};
 
 const MOVE_SPEED: i16 = 5;
 
-pub struct CirclePosition {
+pub struct Circle {
     pub x: i16,
     pub y: i16,
     pub radius: i16,
@@ -14,15 +14,15 @@ pub struct CirclePosition {
     pub is_opening_mouth: bool
 }
 
-impl CirclePosition {
-    pub fn new() -> CirclePosition {
-        return CirclePosition {
+impl Circle {
+    pub fn new() -> Circle {
+        return Circle {
             x: 300, y:200, direction: East.value(),
             radius: 30, color: White.value(), is_opening_mouth: true
         };
     }
 
-    pub fn draw(&mut self, renderer: &render::Canvas<video::Window>) -> () {
+    pub fn draw(&mut self, renderer: &mut render::Canvas<video::Window>) -> () {
         self.move_mouth();
         self.move_circle();
         let _ = renderer.filled_pie(self.x, self.y, 20, self.radius + self.direction, self.direction, self.color);

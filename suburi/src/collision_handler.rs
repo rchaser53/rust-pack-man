@@ -1,5 +1,5 @@
 use sdl2::messagebox;
-use circle::CirclePosition;
+use circle::Circle;
 use std::process;
 
 pub fn show_message(title: &str, message: &str) -> () {
@@ -17,18 +17,18 @@ pub struct CollisionFrame {
 }
 
 impl CollisionFrame {
-  pub fn is_out_frame(&mut self, circle: &CirclePosition) -> () {
+  pub fn is_out_frame(&mut self, circle: &Circle) -> () {
     if self.is_out_xaxis(&circle) || self.is_out_yaxis(&circle) {
       let _ = show_message("title", "out screen!");
       process::exit(1);
     }
   }
 
-  pub fn is_out_xaxis(&mut self, circle: &CirclePosition) -> bool {
+  pub fn is_out_xaxis(&mut self, circle: &Circle) -> bool {
     return circle.x < 0 || self.screen_width < circle.x;
   }
 
-  pub fn is_out_yaxis(&mut self, circle: &CirclePosition) -> bool {
+  pub fn is_out_yaxis(&mut self, circle: &Circle) -> bool {
     return circle.y < 0 || self.screen_height < circle.y;
   }
 }

@@ -3,6 +3,7 @@ use rand::{thread_rng, Rng};
 
 use constants::{BackgroundColor, Direction};
 use constants::BackgroundColor::{Black, Aqua, White};
+use circle::{Circle};
 
 pub const SCREEN_WIDTH: i16 = 600;
 pub const SCREEN_HEIGHT: i16 = 600;
@@ -11,22 +12,28 @@ const CELL_HEIGHT: i16 = 30;
 const COLUMUNS_NUMBER: i16 = SCREEN_WIDTH / CELL_WIDTH;
 const ROWS_NUMBER: i16 = SCREEN_HEIGHT / CELL_HEIGHT;
 
-pub struct Field {
-    field_rows: Vec<FieldRow>,
+pub struct Field<'a> {
+    pub field_rows: Vec<FieldRow>,
+    pub circle: &'a mut Circle
 }
-impl Field {
-    pub fn new() -> Field {
+impl <'a>Field <'a> {
+    pub fn new(circle: &'a mut Circle) -> Field {
         let mut rows: Vec<FieldRow> = Vec::new();
         for _ in 0 .. COLUMUNS_NUMBER {
             rows.push(FieldRow::new());
         }
         
         return Field {
-            field_rows: rows
+            field_rows: rows,
+            circle: circle
         };
     }
 
     pub fn draw(&self, renderer: &mut render::Canvas<video::Window>) -> () {
+        self.draw_row(renderer);
+    }
+
+    pub fn draw_row(&self, renderer: &mut render::Canvas<video::Window>) -> () {
         let rows = self.field_rows.iter();
 
         for (row_index, row) in rows.enumerate() {

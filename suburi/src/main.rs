@@ -19,7 +19,7 @@ use constants::BackgroundColor::{White, Black, Aqua};
 use constants::Direction::{East, West, South, North};
 
 pub mod circle;
-use circle::{CirclePosition};
+use circle::{Circle};
 
 pub mod collision_handler;
 use collision_handler::{CollisionFrame};
@@ -54,7 +54,7 @@ fn create_window(video_ctx: sdl2::VideoSubsystem , width: u32, height: u32)
                 .map_err(|err| CustomError::ParseWindowBuildError(err));
 }
 
-fn handle_event(events: &mut EventPump, circle: &mut CirclePosition) -> () {
+fn handle_event(events: &mut EventPump, circle: &mut Circle) -> () {
     for event in events.poll_iter() {
         match event {
             Event::Quit {..} | Event::KeyDown {keycode: Some(Keycode::Escape), ..} => {
@@ -85,7 +85,7 @@ const COLLISION_FRAME: CollisionFrame = CollisionFrame {
 fn main() {
     // cannnot use fn for const in stable version
     // perhaps i need to try to use nightly version?
-    let mut circle = CirclePosition::new();
+    let mut circle = Circle::new();
     let fifteen_millis = time::Duration::from_millis(15);
 
     let ctx = sdl2::init().unwrap_or_else(|err| panic!("{}", err));
@@ -101,19 +101,18 @@ fn main() {
     let music = play_bgm(Path::new("nyan.mp3"));
     let _ = music.play(1);
 
-    let hoge = Field::new();
+    let mut hoge = Field::new(&mut circle);
 
     let mut main_loop = || {
         thread::sleep(fifteen_millis);
 
-        handle_event(&mut events, &mut circle);
-        COLLISION_FRAME.is_out_frame(&circle);
+        handle_event(&mut events, &mut hoge.circle);
+        COLLISION_FRAME.is_out_frame(&hoge.circle);
         canvas.setup_draw_background();
 
-        circle.draw(&canvas);
+        hoge.circle.draw(&mut canvas);
         canvas.present();
     };
-
 
     loop { main_loop(); }
 }
