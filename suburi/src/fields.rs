@@ -12,6 +12,24 @@ const CELL_HEIGHT: i16 = 30;
 const COLUMUNS_NUMBER: i16 = SCREEN_WIDTH / CELL_WIDTH;
 const ROWS_NUMBER: i16 = SCREEN_HEIGHT / CELL_HEIGHT;
 
+#[derive(Debug)]
+pub enum CellType {
+    Normal,
+    Block,
+    Damage
+}
+
+impl CellType {
+    fn convert(num: i16) -> CellType {
+        match num {
+            0 => CellType::Normal,
+            1 => CellType::Block,
+            2 => CellType::Damage,
+            _ => CellType::Damage
+        }
+    }
+}
+
 pub struct Field<'a> {
     pub field_rows: Vec<FieldRow>,
     pub circle: &'a mut Circle
@@ -22,7 +40,10 @@ impl <'a>Field <'a> {
         for _ in 0 .. COLUMUNS_NUMBER {
             rows.push(FieldRow::new());
         }
-        
+
+        let hoge = CellType::convert(thread_rng().gen_range(0, 3));
+        println!("{:?}", hoge);
+
         return Field {
             field_rows: rows,
             circle: circle
@@ -78,8 +99,8 @@ pub struct FieldCell {
 impl FieldCell {
     pub fn new(n: i16) -> FieldCell {
         FieldCell {
-            width: 30,
-            height: 30,
+            width: CELL_WIDTH as u32,
+            height: CELL_HEIGHT as u32,
             color: White.value() as pixels::Color
         }
     }
