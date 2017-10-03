@@ -1,4 +1,6 @@
-use std::mem::transmute;
+extern crate num;
+
+use self::num::rational::{Ratio};
 
 use sdl2::{render, video, rect, pixels};
 use rand::{thread_rng, Rng};
@@ -14,22 +16,14 @@ const CELL_HEIGHT: i16 = 30;
 const COLUMUNS_NUMBER: i16 = SCREEN_WIDTH / CELL_WIDTH;
 const ROWS_NUMBER: i16 = SCREEN_HEIGHT / CELL_HEIGHT;
 
-#[derive(Debug)]
+#[derive(Copy)]
 pub enum CellType {
     Normal,
     Block,
     Damage
 }
-
-impl CellType {
-    fn convert(num: i16) -> CellType {
-        match num {
-            0 => CellType::Normal,
-            1 => CellType::Block,
-            2 => CellType::Damage,
-            _ => CellType::Damage
-        }
-    }
+impl Clone for CellType {
+    fn clone(&self) -> CellType { *self }
 }
 
 pub struct Field<'a> {
@@ -43,7 +37,7 @@ impl <'a>Field <'a> {
             rows.push(FieldRow::new());
         }
 
-        println!("{}", unsafe { transmute::<CellType, i8>(CellType::Normal) });
+        println!("{}", Ratio::from_integer(CellType::Block as i16));
 
         return Field {
             field_rows: rows,
@@ -94,7 +88,8 @@ impl FieldRow {
 pub struct FieldCell {
     width: u32,
     height: u32,
-    color: pixels::Color
+    color: pixels::Color,
+    // cell_type: CellType
 }
 
 impl FieldCell {
@@ -103,6 +98,7 @@ impl FieldCell {
             width: CELL_WIDTH as u32,
             height: CELL_HEIGHT as u32,
             color: White.value() as pixels::Color
+            // cell_type: CellType::convert(thread_rng().gen_range(0, 3))
         }
     }
 }
