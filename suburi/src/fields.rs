@@ -1,3 +1,5 @@
+use std::mem::transmute;
+
 use sdl2::{render, video, rect, pixels};
 use rand::{thread_rng, Rng};
 
@@ -41,8 +43,7 @@ impl <'a>Field <'a> {
             rows.push(FieldRow::new());
         }
 
-        let hoge = CellType::convert(thread_rng().gen_range(0, 3));
-        println!("{:?}", hoge);
+        println!("{}", unsafe { transmute::<CellType, i8>(CellType::Normal) });
 
         return Field {
             field_rows: rows,
