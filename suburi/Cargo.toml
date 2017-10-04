@@ -4,6 +4,7 @@ name = "suburi"
 version = "0.1.0"
 
 [dependencies]
+enum_primitive = "0.1.1"
 env_logger = "0.4.3"
 log = "0.3.8"
 num = "0.1.40"

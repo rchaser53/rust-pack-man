@@ -1,3 +1,6 @@
+#[macro_use]
+extern crate enum_primitive;
+extern crate num;
 extern crate sdl2;
 extern crate rand;
 
