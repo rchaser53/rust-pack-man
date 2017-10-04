@@ -1,6 +1,5 @@
-extern crate num;
-
-use self::num::rational::{Ratio};
+use num::FromPrimitive;
+use num::rational::{Ratio};
 
 use sdl2::{render, video, rect, pixels};
 use rand::{thread_rng, Rng};
@@ -16,11 +15,13 @@ const CELL_HEIGHT: i16 = 30;
 const COLUMUNS_NUMBER: i16 = SCREEN_WIDTH / CELL_WIDTH;
 const ROWS_NUMBER: i16 = SCREEN_HEIGHT / CELL_HEIGHT;
 
-#[derive(Copy)]
-pub enum CellType {
-    Normal,
-    Block,
-    Damage
+enum_from_primitive! {
+    #[derive(Copy, Debug)]
+    pub enum CellType {
+        Normal,
+        Block,
+        Damage
+    }
 }
 impl Clone for CellType {
     fn clone(&self) -> CellType { *self }
@@ -38,6 +39,7 @@ impl <'a>Field <'a> {
         }
 
         println!("{}", Ratio::from_integer(CellType::Block as i16));
+        println!("{:?}", CellType::from_i16(1).unwrap());
 
         return Field {
             field_rows: rows,
@@ -93,12 +95,12 @@ pub struct FieldCell {
 }
 
 impl FieldCell {
-    pub fn new(n: i16) -> FieldCell {
+    pub fn new(cell_type: i16) -> FieldCell {
         FieldCell {
             width: CELL_WIDTH as u32,
             height: CELL_HEIGHT as u32,
-            color: White.value() as pixels::Color
-            // cell_type: CellType::convert(thread_rng().gen_range(0, 3))
+            color: White.value() as pixels::Color,
+            // cell_type: num::FromPrimitive::from_i16(cell_type)
         }
     }
 }
