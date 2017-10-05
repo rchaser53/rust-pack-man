@@ -104,17 +104,18 @@ fn main() {
     let music = play_bgm(Path::new("nyan.mp3"));
     let _ = music.play(1);
 
-    let mut hoge = Field::new(&mut circle);
+    let mut field = Field::new(&mut circle);
 
     let mut main_loop = || {
         thread::sleep(fifteen_millis);
 
-        handle_event(&mut events, &mut hoge.circle);
-        COLLISION_FRAME.is_out_frame(&hoge.circle);
+        handle_event(&mut events, &mut field.circle);
+        COLLISION_FRAME.is_out_frame(&field.circle);
         canvas.setup_draw_background();
 
-        hoge.circle.draw(&mut canvas);
-        hoge.get_current_cell();
+        field.draw(&mut canvas);
+        field.circle.draw(&mut canvas);
+        field.get_current_cell();
         canvas.present();
     };
 

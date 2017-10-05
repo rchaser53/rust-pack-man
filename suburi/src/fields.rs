@@ -16,11 +16,9 @@ const COLUMUNS_NUMBER: i16 = SCREEN_WIDTH / CELL_WIDTH;
 const ROWS_NUMBER: i16 = SCREEN_HEIGHT / CELL_HEIGHT;
 
 enum_from_primitive! {
-    #[derive(Copy, Debug)]
+    #[derive(Copy)]
     pub enum CellType {
-        Normal,
-        Block,
-        Damage
+        Normal, Block, Damage
     }
 }
 impl Clone for CellType {
@@ -54,7 +52,9 @@ impl <'a>Field <'a> {
         for (row_index, row) in rows.enumerate() {
             let cells = row.field_cells.iter();
             for (cell_index, cell) in cells.enumerate() {
-                let _ = renderer.set_draw_color(White.value() as pixels::Color);
+
+                let color = BackgroundColor::from_i16(cell.cell_type as i16).unwrap().value();
+                let _ = renderer.set_draw_color(color as pixels::Color);
 
                 let x = (cell_index * cell.width as usize) as i32;
                 let y = (row_index * cell.height as usize) as i32;
@@ -65,7 +65,7 @@ impl <'a>Field <'a> {
         }
     }
 
-    pub fn get_current_cell(&self) -> cell_type {
+    pub fn get_current_cell(&self) -> CellType {
         let column = (self.circle.x * COLUMUNS_NUMBER) / SCREEN_WIDTH;
         let row = (self.circle.y * ROWS_NUMBER) / SCREEN_HEIGHT;
 
@@ -81,7 +81,7 @@ impl FieldRow {
         let mut cells: Vec<FieldCell> = Vec::new();
         for _ in 0 .. ROWS_NUMBER {
             cells.push(FieldCell::new(
-                thread_rng().gen_range(1, 3)
+                thread_rng().gen_range(0, 3)
             ));
         }
         

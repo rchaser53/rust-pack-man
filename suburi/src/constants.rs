@@ -1,8 +1,16 @@
+use num::FromPrimitive;
 use sdl2::pixels::Color;
 
-pub enum BackgroundColor {
-    Black, White, Aqua
+enum_from_primitive! {
+    #[derive(Copy)]
+    pub enum BackgroundColor {
+        Black, White, Aqua
+    }
 }
+impl Clone for BackgroundColor {
+    fn clone(&self) -> BackgroundColor { *self }
+}
+
 impl BackgroundColor {
     pub fn value(&self) -> Color {
         match *self {
