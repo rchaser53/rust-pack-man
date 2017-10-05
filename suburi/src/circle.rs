@@ -4,6 +4,11 @@ use constants::BackgroundColor::{White};
 use constants::Direction::{East, West, South, North};
 
 const MOVE_SPEED: i16 = 5;
+const INITIAL_X: i16 = 200;
+const INITIAL_Y: i16 = 200;
+const CIRCLE_RADIUS: i16 = 15;
+const FULL_OPENED_MOUTH_ANGLE: i16 = 80;
+const CLOSED_MOUTH_ANGLE: i16 = 10;
 
 pub struct Circle {
     pub x: i16,
@@ -17,30 +22,30 @@ pub struct Circle {
 impl Circle {
     pub fn new() -> Circle {
         return Circle {
-            x: 300, y:200, direction: East.value(),
-            radius: 30, color: White.value(), is_opening_mouth: true
+            x: INITIAL_X, y: INITIAL_Y, direction: East.value(),
+            radius: CIRCLE_RADIUS, color: White.value(), is_opening_mouth: true
         };
     }
 
     pub fn draw(&mut self, renderer: &mut render::Canvas<video::Window>) -> () {
         self.move_mouth();
         self.move_circle();
-        let _ = renderer.filled_pie(self.x, self.y, 20, self.radius + self.direction, self.direction, self.color);
+        let _ = renderer.filled_pie(self.x, self.y, CIRCLE_RADIUS, self.radius + self.direction, self.direction, self.color);
     }
 
     pub fn is_full_opened_mouth(&mut self) -> bool {
-        return 80 <= self.radius;
+        return FULL_OPENED_MOUTH_ANGLE <= self.radius;
     }
 
     pub fn is_closed_mouth(&mut self) -> bool {
-        return self.radius <= 10;
+        return self.radius <= CLOSED_MOUTH_ANGLE;
     }
 
     pub fn move_mouth(&mut self) -> () {
         if self.is_opening_mouth {
-            self.radius += 10;
+            self.radius += CLOSED_MOUTH_ANGLE;
         } else {
-            self.radius -= 10;
+            self.radius -= CLOSED_MOUTH_ANGLE;
         }
 
         if self.is_full_opened_mouth() || self.is_closed_mouth() {
