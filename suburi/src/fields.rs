@@ -38,9 +38,6 @@ impl <'a>Field <'a> {
             rows.push(FieldRow::new());
         }
 
-        println!("{}", Ratio::from_integer(CellType::Block as i16));
-        println!("{:?}", CellType::from_i16(1).unwrap());
-
         return Field {
             field_rows: rows,
             circle: circle
@@ -67,10 +64,17 @@ impl <'a>Field <'a> {
             }
         }
     }
+
+    pub fn get_current_cell(&self) -> cell_type {
+        let column = (self.circle.x * COLUMUNS_NUMBER) / SCREEN_WIDTH;
+        let row = (self.circle.y * ROWS_NUMBER) / SCREEN_HEIGHT;
+
+        return self.field_rows[row as usize].field_cells[column as usize].cell_type;
+    }
 }
 
 pub struct FieldRow {
-    field_cells: Vec<FieldCell>,
+    pub field_cells: Vec<FieldCell>,
 }
 impl FieldRow {
     pub fn new() -> FieldRow {
@@ -88,10 +92,10 @@ impl FieldRow {
 }
 
 pub struct FieldCell {
-    width: u32,
-    height: u32,
-    color: pixels::Color,
-    // cell_type: CellType
+    pub width: u32,
+    pub height: u32,
+    pub color: pixels::Color,
+    pub cell_type: CellType
 }
 
 impl FieldCell {
@@ -100,7 +104,7 @@ impl FieldCell {
             width: CELL_WIDTH as u32,
             height: CELL_HEIGHT as u32,
             color: White.value() as pixels::Color,
-            // cell_type: num::FromPrimitive::from_i16(cell_type)
+            cell_type: CellType::from_i16(cell_type).unwrap()
         }
     }
 }

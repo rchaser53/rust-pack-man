@@ -114,6 +114,7 @@ fn main() {
         canvas.setup_draw_background();
 
         hoge.circle.draw(&mut canvas);
+        hoge.get_current_cell();
         canvas.present();
     };
 
