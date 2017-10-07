@@ -63,16 +63,20 @@ fn handle_event(events: &mut EventPump, circle: &mut Circle) -> () {
             Event::Quit {..} | Event::KeyDown {keycode: Some(Keycode::Escape), ..} => {
                 process::exit(1);
             },
-            Event::KeyDown { keycode: Some(Keycode::Left), ..} => {
+            Event::KeyDown { keycode: Some(Keycode::Left), ..}
+                | Event::KeyDown { keycode: Some(Keycode::H), ..} => {
                 circle.direction = West.value();
             },
-            Event::KeyDown { keycode: Some(Keycode::Right), ..} => {
+            Event::KeyDown { keycode: Some(Keycode::Right), ..}
+                | Event::KeyDown { keycode: Some(Keycode::L), ..} => {
                 circle.direction = East.value();
             },
-            Event::KeyDown { keycode: Some(Keycode::Up), ..} => {
+            Event::KeyDown { keycode: Some(Keycode::Up), ..}
+                | Event::KeyDown { keycode: Some(Keycode::K), ..} => {
                 circle.direction = North.value();
             },
-            Event::KeyDown { keycode: Some(Keycode::Down), ..} => {
+            Event::KeyDown { keycode: Some(Keycode::Down), ..}
+                | Event::KeyDown { keycode: Some(Keycode::J), ..} => {
                 circle.direction = South.value();
             },
             _ => {}
