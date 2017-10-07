@@ -4,6 +4,9 @@ use num::rational::{Ratio};
 use sdl2::{render, video, rect, pixels};
 use rand::{thread_rng, Rng};
 
+// use error_handling::{Result, CustomError}
+use std::{process};
+
 use constants::{BackgroundColor, Direction};
 use constants::BackgroundColor::{Black, Aqua, White};
 use circle::{Circle};
@@ -42,8 +45,9 @@ impl <'a>Field <'a> {
         };
     }
 
-    pub fn draw(&self, renderer: &mut render::Canvas<video::Window>) -> () {
+    pub fn renew(&mut self, renderer: &mut render::Canvas<video::Window>) -> () {
         self.draw_row(renderer);
+        self.circle.renew(renderer);
     }
 
     pub fn draw_row(&self, renderer: &mut render::Canvas<video::Window>) -> () {
@@ -69,7 +73,17 @@ impl <'a>Field <'a> {
         let column = (self.circle.x * COLUMUNS_NUMBER) / SCREEN_WIDTH;
         let row = (self.circle.y * ROWS_NUMBER) / SCREEN_HEIGHT;
 
+        if self.is_outof_frame(row, column) {
+            println!("{}", "nyan");
+            process::exit(1);
+        }
+
         return self.field_rows[row as usize].field_cells[column as usize].cell_type;
+    }
+
+    pub fn is_outof_frame(&self, row: i16, column: i16) -> bool {
+        return row < 0 || (self.field_rows.len() as i16 - 1) < row
+                || column < 0 || (self.field_rows[0].field_cells.len() as i16 - 1) < column;
     }
 }
 

@@ -24,9 +24,6 @@ use constants::Direction::{East, West, South, North};
 pub mod circle;
 use circle::{Circle};
 
-pub mod collision_handler;
-use collision_handler::{CollisionFrame};
-
 pub mod mixer_music;
 use mixer_music::{setup_sdl2_mixier, play_bgm, play_sound_effect};
 
@@ -84,11 +81,6 @@ fn handle_event(events: &mut EventPump, circle: &mut Circle) -> () {
     }
 }
 
-const COLLISION_FRAME: CollisionFrame = CollisionFrame {
-                                            screen_width: SCREEN_WIDTH,
-                                            screen_height: SCREEN_HEIGHT
-                                        };
-
 fn main() {
     // cannnot use fn for const in stable version
     // perhaps i need to try to use nightly version?
@@ -112,13 +104,10 @@ fn main() {
 
     let mut main_loop = || {
         thread::sleep(fifteen_millis);
-
         handle_event(&mut events, &mut field.circle);
-        COLLISION_FRAME.is_out_frame(&field.circle);
-        canvas.setup_draw_background();
 
-        field.draw(&mut canvas);
-        field.circle.draw(&mut canvas);
+        canvas.setup_draw_background();
+        field.renew(&mut canvas);
         field.get_current_cell();
         canvas.present();
     };

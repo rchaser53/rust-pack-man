@@ -27,18 +27,14 @@ impl Circle {
         };
     }
 
-    pub fn draw(&mut self, renderer: &mut render::Canvas<video::Window>) -> () {
+    pub fn renew(&mut self, renderer: &mut render::Canvas<video::Window>) -> () {
+        self.updateAnimationModel();
+        self.draw(renderer);
+    }
+
+    pub fn updateAnimationModel(&mut self) -> () {
         self.move_mouth();
         self.move_circle();
-        let _ = renderer.filled_pie(self.x, self.y, CIRCLE_RADIUS, self.radius + self.direction, self.direction, self.color);
-    }
-
-    pub fn is_full_opened_mouth(&mut self) -> bool {
-        return FULL_OPENED_MOUTH_ANGLE <= self.radius;
-    }
-
-    pub fn is_closed_mouth(&mut self) -> bool {
-        return self.radius <= CLOSED_MOUTH_ANGLE;
     }
 
     pub fn move_mouth(&mut self) -> () {
@@ -64,5 +60,18 @@ impl Circle {
         };
         self.x += x_amount;
         self.y += y_amount;
+    }
+
+    pub fn is_full_opened_mouth(&mut self) -> bool {
+        return FULL_OPENED_MOUTH_ANGLE <= self.radius;
+    }
+
+    pub fn is_closed_mouth(&mut self) -> bool {
+        return self.radius <= CLOSED_MOUTH_ANGLE;
+    }
+
+    pub fn draw(&mut self, renderer: &mut render::Canvas<video::Window>) -> () {
+        let _ = renderer.filled_pie(self.x, self.y, CIRCLE_RADIUS,
+                                    self.radius + self.direction, self.direction, self.color);
     }
 }
