@@ -97,8 +97,8 @@ fn main() {
                             .unwrap_or_else(|err| panic!("{}", err));
 
     setup_sdl2_mixier(2);
-    let music = play_bgm(Path::new("nyan.mp3"));
-    let _ = music.play(1);
+    // let music = play_bgm(Path::new("nyan.mp3"));
+    // let _ = music.play(1);
 
     let mut field = Field::new(&mut circle);
 
@@ -108,7 +108,12 @@ fn main() {
 
         canvas.setup_draw_background();
         field.renew(&mut canvas);
-        field.get_current_cell();
+        field.get_current_cell()
+            .map_err(|err| {
+                let nyan = CustomError::ParseGameOverError(err);
+                println!("{}", nyan);
+            }
+                        );
         canvas.present();
     };
 

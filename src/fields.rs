@@ -4,7 +4,7 @@ use num::rational::{Ratio};
 use sdl2::{render, video, rect, pixels};
 use rand::{thread_rng, Rng};
 
-// use error_handling::{Result, CustomError}
+use error_handling::{GameOverError, CustomError};
 use std::{process};
 
 use constants::{BackgroundColor, Direction};
@@ -69,16 +69,15 @@ impl <'a>Field <'a> {
         }
     }
 
-    pub fn get_current_cell(&self) -> CellType {
+    pub fn get_current_cell(&self) -> Result<CellType, GameOverError> {
         let column = (self.circle.x * COLUMUNS_NUMBER) / SCREEN_WIDTH;
         let row = (self.circle.y * ROWS_NUMBER) / SCREEN_HEIGHT;
 
         if self.is_outof_frame(row, column) {
-            println!("{}", "nyan");
-            process::exit(1);
+            return Err(GameOverError::OtherError(23));
         }
 
-        return self.field_rows[row as usize].field_cells[column as usize].cell_type;
+        return Ok(self.field_rows[row as usize].field_cells[column as usize].cell_type);
     }
 
     pub fn is_outof_frame(&self, row: i16, column: i16) -> bool {
