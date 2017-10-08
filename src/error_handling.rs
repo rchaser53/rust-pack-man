@@ -59,7 +59,7 @@ impl fmt::Display for CustomError {
         match *self {
             CustomError::ParseWindowBuildError(_) => write!(f, "nya-n"),
             CustomError::ParseGameOverError(ref e) => {
-                show_message("titler", e.description());
+                show_message("title", e.description());
                 process::exit(1);
             },
             CustomError::ParseString(ref e) => panic!("{}", e),

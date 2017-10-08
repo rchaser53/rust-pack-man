@@ -4,11 +4,11 @@ use num::rational::{Ratio};
 use sdl2::{render, video, rect, pixels};
 use rand::{thread_rng, Rng};
 
-use error_handling::{GameOverError, CustomError};
+use error_handling::{Result as CustomResult, GameOverError, CustomError};
 use std::{process};
 
 use constants::{BackgroundColor, Direction};
-use constants::BackgroundColor::{Black, Aqua, White};
+use constants::BackgroundColor::{White};
 use circle::{Circle};
 
 pub const SCREEN_WIDTH: i16 = 600;
@@ -45,9 +45,15 @@ impl <'a>Field <'a> {
         };
     }
 
-    pub fn renew(&mut self, renderer: &mut render::Canvas<video::Window>) -> () {
+    pub fn renew(&mut self, renderer: &mut render::Canvas<video::Window>) -> CustomResult<()> {
         self.draw_row(renderer);
-        self.circle.renew(renderer);
+
+        {
+            let current_cell = self.get_current_cell()?;
+            self.take_action_from_cell(&current_cell)?;
+        }
+
+        return Ok(self.circle.renew(renderer));
     }
 
     pub fn draw_row(&self, renderer: &mut render::Canvas<video::Window>) -> () {
@@ -69,7 +75,7 @@ impl <'a>Field <'a> {
         }
     }
 
-    pub fn get_current_cell(&self) -> Result<CellType, GameOverError> {
+    pub fn get_current_cell(&self) -> Result<&FieldCell, GameOverError> {
         let column = (self.circle.x * COLUMUNS_NUMBER) / SCREEN_WIDTH;
         let row = (self.circle.y * ROWS_NUMBER) / SCREEN_HEIGHT;
 
@@ -77,12 +83,19 @@ impl <'a>Field <'a> {
             return Err(GameOverError::OtherError("out of the frame"));
         }
 
-        return Ok(self.field_rows[row as usize].field_cells[column as usize].cell_type);
+        return Ok(&self.field_rows[row as usize].field_cells[column as usize]);
     }
 
     pub fn is_outof_frame(&self, row: i16, column: i16) -> bool {
         return row < 0 || (self.field_rows.len() as i16 - 1) < row
                 || column < 0 || (self.field_rows[0].field_cells.len() as i16 - 1) < column;
+    }
+
+    pub fn take_action_from_cell(&self, current_cell: &FieldCell) -> Result<(), GameOverError> {
+        match current_cell.cell_type {
+            CellType::Damage => Err(GameOverError::OtherError("hit the enemy")),
+            _ => Ok(())
+        }
     }
 }
 
