@@ -109,11 +109,7 @@ fn main() {
         canvas.setup_draw_background();
         field.renew(&mut canvas);
         field.get_current_cell()
-            .map_err(|err| {
-                let nyan = CustomError::ParseGameOverError(err);
-                println!("{}", nyan);
-            }
-                        );
+            .map_err(|err| println!("{}", CustomError::ParseGameOverError(err)));
         canvas.present();
     };
 

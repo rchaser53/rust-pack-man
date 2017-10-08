@@ -5,19 +5,19 @@ use std::{fmt, process, result};
 
 #[derive(Debug)]
 pub enum GameOverError {
-    OtherError(i16),
+    OtherError(&'static str)
 }
 impl fmt::Display for GameOverError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
-            GameOverError::OtherError(ref e) => write!(f, "SDL error: {}", e.to_string()),
+            GameOverError::OtherError(ref e) => write!(f, "{}", e.to_string()),
         }
     }
 }
 impl Error for GameOverError {
     fn description(&self) -> &str {
         match *self {
-            GameOverError::OtherError(_) => "nyan chu",
+            GameOverError::OtherError(error_message) => error_message,
         }
     }
     fn cause(&self) -> Option<&Error> { None }

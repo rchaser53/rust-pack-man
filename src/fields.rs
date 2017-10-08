@@ -74,7 +74,7 @@ impl <'a>Field <'a> {
         let row = (self.circle.y * ROWS_NUMBER) / SCREEN_HEIGHT;
 
         if self.is_outof_frame(row, column) {
-            return Err(GameOverError::OtherError(23));
+            return Err(GameOverError::OtherError("out of the frame"));
         }
 
         return Ok(self.field_rows[row as usize].field_cells[column as usize].cell_type);
