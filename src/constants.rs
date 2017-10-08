@@ -1,4 +1,3 @@
-use num::FromPrimitive;
 use sdl2::pixels::Color;
 
 enum_from_primitive! {

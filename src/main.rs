@@ -18,7 +18,7 @@ use sdl2::keyboard::Keycode;
 // use sdl2::image::{LoadTexture};
 
 pub mod constants;
-use constants::BackgroundColor::{White, Black, Aqua};
+use constants::BackgroundColor::{White, Black};
 use constants::Direction::{East, West, South, North};
 
 pub mod circle;
@@ -107,18 +107,9 @@ fn main() {
         handle_event(&mut events, &mut field.circle);
 
         canvas.setup_draw_background();
-        field.renew(&mut canvas).map_err(|err| println!("{}", err));
+        let _ = field.renew(&mut canvas).map_err(|err| println!("{}", err));
         canvas.present();
     };
 
     loop { main_loop(); }
 }
-
-// fn create_game_screen<'a>() -> Box<FnMut() -> () + 'a> {
-//     return Box::new(|| {
-//     });
-// }
-
-// let texture = texture_creator.load_texture("./hoge.jpg").unwrap();
-// let sound_chunk = play_sound_effect(Path::new("sine.wav"));
-// let _ = sdl2::mixer::Channel::all().play(&sound_chunk, 0);

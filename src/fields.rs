@@ -1,13 +1,11 @@
 use num::FromPrimitive;
-use num::rational::{Ratio};
 
 use sdl2::{render, video, rect, pixels};
 use rand::{thread_rng, Rng};
 
-use error_handling::{Result as CustomResult, GameOverError, CustomError};
-use std::{process};
 
-use constants::{BackgroundColor, Direction};
+use error_handling::{Result as CustomResult, GameOverError};
+use constants::{BackgroundColor};
 use constants::BackgroundColor::{White};
 use circle::{Circle};
 

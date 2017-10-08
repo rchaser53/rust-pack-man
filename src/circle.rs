@@ -28,11 +28,11 @@ impl Circle {
     }
 
     pub fn renew(&mut self, renderer: &mut render::Canvas<video::Window>) -> () {
-        self.updateAnimationModel();
+        self.update_animation_model();
         self.draw(renderer);
     }
 
-    pub fn updateAnimationModel(&mut self) -> () {
+    pub fn update_animation_model(&mut self) -> () {
         self.move_mouth();
         self.move_circle();
     }
