@@ -25,7 +25,7 @@ pub mod circle;
 use circle::{Circle};
 
 pub mod mixer_music;
-use mixer_music::{setup_sdl2_mixier, play_bgm, play_sound_effect};
+use mixer_music::{setup_sdl2_mixier, play_bgm};
 
 pub mod error_handling;
 use error_handling::{Result, CustomError};
@@ -81,6 +81,8 @@ fn handle_event(events: &mut EventPump, circle: &mut Circle) -> () {
     }
 }
 
+const BGM_PATH: &'static str = "assets/musics/nyan.mp3";
+
 fn main() {
     // cannnot use fn for const in stable version
     // perhaps i need to try to use nightly version?
@@ -97,7 +99,7 @@ fn main() {
                             .unwrap_or_else(|err| panic!("{}", err));
 
     setup_sdl2_mixier(2);
-    let music = play_bgm(Path::new("nyan.mp3"));
+    let music = play_bgm(Path::new(BGM_PATH));
     let _ = music.play(1);
 
     let mut field = Field::new(&mut circle);

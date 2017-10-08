@@ -1,9 +1,10 @@
 use num::FromPrimitive;
+use std::path::Path;
 
 use sdl2::{render, video, rect, pixels};
 use rand::{thread_rng, Rng};
 
-
+use mixer_music::play_sound_effect;
 use error_handling::{Result as CustomResult, GameOverError};
 use constants::{BackgroundColor};
 use constants::BackgroundColor::{White};
@@ -91,10 +92,18 @@ impl <'a>Field <'a> {
 
     pub fn take_action_from_cell(&self, current_cell: &FieldCell) -> Result<(), GameOverError> {
         match current_cell.cell_type {
-            CellType::Damage => Err(GameOverError::OtherError("hit the enemy")),
+            CellType::Damage => Err(hit_enemy()),
             _ => Ok(())
         }
     }
+}
+
+const HIT_EFFECT_PATH: &'static str = "assets/musics/sine.wav";
+const HIT_ENEMY_MESSAGE: &'static str = "hit the enemy";
+
+pub fn hit_enemy() -> GameOverError {
+    let _ = play_sound_effect(Path::new(&HIT_EFFECT_PATH));
+    return GameOverError::OtherError(HIT_ENEMY_MESSAGE);
 }
 
 pub struct FieldRow {

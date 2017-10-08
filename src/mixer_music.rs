@@ -1,7 +1,9 @@
 use std::path::Path;
+use std::{time, thread};
+
 use sdl2::mixer::{
     open_audio, allocate_channels,
-    Music, Chunk,
+    Music, Chunk, Channel,
     DEFAULT_CHANNELS, AUDIO_S16LSB
 };
 
@@ -19,6 +21,8 @@ pub fn play_bgm(path: &Path) -> Music {
     return Music::from_file(path).unwrap();
 }
 
-pub fn play_sound_effect(path: &Path) -> Chunk {
-    return Chunk::from_file(path).unwrap();
+pub fn play_sound_effect(path: &Path) -> () {
+    let path = Chunk::from_file(path).unwrap();
+    let _ = Channel::all().play(&path, 0);
+    thread::sleep(time::Duration::from_millis(200));
 }
