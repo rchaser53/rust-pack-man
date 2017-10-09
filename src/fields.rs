@@ -3,6 +3,7 @@ use std::path::Path;
 
 use sdl2::{render, video, rect, pixels};
 use rand::{thread_rng, Rng};
+use std::{fmt, process, result};
 
 use mixer_music::play_sound_effect;
 use error_handling::{Result as CustomResult, GameOverError};
@@ -27,6 +28,18 @@ impl Clone for CellType {
     fn clone(&self) -> CellType { *self }
 }
 
+const map_config: &'static str =
+"###################
+#                 #
+#                 #
+#                 #
+#                 #
+#                 #
+#                 #
+#                 #
+#                 #
+###################";
+
 pub struct Field<'a> {
     pub field_rows: Vec<FieldRow>,
     pub circle: &'a mut Circle
@@ -34,8 +47,10 @@ pub struct Field<'a> {
 impl <'a>Field <'a> {
     pub fn new(circle: &'a mut Circle) -> Field {
         let mut rows: Vec<FieldRow> = Vec::new();
-        for _ in 0 .. COLUMUNS_NUMBER {
-            rows.push(FieldRow::new());
+
+        let row_defs: Vec<&str> = map_config.split("\n").collect();
+        for row_def in row_defs {
+            rows.push(FieldRow::new(&row_def));
         }
 
         return Field {
@@ -110,11 +125,19 @@ pub struct FieldRow {
     pub field_cells: Vec<FieldCell>,
 }
 impl FieldRow {
-    pub fn new() -> FieldRow {
+    pub fn new(row_def: &str) -> FieldRow {
         let mut cells: Vec<FieldCell> = Vec::new();
-        for _ in 0 .. ROWS_NUMBER {
+
+        let cell_defs: Vec<char> = row_def.chars().collect();
+        for cell_def in cell_defs {
+            let cell_type = match cell_def {
+                ' ' => 0,
+                '#' => 2,
+                _ => 1
+            };
+
             cells.push(FieldCell::new(
-                thread_rng().gen_range(0, 3)
+                cell_type
             ));
         }
         
