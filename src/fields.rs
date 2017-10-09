@@ -23,7 +23,7 @@ const SQUARE_MAP_PATH: &'static str = "assets/maps/sample_map1.txt";
 enum_from_primitive! {
     #[derive(Copy)]
     pub enum CellType {
-        Normal, Block, Damage
+        Normal, Block, Damage, Wall
     }
 }
 impl Clone for CellType {
@@ -108,6 +108,7 @@ impl <'a>Field <'a> {
     pub fn take_action_from_cell(&self, current_cell: &FieldCell) -> Result<(), GameOverError> {
         match current_cell.cell_type {
             CellType::Damage => Err(hit_enemy()),
+            CellType::Wall => Err(hit_wall()),
             _ => Ok(())
         }
     }
@@ -115,10 +116,16 @@ impl <'a>Field <'a> {
 
 const HIT_EFFECT_PATH: &'static str = "assets/musics/sine.wav";
 const HIT_ENEMY_MESSAGE: &'static str = "hit the enemy";
+const HIT_ENEMY_WALL: &'static str = "hit the wall";
 
 pub fn hit_enemy() -> GameOverError {
     let _ = play_sound_effect(Path::new(&HIT_EFFECT_PATH));
     return GameOverError::OtherError(HIT_ENEMY_MESSAGE);
+}
+
+pub fn hit_wall() -> GameOverError {
+    let _ = play_sound_effect(Path::new(&HIT_EFFECT_PATH));
+    return GameOverError::OtherError(HIT_ENEMY_WALL);
 }
 
 pub struct FieldRow {
@@ -144,6 +151,7 @@ impl FieldRow {
         return match character {
             ' ' => 0,
             '#' => 2,
+            '?' => 3,
             _ => 1
         };
     }

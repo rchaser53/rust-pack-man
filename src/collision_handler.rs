@@ -19,7 +19,7 @@ pub struct CollisionFrame {
 impl CollisionFrame {
   pub fn is_out_frame(&mut self, circle: &Circle) -> () {
     if self.is_out_xaxis(&circle) || self.is_out_yaxis(&circle) {
-      // let _ = show_message("title", "out screen!");
+      let _ = show_message("title", "out screen!");
       process::exit(1);
     }
   }
