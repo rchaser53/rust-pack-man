@@ -4,8 +4,8 @@ use constants::BackgroundColor::{White};
 use constants::Direction::{East, West, South, North};
 
 const MOVE_SPEED: i16 = 5;
-const INITIAL_X: i16 = 200;
-const INITIAL_Y: i16 = 200;
+const INITIAL_X: i16 = 50;
+const INITIAL_Y: i16 = 50;
 const CIRCLE_RADIUS: i16 = 15;
 const FULL_OPENED_MOUTH_ANGLE: i16 = 80;
 const CLOSED_MOUTH_ANGLE: i16 = 10;

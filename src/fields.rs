@@ -4,7 +4,6 @@ use std::fs::File;
 use std::io::prelude::*;
 
 use sdl2::{render, video, rect, pixels};
-use rand::{thread_rng, Rng};
 
 use mixer_music::play_sound_effect;
 use error_handling::{Result as CustomResult, GameOverError};
@@ -19,7 +18,7 @@ const CELL_HEIGHT: i16 = 30;
 const COLUMUNS_NUMBER: i16 = SCREEN_WIDTH / CELL_WIDTH;
 const ROWS_NUMBER: i16 = SCREEN_HEIGHT / CELL_HEIGHT;
 
-const SQUARE_MAP_PATH: &'static str = "assets/maps/square.txt";
+const SQUARE_MAP_PATH: &'static str = "assets/maps/sample_map1.txt";
 
 enum_from_primitive! {
     #[derive(Copy)]
