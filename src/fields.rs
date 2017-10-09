@@ -131,19 +131,21 @@ impl FieldRow {
 
         let cell_defs: Vec<char> = row_def.chars().collect();
         for cell_def in cell_defs {
-            let cell_type = match cell_def {
-                ' ' => 0,
-                '#' => 2,
-                _ => 1
-            };
-
             cells.push(FieldCell::new(
-                cell_type
+                FieldRow::get_cell_type_from_charactor(cell_def)
             ));
         }
         
         return FieldRow {
             field_cells: cells
+        };
+    }
+
+    pub fn get_cell_type_from_charactor(character: char) -> i16 {
+        return match character {
+            ' ' => 0,
+            '#' => 2,
+            _ => 1
         };
     }
 }
