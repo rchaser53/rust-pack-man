@@ -1,9 +1,10 @@
 use num::FromPrimitive;
 use std::path::Path;
+use std::fs::File;
+use std::io::prelude::*;
 
 use sdl2::{render, video, rect, pixels};
 use rand::{thread_rng, Rng};
-use std::{fmt, process, result};
 
 use mixer_music::play_sound_effect;
 use error_handling::{Result as CustomResult, GameOverError};
@@ -18,6 +19,8 @@ const CELL_HEIGHT: i16 = 30;
 const COLUMUNS_NUMBER: i16 = SCREEN_WIDTH / CELL_WIDTH;
 const ROWS_NUMBER: i16 = SCREEN_HEIGHT / CELL_HEIGHT;
 
+const SQUARE_MAP_PATH: &'static str = "assets/maps/square.txt";
+
 enum_from_primitive! {
     #[derive(Copy)]
     pub enum CellType {
@@ -28,17 +31,14 @@ impl Clone for CellType {
     fn clone(&self) -> CellType { *self }
 }
 
-const map_config: &'static str =
-"###################
-#                 #
-#                 #
-#                 #
-#                 #
-#                 #
-#                 #
-#                 #
-#                 #
-###################";
+pub fn read_file(file_name: &str) -> String {
+    let mut file = File::open(file_name).expect("file not found");
+
+    let mut contents = String::new();
+    file.read_to_string(&mut contents)
+        .expect("something went wrong reading the file");
+    return contents
+}
 
 pub struct Field<'a> {
     pub field_rows: Vec<FieldRow>,
@@ -48,6 +48,7 @@ impl <'a>Field <'a> {
     pub fn new(circle: &'a mut Circle) -> Field {
         let mut rows: Vec<FieldRow> = Vec::new();
 
+        let map_config = read_file(SQUARE_MAP_PATH);
         let row_defs: Vec<&str> = map_config.split("\n").collect();
         for row_def in row_defs {
             rows.push(FieldRow::new(&row_def));
