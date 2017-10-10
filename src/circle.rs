@@ -17,14 +17,16 @@ pub struct Circle {
     pub radius: i16,
     pub direction: i16,
     pub color: pixels::Color,
-    pub is_opening_mouth: bool
+    pub is_opening_mouth: bool,
+    pub is_stoped: bool
 }
 
 impl Circle {
     pub fn new() -> Circle {
         return Circle {
             x: INITIAL_X, y: INITIAL_Y, direction: East.value(),
-            radius: CIRCLE_RADIUS, color: White.value(), is_opening_mouth: true
+            radius: CIRCLE_RADIUS, color: White.value(),
+            is_opening_mouth: true, is_stoped: false
         };
     }
 
@@ -35,6 +37,8 @@ impl Circle {
 
     pub fn update_animation_model(&mut self) -> () {
         self.move_mouth();
+
+        if self.is_stoped { return; }
         self.move_circle();
     }
 

@@ -1,5 +1,9 @@
 use sdl2::messagebox;
-use circle::Circle;
+
+use error_handling::{GameOverError};
+use mixer_music::play_sound_effect;
+
+use std::path::Path;
 use std::process;
 
 pub fn show_message(title: &str, message: &str) -> () {
@@ -11,24 +15,22 @@ pub fn show_message(title: &str, message: &str) -> () {
           );
 }
 
+const HIT_EFFECT_PATH: &'static str = "assets/musics/sine.wav";
+const HIT_ENEMY_MESSAGE: &'static str = "hit the enemy";
+const HIT_ENEMY_WALL: &'static str = "hit the wall";
+
 pub struct CollisionFrame {
   pub screen_width: i16,
   pub screen_height: i16
 }
-
 impl CollisionFrame {
-  pub fn is_out_frame(&mut self, circle: &Circle) -> () {
-    if self.is_out_xaxis(&circle) || self.is_out_yaxis(&circle) {
-      let _ = show_message("title", "out screen!");
-      process::exit(1);
-    }
+  pub fn hit_enemy() -> GameOverError {
+    let _ = play_sound_effect(Path::new(&HIT_EFFECT_PATH));
+    return GameOverError::OtherError(HIT_ENEMY_MESSAGE);
   }
 
-  pub fn is_out_xaxis(&mut self, circle: &Circle) -> bool {
-    return circle.x < 0 || self.screen_width < circle.x;
-  }
-
-  pub fn is_out_yaxis(&mut self, circle: &Circle) -> bool {
-    return circle.y < 0 || self.screen_height < circle.y;
+  pub fn hit_wall() -> GameOverError {
+    let _ = play_sound_effect(Path::new(&HIT_EFFECT_PATH));
+    return GameOverError::OtherError(HIT_ENEMY_WALL);
   }
 }

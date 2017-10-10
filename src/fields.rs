@@ -1,12 +1,11 @@
 use num::FromPrimitive;
-use std::path::Path;
 use std::fs::File;
 use std::io::prelude::*;
 
 use sdl2::{render, video, rect, pixels};
 
-use mixer_music::play_sound_effect;
 use error_handling::{Result as CustomResult, GameOverError};
+use collision_handler::{CollisionFrame};
 use constants::{BackgroundColor};
 use constants::BackgroundColor::{White};
 use game_status::{GameStatus};
@@ -37,7 +36,7 @@ pub fn read_file(file_name: &str) -> String {
     let mut contents = String::new();
     file.read_to_string(&mut contents)
         .expect("something went wrong reading the file");
-    return contents
+    return contents;
 }
 
 pub struct Field {
@@ -64,12 +63,14 @@ impl Field  {
 
     pub fn renew(&mut self, renderer: &mut render::Canvas<video::Window>) -> CustomResult<()> {
         if self.game_status.is_pause { return Ok(()); }
-
         self.draw_row(renderer);
-
+        
+        let current_cell_type;
         {
-            let current_cell = self.get_current_cell()?;
-            self.take_action_from_cell(&current_cell)?;
+            current_cell_type = self.get_current_cell_type()?;
+        }
+        {
+            self.take_action_from_cell_type(current_cell_type)?;
         }
 
         return Ok(self.circle.renew(renderer));
@@ -94,7 +95,7 @@ impl Field  {
         }
     }
 
-    pub fn get_current_cell(&self) -> Result<&FieldCell, GameOverError> {
+    pub fn get_current_cell_type(&self) -> Result<CellType, GameOverError> {
         let column = (self.circle.x * COLUMUNS_NUMBER) / SCREEN_WIDTH;
         let row = (self.circle.y * ROWS_NUMBER) / SCREEN_HEIGHT;
 
@@ -102,7 +103,7 @@ impl Field  {
             return Err(GameOverError::OtherError("out of the frame"));
         }
 
-        return Ok(&self.field_rows[row as usize].field_cells[column as usize]);
+        return Ok(self.field_rows[row as usize].field_cells[column as usize].cell_type);
     }
 
     pub fn is_outof_frame(&self, row: i16, column: i16) -> bool {
@@ -110,27 +111,19 @@ impl Field  {
                 || column < 0 || (self.field_rows[0].field_cells.len() as i16 - 1) < column;
     }
 
-    pub fn take_action_from_cell(&self, current_cell: &FieldCell) -> Result<(), GameOverError> {
-        match current_cell.cell_type {
-            CellType::Damage => Err(hit_enemy()),
-            CellType::Wall => Err(hit_wall()),
-            _ => Ok(())
+    pub fn take_action_from_cell_type(&mut self, current_cell_type: CellType) -> Result<(), GameOverError> {
+        match current_cell_type {
+            CellType::Damage => Err(CollisionFrame::hit_enemy()),
+            CellType::Wall => {
+                self.circle.is_stoped = true;
+                return Ok(());
+            },
+            _ => {
+                self.circle.is_stoped = false;
+                return Ok(());
+            }
         }
     }
-}
-
-const HIT_EFFECT_PATH: &'static str = "assets/musics/sine.wav";
-const HIT_ENEMY_MESSAGE: &'static str = "hit the enemy";
-const HIT_ENEMY_WALL: &'static str = "hit the wall";
-
-pub fn hit_enemy() -> GameOverError {
-    let _ = play_sound_effect(Path::new(&HIT_EFFECT_PATH));
-    return GameOverError::OtherError(HIT_ENEMY_MESSAGE);
-}
-
-pub fn hit_wall() -> GameOverError {
-    let _ = play_sound_effect(Path::new(&HIT_EFFECT_PATH));
-    return GameOverError::OtherError(HIT_ENEMY_WALL);
 }
 
 pub struct FieldRow {
