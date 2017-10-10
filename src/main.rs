@@ -21,15 +21,13 @@ pub mod constants;
 use constants::BackgroundColor::{White, Black};
 use constants::Direction::{East, West, South, North};
 
-pub mod circle;
-use circle::{Circle};
-
 pub mod mixer_music;
 use mixer_music::{setup_sdl2_mixier, play_bgm};
 
 pub mod error_handling;
 use error_handling::{Result, CustomError};
 
+pub mod circle;
 pub mod fields;
 use fields::{Field, SCREEN_WIDTH, SCREEN_HEIGHT};
 
@@ -54,7 +52,7 @@ fn create_window(video_ctx: sdl2::VideoSubsystem , width: u32, height: u32)
                 .map_err(|err| CustomError::ParseWindowBuildError(err));
 }
 
-fn handle_event(events: &mut EventPump, circle: &mut Circle) -> () {
+fn handle_event(events: &mut EventPump, field: &mut Field) -> () {
     for event in events.poll_iter() {
         match event {
             Event::Quit {..} | Event::KeyDown {keycode: Some(Keycode::Escape), ..} => {
@@ -62,19 +60,22 @@ fn handle_event(events: &mut EventPump, circle: &mut Circle) -> () {
             },
             Event::KeyDown { keycode: Some(Keycode::Left), ..}
                 | Event::KeyDown { keycode: Some(Keycode::H), ..} => {
-                circle.direction = West.value();
+                field.circle.direction = West.value();
             },
             Event::KeyDown { keycode: Some(Keycode::Right), ..}
                 | Event::KeyDown { keycode: Some(Keycode::L), ..} => {
-                circle.direction = East.value();
+                field.circle.direction = East.value();
             },
             Event::KeyDown { keycode: Some(Keycode::Up), ..}
                 | Event::KeyDown { keycode: Some(Keycode::K), ..} => {
-                circle.direction = North.value();
+                field.circle.direction = North.value();
             },
             Event::KeyDown { keycode: Some(Keycode::Down), ..}
                 | Event::KeyDown { keycode: Some(Keycode::J), ..} => {
-                circle.direction = South.value();
+                field.circle.direction = South.value();
+            },
+            Event::KeyDown {keycode: Some(Keycode::Space), ..} => {
+                field.game_status.is_pause = !field.game_status.is_pause;
             },
             _ => {}
         }
@@ -86,7 +87,6 @@ const BGM_PATH: &'static str = "assets/musics/nyan.mp3";
 fn main() {
     // cannnot use fn for const in stable version
     // perhaps i need to try to use nightly version?
-    let mut circle = Circle::new();
     let fifteen_millis = time::Duration::from_millis(15);
 
     let ctx = sdl2::init().unwrap_or_else(|err| panic!("{}", err));
@@ -102,11 +102,11 @@ fn main() {
     let music = play_bgm(Path::new(BGM_PATH));
     let _ = music.play(1);
 
-    let mut field = Field::new(&mut circle);
+    let mut field = Field::new();
 
     let mut main_loop = || {
         thread::sleep(fifteen_millis);
-        handle_event(&mut events, &mut field.circle);
+        handle_event(&mut events, &mut field);
 
         canvas.setup_draw_background();
         let _ = field.renew(&mut canvas).map_err(|err| println!("{}", err));

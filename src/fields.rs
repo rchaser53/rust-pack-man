@@ -20,6 +20,10 @@ const ROWS_NUMBER: i16 = SCREEN_HEIGHT / CELL_HEIGHT;
 
 const SQUARE_MAP_PATH: &'static str = "assets/maps/sample_map1.txt";
 
+pub struct GameStatus {
+    pub is_pause: bool,
+}
+
 enum_from_primitive! {
     #[derive(Copy)]
     pub enum CellType {
@@ -39,12 +43,13 @@ pub fn read_file(file_name: &str) -> String {
     return contents
 }
 
-pub struct Field<'a> {
+pub struct Field {
     pub field_rows: Vec<FieldRow>,
-    pub circle: &'a mut Circle
+    pub circle: Circle,
+    pub game_status: GameStatus
 }
-impl <'a>Field <'a> {
-    pub fn new(circle: &'a mut Circle) -> Field {
+impl Field  {
+    pub fn new() -> Field {
         let mut rows: Vec<FieldRow> = Vec::new();
 
         let map_config = read_file(SQUARE_MAP_PATH);
@@ -55,11 +60,16 @@ impl <'a>Field <'a> {
 
         return Field {
             field_rows: rows,
-            circle: circle
+            circle: Circle::new(),
+            game_status: GameStatus {
+                is_pause: false
+            }
         };
     }
 
     pub fn renew(&mut self, renderer: &mut render::Canvas<video::Window>) -> CustomResult<()> {
+        if self.game_status.is_pause { return Ok(()); }
+
         self.draw_row(renderer);
 
         {
