@@ -1,5 +1,6 @@
 use sdl2::gfx::primitives::DrawRenderer;
 use sdl2::{render, pixels, video};
+
 use constants::BackgroundColor::{White};
 use constants::Direction::{East, West, South, North};
 

@@ -9,6 +9,7 @@ use mixer_music::play_sound_effect;
 use error_handling::{Result as CustomResult, GameOverError};
 use constants::{BackgroundColor};
 use constants::BackgroundColor::{White};
+use game_status::{GameStatus};
 use circle::{Circle};
 
 pub const SCREEN_WIDTH: i16 = 600;
@@ -19,10 +20,6 @@ const COLUMUNS_NUMBER: i16 = SCREEN_WIDTH / CELL_WIDTH;
 const ROWS_NUMBER: i16 = SCREEN_HEIGHT / CELL_HEIGHT;
 
 const SQUARE_MAP_PATH: &'static str = "assets/maps/sample_map1.txt";
-
-pub struct GameStatus {
-    pub is_pause: bool,
-}
 
 enum_from_primitive! {
     #[derive(Copy)]
@@ -61,9 +58,7 @@ impl Field  {
         return Field {
             field_rows: rows,
             circle: Circle::new(),
-            game_status: GameStatus {
-                is_pause: false
-            }
+            game_status: GameStatus::new()
         };
     }
 

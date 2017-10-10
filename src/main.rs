@@ -4,10 +4,6 @@ extern crate num;
 extern crate sdl2;
 extern crate rand;
 
-// #[macro_use]
-// extern crate log;
-// extern crate env_logger;
-
 use std::{thread, process, time};
 use std::path::Path;
 
@@ -27,6 +23,7 @@ use mixer_music::{setup_sdl2_mixier, play_bgm};
 pub mod error_handling;
 use error_handling::{Result, CustomError};
 
+pub mod game_status;
 pub mod circle;
 pub mod fields;
 use fields::{Field, SCREEN_WIDTH, SCREEN_HEIGHT};
