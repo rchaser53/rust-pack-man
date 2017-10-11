@@ -4,6 +4,7 @@ use std::io::prelude::*;
 
 use sdl2::{render, video, rect, pixels};
 
+use constants::Direction::{East, West, South, North};
 use error_handling::{Result as CustomResult, GameOverError};
 use collision_handler::{CollisionFrame};
 use constants::{BackgroundColor};
@@ -95,9 +96,21 @@ impl Field  {
         }
     }
 
-    pub fn get_current_cell_type(&self) -> Result<CellType, GameOverError> {
+    pub fn get_next_cell_index(&self) -> (i16, i16) {
         let column = (self.circle.x * COLUMUNS_NUMBER) / SCREEN_WIDTH;
         let row = (self.circle.y * ROWS_NUMBER) / SCREEN_HEIGHT;
+
+        return match self.circle.direction {
+            num if num == East.value() => (row, column + 1),
+            num if num == South.value() => (row + 1, column),
+            num if num == West.value() => (row, column - 1),
+            num if num == North.value() => (row - 1, column),
+            _ => (column, row)
+        };
+    } 
+
+    pub fn get_current_cell_type(&self) -> Result<CellType, GameOverError> {
+        let (row, column) = self.get_next_cell_index();
 
         if self.is_outof_frame(row, column) {
             return Err(GameOverError::OtherError("out of the frame"));
