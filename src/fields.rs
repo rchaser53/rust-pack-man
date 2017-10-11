@@ -97,15 +97,15 @@ impl Field  {
     }
 
     pub fn get_next_cell_index(&self) -> (i16, i16) {
-        let column = (self.circle.x * COLUMUNS_NUMBER) / SCREEN_WIDTH;
-        let row = (self.circle.y * ROWS_NUMBER) / SCREEN_HEIGHT;
+        let column: f32 = (self.circle.x * COLUMUNS_NUMBER) as f32 / SCREEN_WIDTH as f32;
+        let row: f32 = (self.circle.y * ROWS_NUMBER) as f32 / SCREEN_HEIGHT as f32;
 
         return match self.circle.direction {
-            num if num == East.value() => (row, column + 1),
-            num if num == South.value() => (row + 1, column),
-            num if num == West.value() => (row, column - 1),
-            num if num == North.value() => (row - 1, column),
-            _ => (column, row)
+            num if num == East.value() => (row as i16, column.round() as i16),
+            num if num == South.value() => (row.round() as i16, column as i16),
+            num if num == West.value() => (row as i16, column.round() as i16 - 1),
+            num if num == North.value() => (row.round() as i16 - 1, column as i16),
+            _ => (column as i16, row as i16)
         };
     } 
 
