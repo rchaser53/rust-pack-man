@@ -107,7 +107,7 @@ impl Field  {
             return Err(GameOverError::OtherError("out of the frame"));
         }
 
-        return Ok(self.field_rows[row as usize].field_cells[column as usize].cell_type);
+        return Ok(self.field_rows[row as usize].field_cells[column as usize].status.cell_type);
     }
 
     pub fn is_outof_frame(&self, row: i16, column: i16) -> bool {
