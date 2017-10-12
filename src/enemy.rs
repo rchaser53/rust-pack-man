@@ -42,3 +42,44 @@ impl CirclePosition {
 // pub fn is_closed_mouth(&mut self) -> bool {
 //     return self.radius <= 10;
 // }
+
+
+
+// trait DuckLike {
+//     fn quack(&self);
+//     fn walk(&self) {
+//       println!("walking");
+//     }
+// }
+
+// struct Duck;
+// impl DuckLike for Duck {
+//     fn quack(&self) {
+//         println!("quack");
+//     }
+// }
+
+// struct Tsuchinoko;
+// impl DuckLike for Tsuchinoko {
+//     fn quack(&self) {
+//         println!("mew");
+//     }
+
+//     fn walk(&self) {
+//         println!("wriggling");
+//     }
+// }
+
+// fn duck_go<D: DuckLike>(duck: D) -> D {
+//     duck.quack();
+//     duck.walk();
+
+//     return duck;
+// }
+
+// fn main() {
+//     let duck = Duck;
+//     let tsuchinoko = Tsuchinoko;
+
+//     duck_go(tsuchinoko);
+// }
