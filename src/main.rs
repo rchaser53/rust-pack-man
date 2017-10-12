@@ -81,12 +81,6 @@ fn handle_event(events: &mut EventPump, field: &mut Field) -> () {
     }
 }
 
-macro_rules! expr { ($x:expr) => ($x) } // HACK
-macro_rules! tuple_index {
-    ($tuple:expr, $idx:tt) => { expr!($tuple.$idx) }
-}
-// const hoge:(i8, i16, i32) = (3, 5, 7);
-
 const BGM_PATH: &'static str = "assets/musics/nyan.mp3";
 
 fn main() {
