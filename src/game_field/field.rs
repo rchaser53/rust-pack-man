@@ -1,23 +1,21 @@
-use num::FromPrimitive;
 use std::fs::File;
 use std::io::prelude::*;
 
-use sdl2::{render, video, rect, pixels};
+use sdl2::{render, video};
 
 use constants::Direction::{East, West, South, North};
 use error_handling::{Result as CustomResult, GameOverError};
 use collision_handler::{CollisionFrame};
-use constants::{BackgroundColor};
-use constants::BackgroundColor::{White};
 use game_status::{GameStatus};
 use circle::{Circle};
+use game_field::field_row::FieldRow;
 
 pub const SCREEN_WIDTH: i16 = 600;
 pub const SCREEN_HEIGHT: i16 = 600;
-const CELL_WIDTH: i16 = 30;
-const CELL_HEIGHT: i16 = 30;
-const COLUMUNS_NUMBER: i16 = SCREEN_WIDTH / CELL_WIDTH;
-const ROWS_NUMBER: i16 = SCREEN_HEIGHT / CELL_HEIGHT;
+pub const CELL_WIDTH: i16 = 30;
+pub const CELL_HEIGHT: i16 = 30;
+pub const COLUMUNS_NUMBER: i16 = SCREEN_WIDTH / CELL_WIDTH;
+pub const ROWS_NUMBER: i16 = SCREEN_HEIGHT / CELL_HEIGHT;
 
 const SQUARE_MAP_PATH: &'static str = "assets/maps/sample_map1.txt";
 
@@ -45,6 +43,7 @@ pub struct Field {
     pub circle: Circle,
     pub game_status: GameStatus
 }
+
 impl Field  {
     pub fn new() -> Field {
         let mut rows: Vec<FieldRow> = Vec::new();
@@ -83,15 +82,7 @@ impl Field  {
         for (row_index, row) in rows.enumerate() {
             let cells = row.field_cells.iter();
             for (cell_index, cell) in cells.enumerate() {
-
-                let color = BackgroundColor::from_i16(cell.cell_type as i16).unwrap().value();
-                let _ = renderer.set_draw_color(color as pixels::Color);
-
-                let x = (cell_index * cell.width as usize) as i32;
-                let y = (row_index * cell.height as usize) as i32;
-
-                let rect = rect::Rect::new(x, y, cell.width, cell.height);
-                let _ = renderer.fill_rect(rect);
+                cell.draw(renderer, row_index, cell_index);
             }
         }
     }
@@ -135,53 +126,6 @@ impl Field  {
                 self.circle.is_stoped = false;
                 return Ok(());
             }
-        }
-    }
-}
-
-pub struct FieldRow {
-    pub field_cells: Vec<FieldCell>,
-}
-impl FieldRow {
-    pub fn new(row_def: &str) -> FieldRow {
-        let mut cells: Vec<FieldCell> = Vec::new();
-
-        let cell_defs: Vec<char> = row_def.chars().collect();
-        for cell_def in cell_defs {
-            cells.push(FieldCell::new(
-                FieldRow::get_cell_type_from_charactor(cell_def)
-            ));
-        }
-        
-        return FieldRow {
-            field_cells: cells
-        };
-    }
-
-    pub fn get_cell_type_from_charactor(character: char) -> i16 {
-        return match character {
-            ' ' => 0,
-            '#' => 2,
-            '?' => 3,
-            _ => 1
-        };
-    }
-}
-
-pub struct FieldCell {
-    pub width: u32,
-    pub height: u32,
-    pub color: pixels::Color,
-    pub cell_type: CellType
-}
-
-impl FieldCell {
-    pub fn new(cell_type: i16) -> FieldCell {
-        FieldCell {
-            width: CELL_WIDTH as u32,
-            height: CELL_HEIGHT as u32,
-            color: White.value() as pixels::Color,
-            cell_type: CellType::from_i16(cell_type).unwrap()
         }
     }
 }

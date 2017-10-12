@@ -26,8 +26,9 @@ use error_handling::{Result, CustomError};
 pub mod collision_handler;
 pub mod game_status;
 pub mod circle;
-pub mod fields;
-use fields::{Field, SCREEN_WIDTH, SCREEN_HEIGHT};
+
+mod game_field;
+use game_field::field::{Field, SCREEN_WIDTH, SCREEN_HEIGHT};
 
 trait CanvasBackground {
     fn setup_draw_background(&mut self) -> ();
