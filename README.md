@@ -5,4 +5,10 @@
  - sdl2_gfx
  - sdl2_image
  - sdl2_ttf
- - sdl2_mixer --with-flac --with-fluid-synth --with-libmikmod --with-libmodplug --with-libvorbis --with-smpeg2
+ - sdl2_mixer (with `smpeg2` or `libmad` for MP3 support)
+
+ On macOS, you can install dependencies via `brew`.
+ ```sh
+ brew install sdl2 sdl2_gfx sdl2_image sdl2_ttf
+ brew install sdl2_mixer --with-smpeg2
+ ```
