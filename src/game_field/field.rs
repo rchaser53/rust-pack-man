@@ -114,6 +114,11 @@ impl Field  {
                 self.circle.is_stoped = true;
                 return Ok(());
             },
+            CellType::Item => {
+                let (row, column) = self.get_next_cell_index();
+                self.field_rows[row as usize].field_cells[column as usize].status.exist_item = false;
+                return Ok(());
+            },
             _ => {
                 self.circle.is_stoped = false;
                 return Ok(());

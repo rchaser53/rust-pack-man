@@ -29,6 +29,7 @@ pub fn convert_cell_type_to_background_color(cell_type: CellType) -> pixels::Col
 pub struct Item {}
 impl Item {
     fn draw_unique_feature(cell_status: &CellStatus, renderer: &mut render::Canvas<video::Window>) -> () {
+        if cell_status.exist_item == false { return; }
         let _ = renderer.filled_circle((cell_status.x + CELL_PADDING) as i16,
                   (cell_status.y + CELL_PADDING) as i16, ITEM_RADIUS, BackgroundColor::Yellow.value());
     }

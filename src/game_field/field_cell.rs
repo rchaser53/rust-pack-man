@@ -1,3 +1,4 @@
+use std::cmp::PartialEq;
 use num::FromPrimitive;
 use sdl2::{render, video};
 
@@ -10,7 +11,8 @@ pub struct CellStatus {
     pub height: u32,
     pub x: i32,
     pub y: i32,
-    pub cell_type: CellType
+    pub cell_type: CellType,
+    pub exist_item: bool
 }
 impl CellStatus {
     pub fn new(cell_type: i16, row_index: usize, cell_index: usize) -> CellStatus {
@@ -19,8 +21,16 @@ impl CellStatus {
             y: (row_index * CELL_HEIGHT as usize) as i32,
             width: CELL_WIDTH as u32,
             height: CELL_HEIGHT as u32,
-            cell_type: CellType::from_i16(cell_type).unwrap()
+            cell_type: CellType::from_i16(cell_type).unwrap(),
+            exist_item: CellStatus::get_initial_exist_item(cell_type)
         };
+    }
+
+    pub fn get_initial_exist_item(cell_type: i16) -> bool {
+        if CellType::from_i16(cell_type).unwrap() == CellType::Item {
+            return true;
+        }
+        return false;
     }
 }
 impl Clone for CellStatus {
@@ -28,7 +38,7 @@ impl Clone for CellStatus {
 }
 
 enum_from_primitive! {
-    #[derive(Copy)]
+    #[derive(Copy, PartialEq)]
     pub enum CellType {
         Normal, Block, Damage, Wall, Item
     }
