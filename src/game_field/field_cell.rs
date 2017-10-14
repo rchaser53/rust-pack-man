@@ -1,7 +1,7 @@
 use num::FromPrimitive;
 use sdl2::{render, video, rect, pixels};
 
-use game_field::field::{CELL_WIDTH, CELL_HEIGHT, CellType};
+use game_field::field::{CELL_WIDTH, CELL_HEIGHT};
 use constants::{BackgroundColor};
 use constants::BackgroundColor::{White};
 
@@ -15,6 +15,73 @@ impl CellStatus {
         };
     }
 }
+
+enum_from_primitive! {
+    #[derive(Copy)]
+    pub enum CellType {
+        Normal, Block, Damage, Wall
+    }
+}
+impl Clone for CellType {
+    fn clone(&self) -> CellType { *self }
+}
+impl CellType {
+    fn draw_myself(&self, renderer: &mut render::Canvas<video::Window>) -> () {
+        match *self {
+            CellType::Normal => {
+                println!(1);
+            },
+            CellType::Block => {
+                println!(2);
+            },
+            CellType::Damage => {
+                println!(3);
+            },
+            CellType::Wall => {
+                println!(4);
+            }
+        }
+    }
+}
+
+
+// pub trait Draw_Myself {
+//     fn draw_myself() -> ();
+// }
+// pub struct Normal {}
+// impl Draw_Myself for Normal {
+//     fn draw_myself() -> () {
+//         println!("{}", 1);
+//     }
+// }
+
+// pub struct Block {}
+// impl Draw_Myself for Block {
+//     fn draw_myself() -> () {
+//         println!("{}", 2);
+//     }
+// }
+
+// pub struct Damage {}
+// impl Draw_Myself for Damage {
+//     fn draw_myself() -> () {
+//         println!("{}", 3);
+//     }
+// }
+
+// pub struct Wall {}
+// impl Draw_Myself for Wall {
+//     fn draw_myself() -> () {
+//         println!("{}", 4);
+//     }
+// }
+
+// pub struct Goal {}
+// impl Draw_Myself for Goal {
+//     fn draw_myself() -> () {
+//         println!("{}", 5);
+//     }
+// }
 
 pub struct FieldCell {
     pub width: u32,
@@ -36,6 +103,7 @@ impl FieldCell {
     pub fn draw(&self, renderer: &mut render::Canvas<video::Window>,
                 row_index: usize, cell_index: usize) -> () {
         self.draw_background(renderer, row_index, cell_index);
+        // self.status.cell_type.draw_myself(renderer);
     }
 
     pub fn draw_background( &self, renderer: &mut render::Canvas<video::Window>,

@@ -9,6 +9,7 @@ use collision_handler::{CollisionFrame};
 use game_status::{GameStatus};
 use circle::{Circle};
 use game_field::field_row::FieldRow;
+use game_field::field_cell::CellType;
 
 pub const SCREEN_WIDTH: i16 = 600;
 pub const SCREEN_HEIGHT: i16 = 600;
@@ -18,16 +19,6 @@ pub const COLUMUNS_NUMBER: i16 = SCREEN_WIDTH / CELL_WIDTH;
 pub const ROWS_NUMBER: i16 = SCREEN_HEIGHT / CELL_HEIGHT;
 
 const SQUARE_MAP_PATH: &'static str = "assets/maps/sample_map1.txt";
-
-enum_from_primitive! {
-    #[derive(Copy)]
-    pub enum CellType {
-        Normal, Block, Damage, Wall
-    }
-}
-impl Clone for CellType {
-    fn clone(&self) -> CellType { *self }
-}
 
 pub fn read_file(file_name: &str) -> String {
     let mut file = File::open(file_name).expect("file not found");
