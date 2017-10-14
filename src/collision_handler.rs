@@ -1,10 +1,9 @@
+use std::path::Path;
+
 use sdl2::messagebox;
 
 use error_handling::{GameOverError};
 use mixer_music::play_sound_effect;
-
-use std::path::Path;
-use std::process;
 
 pub fn show_message(title: &str, message: &str) -> () {
   let _ = messagebox::show_simple_message_box(

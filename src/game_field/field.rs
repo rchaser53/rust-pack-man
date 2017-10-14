@@ -3,6 +3,7 @@ use std::fs::File;
 use std::io::prelude::*;
 
 use sdl2::{render, video};
+use sdl2::messagebox::{show_simple_message_box, MESSAGEBOX_INFORMATION};
 
 use constants::Direction::{East, West, South, North};
 use error_handling::{Result as CustomResult, GameOverError};
@@ -20,6 +21,7 @@ pub const COLUMUNS_NUMBER: i16 = SCREEN_WIDTH / CELL_WIDTH;
 pub const ROWS_NUMBER: i16 = SCREEN_HEIGHT / CELL_HEIGHT;
 
 const SQUARE_MAP_PATH: &'static str = "assets/maps/sample_map1.txt";
+const GAME_CLEAR: &'static str = "Game Clear!";
 
 pub fn read_file(file_name: &str) -> String {
     let mut file = File::open(file_name).expect("file not found");
@@ -57,12 +59,11 @@ impl Field  {
     pub fn renew(&mut self, renderer: &mut render::Canvas<video::Window>) -> CustomResult<()> {
         if self.game_status.is_pause { return Ok(()); }
         if self.is_game_clear() {
-            println!("game clear!");
+            let _ = show_simple_message_box(MESSAGEBOX_INFORMATION, GAME_CLEAR, GAME_CLEAR, None);
             process::exit(0);
         }
         
         self.draw_row(renderer);
-        
 
         let current_cell;
         {

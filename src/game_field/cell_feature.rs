@@ -1,4 +1,3 @@
-use num::FromPrimitive;
 use sdl2::gfx::primitives::DrawRenderer;
 use sdl2::{render, video, rect, pixels};
 

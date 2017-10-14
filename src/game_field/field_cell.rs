@@ -1,4 +1,3 @@
-use std::cmp::PartialEq;
 use num::FromPrimitive;
 use sdl2::{render, video};
 
