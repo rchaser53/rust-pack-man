@@ -41,8 +41,9 @@ impl Field  {
 
         let map_config = read_file(SQUARE_MAP_PATH);
         let row_defs: Vec<&str> = map_config.split("\n").collect();
-        for row_def in row_defs {
-            rows.push(FieldRow::new(&row_def));
+        let row_defs_length = row_defs.len();
+        for row_index in 0..row_defs_length {
+            rows.push(FieldRow::new(&row_defs[row_index], row_index));
         }
 
         return Field {
@@ -70,10 +71,10 @@ impl Field  {
     pub fn draw_row(&self, renderer: &mut render::Canvas<video::Window>) -> () {
         let rows = self.field_rows.iter();
 
-        for (row_index, row) in rows.enumerate() {
+        for row in rows {
             let cells = row.field_cells.iter();
-            for (cell_index, cell) in cells.enumerate() {
-                cell.draw(renderer, row_index, cell_index);
+            for cell in cells {
+                cell.draw(renderer);
             }
         }
     }
