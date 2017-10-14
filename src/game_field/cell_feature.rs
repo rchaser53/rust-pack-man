@@ -1,44 +1,44 @@
 use num::FromPrimitive;
+use sdl2::gfx::primitives::DrawRenderer;
 use sdl2::{render, video, rect, pixels};
 
 use game_field::field_cell::{CellStatus, CellType};
 use constants::{BackgroundColor};
 
-pub trait DrawMyself {
-    fn draw_myself(cell_status: &CellStatus, renderer: &mut render::Canvas<video::Window>) -> () {
-        let color = BackgroundColor::from_i16(cell_status.cell_type as i16).unwrap().value();
-        let _ = renderer.set_draw_color(color as pixels::Color);
+const ITEM_RADIUS: i16 = 10;
 
-        let rect = rect::Rect::new(cell_status.x, cell_status.y, cell_status.width, cell_status.height);
-        let _ = renderer.fill_rect(rect);
-    }
+pub fn draw_myself(cell_status: &CellStatus, renderer: &mut render::Canvas<video::Window>) -> () {
+    let color = convert_cell_type_to_background_color(cell_status.cell_type);
+    let _ = renderer.set_draw_color(color as pixels::Color);
+
+    let rect = rect::Rect::new(cell_status.x, cell_status.y, cell_status.width, cell_status.height);
+    let _ = renderer.fill_rect(rect);
 }
 
-pub struct Normal {}
-impl DrawMyself for Normal{}
-pub struct Block {}
-impl DrawMyself for Block{}
-pub struct Damage {}
-impl DrawMyself for Damage{}
-pub struct Wall {}
-impl DrawMyself for Wall{}
+pub fn convert_cell_type_to_background_color(cell_type: CellType) -> pixels::Color {
+  return match cell_type {
+    CellType::Normal => BackgroundColor::Black.value(),
+    CellType::Block => BackgroundColor::Aqua.value(),
+    CellType::Damage => BackgroundColor::Aqua.value(),
+    CellType::Wall => BackgroundColor::Gray.value(),
+    CellType::Item => BackgroundColor::Black.value()
+  };
+}
 
 pub struct Item {}
-impl DrawMyself for Item {
-    fn draw_myself(cell_status: &CellStatus, renderer: &mut render::Canvas<video::Window>) -> () {
-        println!("{}", 5);
+impl Item {
+    fn draw_unique_feature(cell_status: &CellStatus, renderer: &mut render::Canvas<video::Window>) -> () {
     }
 }
 
 pub struct CellFeature {}
 impl CellFeature {
     pub fn draw(cell_status: &CellStatus, renderer: &mut render::Canvas<video::Window>) -> () {
+        draw_myself(cell_status, renderer);
+
         match cell_status.cell_type {
-            CellType::Normal => { Normal::draw_myself(cell_status, renderer); },
-            CellType::Block => { Block::draw_myself(cell_status, renderer); },
-            CellType::Damage => { Damage::draw_myself(cell_status, renderer); },
-            CellType::Wall => { Wall::draw_myself(cell_status, renderer); },
-            CellType::Item => { Item::draw_myself(cell_status, renderer); }
+            CellType::Item => { Item::draw_unique_feature(cell_status, renderer); },
+            _ => {}
         }
     }
 }

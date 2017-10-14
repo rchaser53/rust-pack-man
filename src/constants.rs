@@ -3,7 +3,7 @@ use sdl2::pixels::Color;
 enum_from_primitive! {
     #[derive(Copy)]
     pub enum BackgroundColor {
-        Black, White, Aqua, Gray
+        Black, White, Aqua, Gray, Yellow
     }
 }
 impl Clone for BackgroundColor {
@@ -17,6 +17,7 @@ impl BackgroundColor {
             BackgroundColor::Aqua => Color::RGB(0, 255, 255),
             BackgroundColor::White => Color::RGB(255, 255, 255),
             BackgroundColor::Gray => Color::RGB(200, 200, 200),
+            BackgroundColor::Yellow => Color::RGB(255, 155, 0),
         }
     }
 }
