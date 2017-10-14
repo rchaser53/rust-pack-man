@@ -1,3 +1,4 @@
+use std::process;
 use std::fs::File;
 use std::io::prelude::*;
 
@@ -55,8 +56,14 @@ impl Field  {
 
     pub fn renew(&mut self, renderer: &mut render::Canvas<video::Window>) -> CustomResult<()> {
         if self.game_status.is_pause { return Ok(()); }
+        if self.is_game_clear() {
+            println!("game clear!");
+            process::exit(0);
+        }
+        
         self.draw_row(renderer);
         
+
         let current_cell;
         {
             current_cell = self.get_current_cell_type()?;
@@ -68,9 +75,19 @@ impl Field  {
         return Ok(self.circle.renew(renderer));
     }
 
+    pub fn is_game_clear(&self) -> bool {
+        let rows = self.field_rows.iter();
+        for row in rows {
+            let cells = row.field_cells.iter();
+            for cell in cells {
+                if cell.status.exist_item { return false }
+            }
+        }
+        return true;
+    }
+
     pub fn draw_row(&self, renderer: &mut render::Canvas<video::Window>) -> () {
         let rows = self.field_rows.iter();
-
         for row in rows {
             let cells = row.field_cells.iter();
             for cell in cells {
