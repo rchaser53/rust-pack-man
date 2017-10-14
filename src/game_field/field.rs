@@ -9,7 +9,7 @@ use collision_handler::{CollisionFrame};
 use game_status::{GameStatus};
 use circle::{Circle};
 use game_field::field_row::FieldRow;
-use game_field::field_cell::CellType;
+use game_field::field_cell::{CellStatus, CellType};
 
 pub const SCREEN_WIDTH: i16 = 600;
 pub const SCREEN_HEIGHT: i16 = 600;
@@ -57,12 +57,12 @@ impl Field  {
         if self.game_status.is_pause { return Ok(()); }
         self.draw_row(renderer);
         
-        let current_cell_type;
+        let current_cell;
         {
-            current_cell_type = self.get_current_cell_type()?;
+            current_cell = self.get_current_cell_type()?;
         }
         {
-            self.take_action_from_cell_type(current_cell_type)?;
+            self.take_action_from_cell_type(current_cell.cell_type)?;
         }
 
         return Ok(self.circle.renew(renderer));
@@ -92,14 +92,14 @@ impl Field  {
         };
     } 
 
-    pub fn get_current_cell_type(&self) -> Result<CellType, GameOverError> {
+    pub fn get_current_cell_type(&mut self) -> Result<CellStatus, GameOverError> {
         let (row, column) = self.get_next_cell_index();
 
         if self.is_outof_frame(row, column) {
             return Err(GameOverError::OtherError("out of the frame"));
         }
 
-        return Ok(self.field_rows[row as usize].field_cells[column as usize].status.cell_type);
+        return Ok(self.field_rows[row as usize].field_cells[column as usize].status.clone());
     }
 
     pub fn is_outof_frame(&self, row: i16, column: i16) -> bool {

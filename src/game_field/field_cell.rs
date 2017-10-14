@@ -4,6 +4,7 @@ use sdl2::{render, video};
 use game_field::field::{CELL_WIDTH, CELL_HEIGHT};
 use game_field::cell_feature::{CellFeature};
 
+#[derive(Copy)]
 pub struct CellStatus {
     pub width: u32,
     pub height: u32,
@@ -21,6 +22,9 @@ impl CellStatus {
             cell_type: CellType::from_i16(cell_type).unwrap()
         };
     }
+}
+impl Clone for CellStatus {
+    fn clone(&self) -> CellStatus { *self }
 }
 
 enum_from_primitive! {
