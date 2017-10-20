@@ -22,3 +22,35 @@ impl Nyan for i32 {
         println!("i32");
     }
 }
+
+// type2
+// trait Hoge {
+//     fn aaa() {}
+// }
+// impl Hoge for i16 {
+//     fn aaa() {
+//         println!("i16");
+//     }
+// }
+// impl Hoge for str{
+//     fn aaa() {
+//         println!("")
+//     }
+// }
+
+// struct Poyo<T> {
+//     aaa: T
+// }
+// impl <T>Poyo<T> {
+//     fn hoge(&self) -> &T {
+//         return &self.aaa;
+//     }
+// }
+// fn createPoyo<T>(aaa: T) -> Poyo<T> {
+//     Poyo {
+//         aaa: aaa
+//     }
+// }
+
+// let abc = createPoyo("def");
+// println!("{}", abc.aaa);
