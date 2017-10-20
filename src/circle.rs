@@ -23,11 +23,11 @@ pub struct Circle {
 
 impl Circle {
     pub fn new() -> Circle {
-        return Circle {
+        Circle {
             x: INITIAL_X, y: INITIAL_Y, direction: East.value(),
             radius: CIRCLE_RADIUS, color: White.value(),
             is_opening_mouth: true, is_stoped: false
-        };
+        }
     }
 
     pub fn renew(&mut self, renderer: &mut render::Canvas<video::Window>) -> () {
@@ -68,11 +68,11 @@ impl Circle {
     }
 
     pub fn is_full_opened_mouth(&mut self) -> bool {
-        return FULL_OPENED_MOUTH_ANGLE <= self.radius;
+        FULL_OPENED_MOUTH_ANGLE <= self.radius
     }
 
     pub fn is_closed_mouth(&mut self) -> bool {
-        return self.radius <= CLOSED_MOUTH_ANGLE;
+        self.radius <= CLOSED_MOUTH_ANGLE
     }
 
     pub fn draw(&mut self, renderer: &mut render::Canvas<video::Window>) -> () {

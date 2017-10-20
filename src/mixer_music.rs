@@ -18,7 +18,7 @@ pub fn setup_sdl2_mixier(permit_channels_number: i32) -> () {
 }
 
 pub fn play_bgm(path: &Path) -> Music {
-    return Music::from_file(path).unwrap();
+    Music::from_file(path).unwrap()
 }
 
 pub fn play_sound_effect(path: &Path) -> () {
