@@ -6,10 +6,10 @@ pub struct GameStatus {
 
 impl GameStatus {
   pub fn new() -> GameStatus {
-    return GameStatus {
+    GameStatus {
       is_pause: false,
       is_clear: false,
       score: 0
-    };
+    }
   }
 }

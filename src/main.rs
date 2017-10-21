@@ -43,12 +43,12 @@ impl CanvasBackground for sdl2::render::WindowCanvas {
 
 fn create_window(video_ctx: sdl2::VideoSubsystem , width: u32, height: u32)
                     -> Result<video::Window> {
-    return video_ctx
-                .window("Window", width, height)
-                .position_centered()
-                .opengl()
-                .build()
-                .map_err(|err| CustomError::ParseWindowBuildError(err));
+    video_ctx
+         .window("Window", width, height)
+         .position_centered()
+         .opengl()
+         .build()
+         .map_err(|err| CustomError::ParseWindowBuildError(err))
 }
 
 fn handle_event(events: &mut EventPump, field: &mut Field) -> () {

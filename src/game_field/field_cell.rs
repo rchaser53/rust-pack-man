@@ -15,21 +15,18 @@ pub struct CellStatus {
 }
 impl CellStatus {
     pub fn new(cell_type: i16, row_index: usize, cell_index: usize) -> CellStatus {
-        return CellStatus {
+        CellStatus {
             x: (cell_index * CELL_WIDTH as usize) as i32,
             y: (row_index * CELL_HEIGHT as usize) as i32,
             width: CELL_WIDTH as u32,
             height: CELL_HEIGHT as u32,
             cell_type: CellType::from_i16(cell_type).unwrap(),
             exist_item: CellStatus::get_initial_exist_item(cell_type)
-        };
+        }
     }
 
     pub fn get_initial_exist_item(cell_type: i16) -> bool {
-        if CellType::from_i16(cell_type).unwrap() == CellType::Item {
-            return true;
-        }
-        return false;
+        CellType::from_i16(cell_type).unwrap() == CellType::Item
     }
 }
 impl Clone for CellStatus {

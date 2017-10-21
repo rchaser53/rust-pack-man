@@ -17,18 +17,18 @@ impl FieldRow {
             ));
         }
 
-        return FieldRow {
+        FieldRow {
             field_cells: cells
-        };
+        }
     }
 
     pub fn get_cell_type_from_charactor(character: char) -> i16 {
-        return match character {
+        match character {
             ' ' => 0,
             '#' => 2,
             '?' => 3,
             '*' => 4,
             _ => 1
-        };
+        }
     }
 }
