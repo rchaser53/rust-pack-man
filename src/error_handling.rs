@@ -67,7 +67,7 @@ impl fmt::Display for CustomError {
     }
 }
 
-pub fn show_message(title: &str, message: &str) -> () {
+pub fn show_message(title: &str, message: &str) {
   let _ = show_simple_message_box(
               MESSAGEBOX_ERROR, title,
               message, None

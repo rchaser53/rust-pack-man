@@ -31,10 +31,10 @@ mod game_field;
 use game_field::field::{Field, SCREEN_WIDTH, SCREEN_HEIGHT};
 
 trait CanvasBackground {
-    fn setup_draw_background(&mut self) -> ();
+    fn setup_draw_background(&mut self);
 }
 impl CanvasBackground for sdl2::render::WindowCanvas {
-    fn setup_draw_background(&mut self) -> () {
+    fn setup_draw_background(&mut self) {
         self.set_draw_color(Black.value());
         self.clear();
         self.set_draw_color(White.value());
@@ -51,7 +51,7 @@ fn create_window(video_ctx: sdl2::VideoSubsystem , width: u32, height: u32)
          .map_err(|err| CustomError::ParseWindowBuildError(err))
 }
 
-fn handle_event(events: &mut EventPump, field: &mut Field) -> () {
+fn handle_event(events: &mut EventPump, field: &mut Field) {
     for event in events.poll_iter() {
         match event {
             Event::Quit {..} | Event::KeyDown {keycode: Some(Keycode::Escape), ..} => {

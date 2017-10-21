@@ -7,7 +7,7 @@ use constants::{BackgroundColor};
 const ITEM_RADIUS: i16 = 10;
 const CELL_PADDING: i32 = 15;
 
-pub fn draw_myself(cell_status: &CellStatus, renderer: &mut render::Canvas<video::Window>) -> () {
+pub fn draw_myself(cell_status: &CellStatus, renderer: &mut render::Canvas<video::Window>) {
     let color = convert_cell_type_to_background_color(cell_status.cell_type);
     let _ = renderer.set_draw_color(color as pixels::Color);
 
@@ -27,7 +27,7 @@ pub fn convert_cell_type_to_background_color(cell_type: CellType) -> pixels::Col
 
 pub struct Item {}
 impl Item {
-    fn draw_unique_feature(cell_status: &CellStatus, renderer: &mut render::Canvas<video::Window>) -> () {
+    fn draw_unique_feature(cell_status: &CellStatus, renderer: &mut render::Canvas<video::Window>) {
         if !cell_status.exist_item { return; }
         let _ = renderer.filled_circle((cell_status.x + CELL_PADDING) as i16,
                   (cell_status.y + CELL_PADDING) as i16, ITEM_RADIUS, BackgroundColor::Yellow.value());
@@ -36,7 +36,7 @@ impl Item {
 
 pub struct CellFeature {}
 impl CellFeature {
-    pub fn draw(cell_status: &CellStatus, renderer: &mut render::Canvas<video::Window>) -> () {
+    pub fn draw(cell_status: &CellStatus, renderer: &mut render::Canvas<video::Window>) {
         draw_myself(cell_status, renderer);
 
         match cell_status.cell_type {

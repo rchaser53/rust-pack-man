@@ -5,7 +5,7 @@ use sdl2::messagebox;
 use error_handling::{GameOverError};
 use mixer_music::play_sound_effect;
 
-pub fn show_message(title: &str, message: &str) -> () {
+pub fn show_message(title: &str, message: &str) {
   let _ = messagebox::show_simple_message_box(
               messagebox::MESSAGEBOX_ERROR,
               title,

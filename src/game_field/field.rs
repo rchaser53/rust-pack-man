@@ -87,7 +87,7 @@ impl Field  {
         true
     }
 
-    pub fn draw_row(&self, renderer: &mut render::Canvas<video::Window>) -> () {
+    pub fn draw_row(&self, renderer: &mut render::Canvas<video::Window>) {
         let rows = self.field_rows.iter();
         for row in rows {
             let cells = row.field_cells.iter();
