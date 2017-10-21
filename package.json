@@ -1,0 +1,20 @@
+{
+  "name": "rust_pack_man",
+  "version": "1.0.0",
+  "description": "<img alt=\"\" src=\"https://github.com/rchaser53/rust_pack_man/blob/master/packman.gif\" width=\"100%\" >",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rchaser53/rust_pack_man.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/rchaser53/rust_pack_man/issues"
+  },
+  "homepage": "https://github.com/rchaser53/rust_pack_man#readme"
+}

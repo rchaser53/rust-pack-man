@@ -1,0 +1,34 @@
+<!doctype html>
+<html>
+<head></head>
+<body>
+  <canvas id="targetCanvas"></canvas>
+  <script>
+    const name = 'wasm-test';
+    var Module = {
+      preRun: [],
+      postRun: [],
+      wasmBinaryFile: `${name}.wasm`,
+      print: text => {
+        console.log(text);
+      },
+      printErr: text => {
+        console.error(text);
+      },
+      canvas: document.getElementById('targetCanvas')
+    };
+
+    // Module["preloadedAudios"] = {
+    //   'aaa': 'assets/musics/nyan.mp3'
+    // }
+    fetch(`${name}.wasm`)
+      .then(resp => resp.arrayBuffer())
+      .then(buffer => {
+        Module.wasmBinary = buffer;
+        const script = document.createElement("script");
+        script.src = `${name}.js`;
+        document.body.appendChild(script);
+      })
+  </script>
+</body>
+</html>
