@@ -24,12 +24,12 @@ pub struct CollisionFrame {
 }
 impl CollisionFrame {
   pub fn hit_enemy() -> GameOverError {
-    let _ = play_sound_effect(Path::new(&HIT_EFFECT_PATH));
+    play_sound_effect(Path::new(&HIT_EFFECT_PATH));
     GameOverError::OtherError(HIT_ENEMY_MESSAGE)
   }
 
   pub fn hit_wall() -> GameOverError {
-    let _ = play_sound_effect(Path::new(&HIT_EFFECT_PATH));
+    play_sound_effect(Path::new(&HIT_EFFECT_PATH));
     GameOverError::OtherError(HIT_ENEMY_WALL)
   }
 }
