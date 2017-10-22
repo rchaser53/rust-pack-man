@@ -59,19 +59,19 @@ impl Circle {
         let (x_amount, y_amount) = match direction {
             num if num == East.value() => (MOVE_SPEED, 0),
             num if num == South.value() => (0, MOVE_SPEED),
-            num if num == West.value() => (-1 * MOVE_SPEED, 0),
-            num if num == North.value() => (0, -1 * MOVE_SPEED),
+            num if num == West.value() => (-MOVE_SPEED, 0),
+            num if num == North.value() => (0, -MOVE_SPEED),
             _ => (0, 0)
         };
         self.x += x_amount;
         self.y += y_amount;
     }
 
-    pub fn is_full_opened_mouth(&mut self) -> bool {
+    pub fn is_full_opened_mouth(&self) -> bool {
         FULL_OPENED_MOUTH_ANGLE <= self.radius
     }
 
-    pub fn is_closed_mouth(&mut self) -> bool {
+    pub fn is_closed_mouth(&self) -> bool {
         self.radius <= CLOSED_MOUTH_ANGLE
     }
 
