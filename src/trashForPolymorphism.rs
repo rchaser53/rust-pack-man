@@ -8,17 +8,17 @@ trait Nyan {
     fn abeshi(&self);
 }
 impl Nyan for i8 {
-    fn abeshi(&self) -> () {
+    fn abeshi(&self) {
         println!("i8");
     }
 }
 impl Nyan for i16 {
-    fn abeshi(&self) -> () {
+    fn abeshi(&self) {
         println!("i16");
     }
 }
 impl Nyan for i32 {
-    fn abeshi(&self) -> () {
+    fn abeshi(&self) {
         println!("i32");
     }
 }

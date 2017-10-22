@@ -54,7 +54,7 @@ impl FieldCell {
         }
     }
 
-    pub fn draw(&self, renderer: &mut render::Canvas<video::Window>) -> () {
+    pub fn draw(&self, renderer: &mut render::Canvas<video::Window>) {
         CellFeature::draw(&self.status, renderer);
     }
 }

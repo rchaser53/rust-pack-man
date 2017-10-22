@@ -25,11 +25,11 @@ impl CirclePosition {
         };
     }
 
-    pub fn draw(&self, renderer: &render::Canvas<video::Window>) -> () {
+    pub fn draw(&self, renderer: &render::Canvas<video::Window>) {
         let _ = renderer.filled_ellipse(self.x, self.y, 20, 20, self.color);
     }
 
-    // pub fn move_circle(&mut self) -> () {
+    // pub fn move_circle(&mut self) {
     //     self.x += x_amount;
     //     self.y += y_amount;
     // }
