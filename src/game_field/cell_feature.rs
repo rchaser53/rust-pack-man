@@ -9,7 +9,7 @@ const CELL_PADDING: i32 = 15;
 
 pub fn draw_myself(cell_status: &CellStatus, renderer: &mut render::Canvas<video::Window>) -> () {
     let color = convert_cell_type_to_background_color(cell_status.cell_type);
-    let _ = renderer.set_draw_color(color as pixels::Color);
+    renderer.set_draw_color(color as pixels::Color);
 
     let rect = rect::Rect::new(cell_status.x, cell_status.y, cell_status.width, cell_status.height);
     let _ = renderer.fill_rect(rect);

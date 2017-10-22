@@ -43,10 +43,10 @@ impl Field  {
         let mut rows: Vec<FieldRow> = Vec::new();
 
         let map_config = read_file(SQUARE_MAP_PATH);
-        let row_defs: Vec<&str> = map_config.split("\n").collect();
+        let row_defs: Vec<&str> = map_config.split('\n').collect();
         let row_defs_length = row_defs.len();
         for row_index in 0..row_defs_length {
-            rows.push(FieldRow::new(&row_defs[row_index], row_index));
+            rows.push(FieldRow::new(row_defs[row_index], row_index));
         }
 
         Field {

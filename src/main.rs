@@ -48,7 +48,7 @@ fn create_window(video_ctx: sdl2::VideoSubsystem , width: u32, height: u32)
          .position_centered()
          .opengl()
          .build()
-         .map_err(|err| CustomError::ParseWindowBuildError(err))
+         .map_err(CustomError::ParseWindowBuildError)
 }
 
 fn handle_event(events: &mut EventPump, field: &mut Field) -> () {
