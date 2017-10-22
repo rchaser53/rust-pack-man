@@ -1,4 +1,15 @@
 use sdl2::pixels::Color;
+use std::collections::HashMap;
+
+lazy_static! {
+  pub static ref FILE_PATHS: HashMap<&'static str, &'static str> = {
+    let mut map = HashMap::new();
+    map.insert("BGM_PATH", "assets/musics/nyan.mp3");
+    map.insert("HIT_EFFECT_PATH", "assets/musics/sine.wav");
+    map.insert("SQUARE_MAP_PATH", "assets/maps/sample_map1.txt");
+    map
+  };
+}
 
 enum_from_primitive! {
     #[derive(Copy)]

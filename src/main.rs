@@ -1,5 +1,7 @@
 #[macro_use]
 extern crate enum_primitive;
+#[macro_use]
+extern crate lazy_static;
 extern crate num;
 extern crate sdl2;
 extern crate rand;
@@ -14,8 +16,9 @@ use sdl2::keyboard::Keycode;
 // use sdl2::image::{LoadTexture};
 
 pub mod constants;
-use constants::BackgroundColor::{White, Black};
-use constants::Direction::{East, West, South, North};
+use constants::{FILE_PATHS, BackgroundColor, Direction};
+use BackgroundColor::{White, Black};
+use Direction::{East, West, South, North};
 
 pub mod mixer_music;
 use mixer_music::{setup_sdl2_mixier, play_bgm};
@@ -81,8 +84,6 @@ fn handle_event(events: &mut EventPump, field: &mut Field) {
     }
 }
 
-const BGM_PATH: &'static str = "assets/musics/nyan.mp3";
-
 fn main() {
     // cannnot use fn for const in stable version
     // perhaps i need to try to use nightly version?
@@ -98,7 +99,7 @@ fn main() {
                             .unwrap_or_else(|err| panic!("{}", err));
 
     setup_sdl2_mixier(2);
-    let music = play_bgm(Path::new(BGM_PATH));
+    let music = play_bgm(Path::new(FILE_PATHS.get("BGM_PATH").unwrap()));
     let _ = music.play(1);
 
     let mut field = Field::new();

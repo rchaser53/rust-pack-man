@@ -5,6 +5,7 @@ use std::io::prelude::*;
 use sdl2::{render, video};
 use sdl2::messagebox::{show_simple_message_box, MESSAGEBOX_INFORMATION};
 
+use constants::FILE_PATHS;
 use constants::Direction::{East, West, South, North};
 use error_handling::{Result as CustomResult, GameOverError};
 use collision_handler::{CollisionFrame};
@@ -20,7 +21,6 @@ pub const CELL_HEIGHT: i16 = 30;
 pub const COLUMUNS_NUMBER: i16 = SCREEN_WIDTH / CELL_WIDTH;
 pub const ROWS_NUMBER: i16 = SCREEN_HEIGHT / CELL_HEIGHT;
 
-const SQUARE_MAP_PATH: &'static str = "assets/maps/sample_map1.txt";
 const GAME_CLEAR: &'static str = "Game Clear!";
 
 pub fn read_file(file_name: &str) -> String {
@@ -42,7 +42,7 @@ impl Field  {
     pub fn new() -> Field {
         let mut rows: Vec<FieldRow> = Vec::new();
 
-        let map_config = read_file(SQUARE_MAP_PATH);
+        let map_config = read_file(FILE_PATHS.get("SQUARE_MAP_PATH").unwrap());
         let row_defs: Vec<&str> = map_config.split('\n').collect();
         let row_defs_length = row_defs.len();
         for row_index in 0..row_defs_length {
