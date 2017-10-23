@@ -4,7 +4,7 @@ const app = express()
 const server = require('http').createServer(app)
 
 app.use('/', express.static('wasm'));
-app.use('/', express.static(__dirname));
+app.use('/', express.static(path.join(__dirname, 'assets/maps/')));
 app.get('/', (req, res) => {
   res.sendFile(path.resolve(__dirname, 'index.html'))
 });

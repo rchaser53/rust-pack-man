@@ -18,9 +18,13 @@
       canvas: document.getElementById('targetCanvas')
     };
 
-    // Module["preloadedAudios"] = {
-    //   'aaa': 'assets/musics/nyan.mp3'
-    // }
+    Module['preRun'] = function () {
+      FS.createPreloadedFile(
+          '/',
+          'sample_map1.txt',
+          '/sample_map1.txt',
+          true, false);
+    };
     fetch(`${name}.wasm`)
       .then(resp => resp.arrayBuffer())
       .then(buffer => {

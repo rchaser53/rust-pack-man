@@ -6,7 +6,12 @@ lazy_static! {
     let mut map = HashMap::new();
     map.insert("BGM_PATH", "assets/musics/nyan.mp3");
     map.insert("HIT_EFFECT_PATH", "assets/musics/sine.wav");
+
+    #[cfg(target_os = "emscripten")]
+    map.insert("SQUARE_MAP_PATH", "sample_map1.txt");
+    #[cfg(not(target_os = "emscripten"))]
     map.insert("SQUARE_MAP_PATH", "assets/maps/sample_map1.txt");
+
     map
   };
 }
