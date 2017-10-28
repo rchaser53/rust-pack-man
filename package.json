@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/rchaser53/rust_pack_man/issues"
   },
-  "homepage": "https://github.com/rchaser53/rust_pack_man#readme"
+  "homepage": "https://github.com/rchaser53/rust_pack_man#readme",
+  "devDependencies": {
+    "express": "^4.16.2"
+  }
 }
