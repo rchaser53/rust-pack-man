@@ -35,5 +35,11 @@ fn main() {
                         }
                     )
                 };
-    hoge.aaa.say_hello();
+    // hoge.aaa.say_hello();
+    nyan(hoge.aaa);
+}
+
+fn nyan(x: Box<SayHello>) -> Box<SayHello> {
+    x.say_hello();
+    return x;
 }
