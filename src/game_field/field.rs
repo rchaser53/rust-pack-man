@@ -12,7 +12,15 @@ use collision_handler::{CollisionFrame};
 use game_status::{GameStatus};
 use circle::{Circle};
 use game_field::field_row::FieldRow;
-use game_field::field_cell::{CellStatus, CellType};
+// use game_field::cell_status::{CellStatus};
+use game_field::cell_feature::{DrawMyself};
+//     DrawMyself,
+//     NormalFeature,
+//     DamageFeature,
+//     BlockFeature,
+//     WallFeature,
+//     ItemFeature
+// };
 
 pub const SCREEN_WIDTH: i16 = 600;
 pub const SCREEN_HEIGHT: i16 = 600;
@@ -65,12 +73,13 @@ impl Field  {
 
         self.draw_row(renderer);
 
-        let current_cell;
+        // let current_cell;
         {
-            current_cell = self.get_current_cell_type()?;
+            // current_cell = self.get_current_cell_type()?;
         }
         {
-            self.take_action_from_cell_type(current_cell.cell_type)?;
+            // self.take_action_from_cell_type(current_cell.cell_type)?;
+            // self.take_action_from_cell_type(current_cell, renderer)?;
         }
 
         Ok(self.circle.renew(renderer))
@@ -110,14 +119,14 @@ impl Field  {
         }
     }
 
-    pub fn get_current_cell_type(&mut self) -> Result<CellStatus, GameOverError> {
+    pub fn get_current_cell_type(&mut self) -> Result<&Box<DrawMyself>, GameOverError> {
         let (row, column) = self.get_next_cell_index();
 
         if self.is_outof_frame(row, column) {
             return Err(GameOverError::OtherError("out of the frame"));
         }
 
-        Ok(self.field_rows[row as usize].field_cells[column as usize].status.clone())
+        Ok(&self.field_rows[row as usize].field_cells[column as usize].feature)
     }
 
     pub fn is_outof_frame(&self, row: i16, column: i16) -> bool {
@@ -125,22 +134,22 @@ impl Field  {
          || column < 0 || (self.field_rows[0].field_cells.len() as i16 - 1) < column
     }
 
-    pub fn take_action_from_cell_type(&mut self, current_cell_type: CellType) -> Result<(), GameOverError> {
-        match current_cell_type {
-            CellType::Damage => Err(CollisionFrame::hit_enemy()),
-            CellType::Wall => {
-                self.circle.is_stoped = true;
-                Ok(())
-            },
-            CellType::Item => {
-                let (row, column) = self.get_next_cell_index();
-                self.field_rows[row as usize].field_cells[column as usize].status.exist_item = false;
-                Ok(())
-            },
-            _ => {
-                self.circle.is_stoped = false;
-                Ok(())
-            }
-        }
+    pub fn take_action_from_cell_type(&mut self, current_cell_type: &Box<DrawMyself>,
+                                      renderer: &mut render::Canvas<video::Window>) -> Result<(), GameOverError> {
+        // match current_cell_type {
+        //     DamageFeature => Err(CollisionFrame::hit_enemy()),
+        //     WallFeature => {
+        //         self.circle.is_stoped = true;
+        //     },
+        //     ItemFeature => {
+        //         let (row, column) = self.get_next_cell_index();
+        //         self.field_rows[row as usize].field_cells[column as usize].status.exist_item = false;
+        //     },
+        //     _ => {
+        //         self.circle.is_stoped = false;
+        //     }
+        // };
+
+        Ok(self.circle.renew(renderer))
     }
 }
