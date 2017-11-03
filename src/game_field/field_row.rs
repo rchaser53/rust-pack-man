@@ -1,16 +1,22 @@
 use game_field::field_cell::{FieldCell};
-use game_field::cell_status::{CellStatus};
+use game_field::cell_status::{
+    CellStatus,
+    CellStatusFactory,
+    NormalCellStatusFactory,
+    BlockCellStatusFactory,
+    DamageCellStatusFactory,
+    WallCellStatusFactory,
+    ItemCellStatusFactory
+};
 use constants::BackgroundColor;
 use game_field::cell_feature::{
-    NormalFeature
+    DrawMyself,
+    NormalFeature,
+    DamageFeature,
+    BlockFeature,
+    WallFeature,
+    ItemFeature 
 };
-//     DrawMyself,
-    
-//     DamageFeature,
-//     BlockFeature,
-//     WallFeature,
-//     ItemFeature
-
 
 pub struct FieldRow {
     pub field_cells: Vec<FieldCell>
@@ -22,38 +28,22 @@ impl FieldRow {
         let cell_defs: Vec<char> = row_def.chars().collect();
         let cell_defs_length = cell_defs.len();
         for cell_index in 0..cell_defs_length {
-            cells.push(FieldCell::new(
-                CellStatus::new(BackgroundColor::Black.value(), row_index, cell_index),
-                Box::new(NormalFeature {})
-            ));
+            let (cell_status, cell_feature) = FieldRow::get_cell_feature(cell_defs[cell_index], row_index, cell_index);
+            cells.push(FieldCell::new(cell_status, cell_feature));
         }
 
         FieldRow {
             field_cells: cells
         }
     }
+
+    pub fn get_cell_feature(character: char, row_index: usize, cell_index: usize) -> (CellStatus, Box<DrawMyself>) {
+        match character {
+            ' ' => (Box::new(NormalCellStatusFactory{}).create_cell_status(row_index, cell_index), Box::new(NormalFeature {})),
+            '#' => (Box::new(BlockCellStatusFactory{}).create_cell_status(row_index, cell_index), Box::new(BlockFeature {})),
+            '?' => (Box::new(WallCellStatusFactory{}).create_cell_status(row_index, cell_index), Box::new(WallFeature {})),
+            '*' => (Box::new(ItemCellStatusFactory{}).create_cell_status(row_index, cell_index), Box::new(ItemFeature {})),
+            _ => (Box::new(NormalCellStatusFactory{}).create_cell_status(row_index, cell_index), Box::new(NormalFeature {}))
+        }
+    }
 }
-
-    // FieldRow::get_cell_type_from_charactor(cell_defs[cell_index])
-
-    // pub fn get_cell_type_from_charactor(character: char) -> CellFeature {
-    //     match character {
-    //         ' ' => CellFeature::new(BackgroundColor::Black.value()),
-    //         '#' => CellFeature::new(BackgroundColor::Black.value()),
-    //         '?' => CellFeature::new(BackgroundColor::Black.value()),
-    //         '*' => CellFeature::new(BackgroundColor::Black.value()),
-    //         _ => CellFeature::new(BackgroundColor::Black.value()),
-    //     }
-    // }
-
-    // ' ' => 0,
-    // '#' => 2,
-    // '?' => 3,
-    // '*' => 4,
-    // _ => 1
-
-    // CellType::Normal => BackgroundColor::Black.value(),
-    // CellType::Block => BackgroundColor::Aqua.value(),
-    // CellType::Damage => BackgroundColor::Aqua.value(),
-    // CellType::Wall => BackgroundColor::Gray.value(),
-    // CellType::Item => BackgroundColor::Black.value()
