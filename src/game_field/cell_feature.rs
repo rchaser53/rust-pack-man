@@ -17,12 +17,14 @@ pub trait DrawMyself {
         self.draw_unique_feature(cell_status, renderer);
     }
 
+    #[allow(unused)]
     fn draw_unique_feature(&self, cell_status: &CellStatus, renderer: &mut render::Canvas<video::Window>) {}
 }
 
 pub struct NormalFeature {}
 impl DrawMyself for NormalFeature {}
 
+#[allow(unused)]
 pub struct DamageFeature {}
 impl DrawMyself for DamageFeature {}
 

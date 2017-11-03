@@ -4,15 +4,12 @@ use game_field::cell_status::{
     CellStatusFactory,
     NormalCellStatusFactory,
     BlockCellStatusFactory,
-    DamageCellStatusFactory,
     WallCellStatusFactory,
     ItemCellStatusFactory
 };
-use constants::BackgroundColor;
 use game_field::cell_feature::{
     DrawMyself,
     NormalFeature,
-    DamageFeature,
     BlockFeature,
     WallFeature,
     ItemFeature 

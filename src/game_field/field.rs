@@ -5,16 +5,15 @@ use std::io::prelude::*;
 use sdl2::{render, video};
 use sdl2::messagebox::{show_simple_message_box, MESSAGEBOX_INFORMATION};
 
-use constants::{FILE_PATHS, Direction, CellType};
+use constants::{FILE_PATHS, CellType};
 use constants::Direction::{East, West, South, North};
-use constants::CellType::{Normal, Block, Damage, Wall, Item};
+use constants::CellType::{Block, Damage, Wall, Item};
 
 use error_handling::{Result as CustomResult, GameOverError};
 use collision_handler::{CollisionFrame};
 use game_status::{GameStatus};
 use circle::{Circle};
 use game_field::field_row::FieldRow;
-use game_field::cell_feature::{DrawMyself};
 
 pub const SCREEN_WIDTH: i16 = 600;
 pub const SCREEN_HEIGHT: i16 = 600;

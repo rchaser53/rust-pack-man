@@ -6,7 +6,7 @@ use constants::CellType::{
   Normal, Block, Damage, Wall, Item
 };
 use constants::BackgroundColor::{
-  Black, Aqua, White, Gray, Yellow
+  Black, Aqua, White, Gray
 };
 
 pub struct CellStatus {
@@ -62,6 +62,7 @@ impl CellStatusFactory for BlockCellStatusFactory {
   }
 }
 
+#[allow(unused)]
 pub struct DamageCellStatusFactory {}
 impl CellStatusFactory for DamageCellStatusFactory {
   fn create_unique_staus(&self) -> UniqueStatus {
