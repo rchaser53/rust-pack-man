@@ -1,7 +1,14 @@
 use sdl2::{render, video};
 
-use enemy::enemy_feature::{EnemyAction};
-use enemy::enemy_status::{EnemyStatus};
+use enemy::enemy_feature::{
+  EnemyAction,
+  NormalFeature
+};
+use enemy::enemy_status::{
+  EnemyStatus,
+  EnemyStatusFactory,
+  NormalEnemyStatusFactory
+};
 
 pub struct Enemy {
   pub status: EnemyStatus,
@@ -18,5 +25,26 @@ impl Enemy {
 
   pub fn draw(&self, renderer: &mut render::Canvas<video::Window>) {
     self.feature.draw(&self.status, renderer);
+  }
+}
+
+pub struct EnemyCreater {}
+impl EnemyCreater {
+  pub fn create_enemy(row_def: &str, row_index: usize) -> Vec<Enemy> {
+    let mut enemies: Vec<Enemy> = Vec::new();
+    let cell_defs: Vec<char> = row_def.chars().collect();
+    
+    enemies = cell_defs.iter().enumerate().fold(enemies, |mut stack, (cell_index, map_char)| {
+      match *map_char {
+        ' ' => { 
+          stack.push( Enemy::new(Box::new(NormalEnemyStatusFactory{}).create_enemy_status(row_index, cell_index),
+                      Box::new(NormalFeature {})));
+         },
+        _ => {}
+      };
+      stack
+    });
+
+    enemies
   }
 }

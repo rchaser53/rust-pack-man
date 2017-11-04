@@ -14,7 +14,7 @@ use collision_handler::{CollisionFrame};
 use game_status::{GameStatus};
 use circle::{Circle};
 use game_field::field_row::FieldRow;
-use enemy::enemy::Enemy;
+use enemy::enemy::{Enemy, EnemyCreater};
 
 pub const SCREEN_WIDTH: i16 = 600;
 pub const SCREEN_HEIGHT: i16 = 600;
@@ -43,22 +43,34 @@ pub struct Field {
 
 impl Field  {
     pub fn new() -> Field {
-        let mut rows: Vec<FieldRow> = Vec::new();
-        let mut enemies: Vec<Enemy> = Vec::new();
-
         let map_config = read_file(FILE_PATHS.get("SQUARE_MAP_PATH").unwrap());
+        Field {
+            field_rows: Field::create_field_rows(&map_config),
+            enemies: Field::create_enemies(&map_config),
+            circle: Circle::new(),
+            game_status: GameStatus::new()
+        }
+    }
+
+    pub fn create_field_rows(map_config: &str) -> Vec<FieldRow> {
+        let mut rows: Vec<FieldRow> = Vec::new();
         let row_defs: Vec<&str> = map_config.split('\n').collect();
         let row_defs_length = row_defs.len();
         for row_index in 0..row_defs_length {
             rows.push(FieldRow::new(row_defs[row_index], row_index));
         }
+        rows
+    }
 
-        Field {
-            field_rows: rows,
-            enemies: enemies,
-            circle: Circle::new(),
-            game_status: GameStatus::new()
+    pub fn create_enemies(map_config: &str) -> Vec<Enemy> {
+        let mut enemies: Vec<Enemy> = Vec::new();
+        let row_defs: Vec<&str> = map_config.split('\n').collect();
+        let row_defs_length = row_defs.len();
+        for row_index in 0..row_defs_length {
+            EnemyCreater::create_enemy(row_defs[row_index], row_index);
         }
+
+        enemies
     }
 
     pub fn renew(&mut self, renderer: &mut render::Canvas<video::Window>) -> CustomResult<()> {

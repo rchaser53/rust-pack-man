@@ -16,3 +16,6 @@ pub trait EnemyAction {
     let _ = renderer.filled_ellipse(enemy_status.x, enemy_status.y, enemy_status.width, enemy_status.height, enemy_status.background_color);
   }
 }
+
+pub struct NormalFeature {}
+impl EnemyAction for NormalFeature {}
