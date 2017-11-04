@@ -14,6 +14,7 @@ use collision_handler::{CollisionFrame};
 use game_status::{GameStatus};
 use circle::{Circle};
 use game_field::field_row::FieldRow;
+use enemy::enemy::Enemy;
 
 pub const SCREEN_WIDTH: i16 = 600;
 pub const SCREEN_HEIGHT: i16 = 600;
@@ -35,6 +36,7 @@ pub fn read_file(file_name: &str) -> String {
 
 pub struct Field {
     pub field_rows: Vec<FieldRow>,
+    pub enemies: Vec<Enemy>,
     pub circle: Circle,
     pub game_status: GameStatus
 }
@@ -42,6 +44,7 @@ pub struct Field {
 impl Field  {
     pub fn new() -> Field {
         let mut rows: Vec<FieldRow> = Vec::new();
+        let mut enemies: Vec<Enemy> = Vec::new();
 
         let map_config = read_file(FILE_PATHS.get("SQUARE_MAP_PATH").unwrap());
         let row_defs: Vec<&str> = map_config.split('\n').collect();
@@ -52,6 +55,7 @@ impl Field  {
 
         Field {
             field_rows: rows,
+            enemies: enemies,
             circle: Circle::new(),
             game_status: GameStatus::new()
         }

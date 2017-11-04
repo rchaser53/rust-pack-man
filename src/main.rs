@@ -36,6 +36,8 @@ pub mod circle;
 mod game_field;
 use game_field::field::{Field, SCREEN_WIDTH, SCREEN_HEIGHT};
 
+mod enemy;
+
 trait CanvasBackground {
     fn setup_draw_background(&mut self);
 }
