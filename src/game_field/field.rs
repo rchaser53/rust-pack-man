@@ -69,30 +69,22 @@ impl Field  {
         for row_index in 0..row_defs_length {
             enemies.append(&mut EnemyCreater::create_enemy(row_defs[row_index], row_index));
         }
-
         enemies
     }
 
     pub fn renew(&mut self, renderer: &mut render::Canvas<video::Window>) -> CustomResult<()> {
-        if self.game_status.is_pause { return Ok(()); }
         if self.is_game_clear() {
             let _ = show_simple_message_box(MESSAGEBOX_INFORMATION, GAME_CLEAR, GAME_CLEAR, None);
             process::exit(0);
         }
 
-        self.draw_row(renderer);
-        self.draw_enemies(renderer);
-        {
-            let current_cell;
-            {
-                current_cell = self.get_current_cell_type()?;
-            }
-            {
-                self.take_action_from_cell_type(current_cell)?;
-            }
-        }
+        if self.game_status.is_pause { return Ok(()) }
 
-        Ok(self.circle.renew(renderer))
+        let current_cell = &self.get_current_cell_type()?;
+        self.take_action_from_cell_type(current_cell)?;
+
+        self.renew_each(renderer);
+        Ok(())
     }
 
     pub fn is_game_clear(&self) -> bool {
@@ -106,7 +98,32 @@ impl Field  {
         true
     }
 
-    pub fn draw_row(&self, renderer: &mut render::Canvas<video::Window>) {
+    pub fn take_action_from_cell_type(&mut self, current_cell_type: &CellType) -> Result<(), GameOverError> {
+        match *current_cell_type {
+            Damage | Block => Err(CollisionFrame::hit_enemy()),
+            Wall => {
+                self.circle.is_stoped = true;
+                Ok(())
+            },
+            Item => {
+                let (row, column) = self.get_next_cell_index();
+                self.field_rows[row as usize].field_cells[column as usize].status.exist_item = false;
+                Ok(())
+            },
+            _ => {
+                self.circle.is_stoped = false;
+                Ok(())
+            }
+        }
+    }
+
+    pub fn renew_each(&mut self, renderer: &mut render::Canvas<video::Window>) {
+        self.renew_rows(renderer);
+        self.renew_enemies(renderer);
+        self.circle.renew(renderer);
+    }
+
+    pub fn renew_rows(&self, renderer: &mut render::Canvas<video::Window>) {
         let rows = self.field_rows.iter();
         for row in rows {
             let cells = row.field_cells.iter();
@@ -116,22 +133,9 @@ impl Field  {
         }
     }
 
-    pub fn draw_enemies(&mut self, renderer: &mut render::Canvas<video::Window>) {
+    pub fn renew_enemies(&mut self, renderer: &mut render::Canvas<video::Window>) {
         for enemy in &mut self.enemies {
             enemy.feature.renew(&mut enemy.status, renderer);
-        }
-    }
-
-    pub fn get_next_cell_index(&self) -> (i16, i16) {
-        let column: f32 = (self.circle.x * COLUMUNS_NUMBER) as f32 / SCREEN_WIDTH as f32;
-        let row: f32 = (self.circle.y * ROWS_NUMBER) as f32 / SCREEN_HEIGHT as f32;
-
-        match self.circle.direction {
-            num if num == East.value() => (row as i16, column.round() as i16),
-            num if num == South.value() => (row.round() as i16, column as i16),
-            num if num == West.value() => (row as i16, column.round() as i16 - 1),
-            num if num == North.value() => (row.round() as i16 - 1, column as i16),
-            _ => (column as i16, row as i16)
         }
     }
 
@@ -150,22 +154,16 @@ impl Field  {
          || column < 0 || (self.field_rows[0].field_cells.len() as i16 - 1) < column
     }
 
-    pub fn take_action_from_cell_type(&mut self, current_cell_type: CellType) -> Result<(), GameOverError> {
-        match current_cell_type {
-            Damage | Block => Err(CollisionFrame::hit_enemy()),
-            Wall => {
-                self.circle.is_stoped = true;
-                Ok(())
-            },
-            Item => {
-                let (row, column) = self.get_next_cell_index();
-                self.field_rows[row as usize].field_cells[column as usize].status.exist_item = false;
-                Ok(())
-            },
-            _ => {
-                self.circle.is_stoped = false;
-                Ok(())
-            }
+    pub fn get_next_cell_index(&self) -> (i16, i16) {
+        let column: f32 = (self.circle.x * COLUMUNS_NUMBER) as f32 / SCREEN_WIDTH as f32;
+        let row: f32 = (self.circle.y * ROWS_NUMBER) as f32 / SCREEN_HEIGHT as f32;
+
+        match self.circle.direction {
+            num if num == East.value() => (row as i16, column.round() as i16),
+            num if num == South.value() => (row.round() as i16, column as i16),
+            num if num == West.value() => (row as i16, column.round() as i16 - 1),
+            num if num == North.value() => (row.round() as i16 - 1, column as i16),
+            _ => (column as i16, row as i16)
         }
     }
 }
