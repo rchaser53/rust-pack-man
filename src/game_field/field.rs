@@ -5,12 +5,10 @@ use std::io::prelude::*;
 use sdl2::{render, video};
 use sdl2::messagebox::{show_simple_message_box, MESSAGEBOX_INFORMATION};
 
-use constants::{FILE_PATHS, CellType};
+use constants::{FILE_PATHS};
 use constants::Direction::{East, West, South, North};
-use constants::CellType::{Block, Damage, Wall, Item};
 
 use error_handling::{Result as CustomResult, GameOverError};
-use collision_handler::{CollisionFrame};
 use game_status::{GameStatus};
 use circle::{Circle};
 use game_field::field_row::FieldRow;
@@ -80,8 +78,8 @@ impl Field  {
 
         if self.game_status.is_pause { return Ok(()) }
 
-        let current_cell = &self.get_current_cell_type()?;
-        self.take_action_from_cell_type(current_cell)?;
+        let (row, column) = self.get_current_cell_position()?;
+        self.take_action_by_cell(row, column)?;
 
         self.renew_each(renderer);
         Ok(())
@@ -98,23 +96,13 @@ impl Field  {
         true
     }
 
-    pub fn take_action_from_cell_type(&mut self, current_cell_type: &CellType) -> Result<(), GameOverError> {
-        match *current_cell_type {
-            Damage | Block => Err(CollisionFrame::hit_enemy()),
-            Wall => {
-                self.circle.is_stoped = true;
-                Ok(())
-            },
-            Item => {
-                let (row, column) = self.get_next_cell_index();
-                self.field_rows[row as usize].field_cells[column as usize].status.exist_item = false;
-                Ok(())
-            },
-            _ => {
-                self.circle.is_stoped = false;
-                Ok(())
-            }
-        }
+    pub fn take_action_by_cell(&mut self, row: usize, column: usize) -> CustomResult<()> {
+        let target_cell = &mut self.field_rows[row as usize].field_cells[column as usize];
+        let target_cell_feature = &target_cell.feature;
+        let mut target_cell_status = &mut target_cell.status;
+
+        target_cell_feature.effect(&mut self.circle, &mut target_cell_status)?;
+        Ok(())
     }
 
     pub fn renew_each(&mut self, renderer: &mut render::Canvas<video::Window>) {
@@ -139,14 +127,13 @@ impl Field  {
         }
     }
 
-    pub fn get_current_cell_type(&self) -> Result<CellType, GameOverError> {
+    pub fn get_current_cell_position(&self) -> Result<(usize, usize), GameOverError> {
         let (row, column) = self.get_next_cell_index();
 
         if self.is_outof_frame(row, column) {
             return Err(GameOverError::OtherError("out of the frame"));
         }
-
-        Ok(self.field_rows[row as usize].field_cells[column as usize].status.cell_type.clone())
+        Ok((row as usize, column as usize))
     }
 
     pub fn is_outof_frame(&self, row: i16, column: i16) -> bool {
