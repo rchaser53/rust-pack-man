@@ -1,9 +1,7 @@
-use std::process;
 use std::fs::File;
 use std::io::prelude::*;
 
 use sdl2::{render, video};
-use sdl2::messagebox::{show_simple_message_box, MESSAGEBOX_INFORMATION};
 
 use constants::{FILE_PATHS};
 use constants::Direction::{East, West, South, North};
@@ -12,6 +10,7 @@ use error_handling::{Result as CustomResult, GameOverError};
 use game_status::{GameStatus};
 use circle::{Circle};
 use game_field::field_row::FieldRow;
+use game_field::game_event_handler::GameEventHandler;
 use enemy::enemy::{Enemy, EnemyCreater};
 
 pub const SCREEN_WIDTH: i16 = 600;
@@ -20,9 +19,6 @@ pub const CELL_WIDTH: i16 = 30;
 pub const CELL_HEIGHT: i16 = 30;
 pub const COLUMUNS_NUMBER: i16 = SCREEN_WIDTH / CELL_WIDTH;
 pub const ROWS_NUMBER: i16 = SCREEN_HEIGHT / CELL_HEIGHT;
-
-const GAME_CLEAR: &'static str = "Game Clear!";
-const HIT_ENEMY: &'static str = "Hit Enemy!";
 
 pub fn read_file(file_name: &str) -> String {
     let mut file = File::open(file_name).expect("file not found");
@@ -73,51 +69,13 @@ impl Field  {
 
     pub fn renew(&mut self, renderer: &mut render::Canvas<video::Window>) -> CustomResult<()> {
         if self.game_status.is_pause { return Ok(()) }
-        self.handle_game_event();
+        GameEventHandler::handle_game_event(&self);
 
         let (row, column) = self.get_current_cell_position()?;
         self.take_action_by_cell(row, column)?;
 
         self.renew_each(renderer);
         Ok(())
-    }
-
-    pub fn handle_game_event(&mut self) -> CustomResult<()> {
-        if self.is_game_clear() {
-            let _ = show_simple_message_box(MESSAGEBOX_INFORMATION, GAME_CLEAR, GAME_CLEAR, None);
-            process::exit(0);
-        }
-
-        if self.is_hit_enemy() {
-            let _ = show_simple_message_box(MESSAGEBOX_INFORMATION, HIT_ENEMY, HIT_ENEMY, None);
-            process::exit(0);
-        }
-
-        Ok(())
-    }
-
-    pub fn is_game_clear(&self) -> bool {
-        let rows = self.field_rows.iter();
-        for row in rows {
-            let cells = row.field_cells.iter();
-            for cell in cells {
-                if cell.status.exist_item { return false }
-            }
-        }
-        true
-    }
-
-    pub fn is_hit_enemy(&self) -> bool {
-        let enemies = self.enemies.iter();
-        for enemy in enemies {
-            let is_x_hit_range = (enemy.status.x - self.circle.x).abs() <= 20;
-            let is_y_hit_range = (enemy.status.y - self.circle.y).abs() <= 20;
-
-            if is_x_hit_range && is_y_hit_range {
-                return true
-            }
-        }
-        false
     }
 
     pub fn take_action_by_cell(&mut self, row: usize, column: usize) -> CustomResult<()> {
