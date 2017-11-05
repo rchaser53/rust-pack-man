@@ -8,7 +8,7 @@ const ENEMY_WIDTH: i16 = 15;
 const ENEMY_HEIGHT: i16 = 15;
 
 pub enum EnemyType {
-  Normal, Chaser, Random
+  Normal, Chaser
 }
 
 pub struct UniqueStatus {
@@ -51,6 +51,7 @@ pub trait EnemyStatusFactory {
 pub struct NormalEnemyStatusFactory {}
 impl EnemyStatusFactory for NormalEnemyStatusFactory {}
 
+#[allow(unused)]
 pub struct ChaserCellStatusFactory {}
 impl EnemyStatusFactory for ChaserCellStatusFactory {
   fn create_unique_staus(&self) -> UniqueStatus {

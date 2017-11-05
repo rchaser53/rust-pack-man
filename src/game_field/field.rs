@@ -67,7 +67,7 @@ impl Field  {
         let row_defs: Vec<&str> = map_config.split('\n').collect();
         let row_defs_length = row_defs.len();
         for row_index in 0..row_defs_length {
-            EnemyCreater::create_enemy(row_defs[row_index], row_index);
+            enemies.append(&mut EnemyCreater::create_enemy(row_defs[row_index], row_index));
         }
 
         enemies
@@ -81,6 +81,7 @@ impl Field  {
         }
 
         self.draw_row(renderer);
+        self.draw_enemies(renderer);
         {
             let current_cell;
             {
@@ -112,6 +113,12 @@ impl Field  {
             for cell in cells {
                 cell.draw(renderer);
             }
+        }
+    }
+
+    pub fn draw_enemies(&mut self, renderer: &mut render::Canvas<video::Window>) {
+        for enemy in &mut self.enemies {
+            enemy.feature.renew(&mut enemy.status, renderer);
         }
     }
 

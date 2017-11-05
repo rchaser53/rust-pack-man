@@ -1,8 +1,7 @@
 use sdl2::gfx::primitives::DrawRenderer;
-use sdl2::{render, video, rect};
+use sdl2::{render, video};
 
 use enemy::enemy_status::{EnemyStatus};
-use constants::{BackgroundColor};
 
 pub trait EnemyAction {
   fn renew(&self, enemy_status: &mut EnemyStatus, renderer: &mut render::Canvas<video::Window>) {
