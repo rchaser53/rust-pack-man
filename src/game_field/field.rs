@@ -69,7 +69,7 @@ impl Field  {
 
     pub fn renew(&mut self, renderer: &mut render::Canvas<video::Window>) -> CustomResult<()> {
         if self.game_status.is_pause { return Ok(()) }
-        GameEventHandler::handle_game_event(&self);
+        let _ = GameEventHandler::handle_game_event(&self);
 
         let (row, column) = self.get_current_cell_position()?;
         self.take_action_by_cell(row, column)?;
@@ -105,7 +105,7 @@ impl Field  {
 
     pub fn renew_enemies(&self, renderer: &mut render::Canvas<video::Window>) {
         for enemy in &self.enemies {
-            enemy.feature.renew(&mut enemy.status.borrow_mut(), renderer);
+            enemy.feature.renew(self, &mut enemy.status.borrow_mut(), renderer);
         }
     }
 
