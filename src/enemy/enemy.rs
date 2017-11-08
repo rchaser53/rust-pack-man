@@ -1,3 +1,4 @@
+use std::cell::RefCell;
 use enemy::enemy_feature::{
   EnemyAction,
   NormalFeature
@@ -9,14 +10,14 @@ use enemy::enemy_status::{
 };
 
 pub struct Enemy {
-  pub status: EnemyStatus,
+  pub status: RefCell<EnemyStatus>,
   pub feature: Box<EnemyAction> 
 }
 
 impl Enemy {
   pub fn new(status: EnemyStatus, feature: Box<EnemyAction>) -> Enemy {
     Enemy {
-      status: status,
+      status: RefCell::new(status),
       feature: feature
     }
   }

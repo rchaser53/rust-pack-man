@@ -81,7 +81,7 @@ impl Field  {
     pub fn take_action_by_cell(&mut self, row: usize, column: usize) -> CustomResult<()> {
         let target_cell = &mut self.field_rows[row as usize].field_cells[column as usize];
         let target_cell_feature = &target_cell.feature;
-        let mut target_cell_status = &mut target_cell.status;
+        let mut target_cell_status = &mut target_cell.status.borrow_mut();
 
         target_cell_feature.effect(&mut self.circle, &mut target_cell_status)?;
         Ok(())
@@ -103,9 +103,9 @@ impl Field  {
         }
     }
 
-    pub fn renew_enemies(&mut self, renderer: &mut render::Canvas<video::Window>) {
-        for enemy in &mut self.enemies {
-            enemy.feature.renew(&mut enemy.status, renderer);
+    pub fn renew_enemies(&self, renderer: &mut render::Canvas<video::Window>) {
+        for enemy in &self.enemies {
+            enemy.feature.renew(&mut enemy.status.borrow_mut(), renderer);
         }
     }
 

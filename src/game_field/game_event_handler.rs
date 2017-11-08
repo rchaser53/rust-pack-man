@@ -31,7 +31,7 @@ impl GameEventHandler {
         for row in rows {
             let cells = row.field_cells.iter();
             for cell in cells {
-                if cell.status.exist_item { return false }
+                if cell.status.borrow().exist_item { return false }
             }
         }
         true
@@ -40,8 +40,8 @@ impl GameEventHandler {
     pub fn is_hit_enemy(circle: &Circle, enemies: &Vec<Enemy>) -> bool {
         let enemies = enemies.iter();
         for enemy in enemies {
-            let is_x_hit_range = (enemy.status.x - circle.x).abs() <= 20;
-            let is_y_hit_range = (enemy.status.y - circle.y).abs() <= 20;
+            let is_x_hit_range = (enemy.status.borrow().x - circle.x).abs() <= 20;
+            let is_y_hit_range = (enemy.status.borrow().y - circle.y).abs() <= 20;
 
             if is_x_hit_range && is_y_hit_range {
                 return true
