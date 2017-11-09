@@ -34,7 +34,8 @@ pub mod game_status;
 pub mod circle;
 
 mod game_field;
-use game_field::field::{Field, SCREEN_WIDTH, SCREEN_HEIGHT};
+use game_field::field::{Field};
+use game_field::position_handler::{SCREEN_WIDTH, SCREEN_HEIGHT};
 
 mod enemy;
 
