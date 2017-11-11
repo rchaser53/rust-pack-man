@@ -69,7 +69,7 @@ impl Field  {
     pub fn renew(&mut self, renderer: &mut render::Canvas<video::Window>) -> CustomResult<()> {
         if self.game_status.is_pause { return Ok(()) }
         let _ = GameEventHandler::handle_game_event(&self);
-        let (row, column) = self.position_handler.get_current_cell_position(self.circle.x, self.circle.y, self.circle.direction)?;
+        let (row, column) = self.position_handler.get_current_cell_position(self.circle.x, self.circle.y, &self.circle.direction)?;
         self.take_action_by_cell(row, column)?;
 
         self.renew_each(renderer);
