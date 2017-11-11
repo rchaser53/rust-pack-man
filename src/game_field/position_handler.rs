@@ -1,3 +1,4 @@
+use constants::Direction;
 use constants::Direction::{East, West, South, North};
 use error_handling::{GameOverError};
 
@@ -21,7 +22,7 @@ impl PositionHandler {
         }
     }
 
-    pub fn get_current_cell_position(&self, x: i16, y: i16, direction: i16) -> Result<(usize, usize), GameOverError> {
+    pub fn get_current_cell_position(&self, x: i16, y: i16, direction: Direction) -> Result<(usize, usize), GameOverError> {
         let (row, column) = self.get_next_cell_index(x, y, direction);
 
         if self.is_outof_frame(row, column) {
@@ -35,16 +36,22 @@ impl PositionHandler {
          || column < 0 || (self.column_number - 1) < column
     }
 
-    pub fn get_next_cell_index(&self, x: i16, y: i16, direction: i16) -> (i16, i16) {
+    pub fn get_target_cell_index(&self, x: i16, y: i16) -> (i16, i16) {
+        let column = (x * COLUMUNS_NUMBER) as f32 / SCREEN_WIDTH as f32;
+        let row = (y * ROWS_NUMBER) as f32 / SCREEN_HEIGHT as f32;
+
+        (column.round() as i16, row.round() as i16)
+    }
+
+    pub fn get_next_cell_index(&self, x: i16, y: i16, direction: Direction) -> (i16, i16) {
         let column: f32 = (x * COLUMUNS_NUMBER) as f32 / SCREEN_WIDTH as f32;
         let row: f32 = (y * ROWS_NUMBER) as f32 / SCREEN_HEIGHT as f32;
 
         match direction {
-            num if num == East.value() => (row as i16, column.round() as i16),
-            num if num == South.value() => (row.round() as i16, column as i16),
-            num if num == West.value() => (row as i16, column.round() as i16 - 1),
-            num if num == North.value() => (row.round() as i16 - 1, column as i16),
-            _ => (column as i16, row as i16)
+            East => (row as i16, column.round() as i16),
+            West => (row as i16, column.round() as i16 - 1),
+            South => (row.round() as i16, column as i16),
+            North => (row.round() as i16 - 1, column as i16)
         }
-    }    
+    }
 }

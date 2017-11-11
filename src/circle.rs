@@ -1,6 +1,7 @@
 use sdl2::gfx::primitives::DrawRenderer;
 use sdl2::{render, pixels, video};
 
+use constants::Direction;
 use constants::BackgroundColor::{White};
 use constants::Direction::{East, West, South, North};
 
@@ -15,7 +16,7 @@ pub struct Circle {
     pub x: i16,
     pub y: i16,
     pub radius: i16,
-    pub direction: i16,
+    pub direction: Direction,
     pub color: pixels::Color,
     pub is_opening_mouth: bool,
     pub is_stoped: bool
@@ -24,7 +25,7 @@ pub struct Circle {
 impl Circle {
     pub fn new() -> Circle {
         Circle {
-            x: INITIAL_X, y: INITIAL_Y, direction: East.value(),
+            x: INITIAL_X, y: INITIAL_Y, direction: East,
             radius: CIRCLE_RADIUS, color: White.value(),
             is_opening_mouth: true, is_stoped: false
         }
@@ -55,13 +56,11 @@ impl Circle {
     }
 
     pub fn move_circle(&mut self) {
-        let direction = self.direction;
-        let (x_amount, y_amount) = match direction {
-            num if num == East.value() => (MOVE_SPEED, 0),
-            num if num == South.value() => (0, MOVE_SPEED),
-            num if num == West.value() => (-MOVE_SPEED, 0),
-            num if num == North.value() => (0, -MOVE_SPEED),
-            _ => (0, 0)
+        let (x_amount, y_amount) = match self.direction {
+            East => (MOVE_SPEED, 0),
+            South => (0, MOVE_SPEED),
+            West => (-MOVE_SPEED, 0),
+            North => (0, -MOVE_SPEED),
         };
         self.x += x_amount;
         self.y += y_amount;
@@ -77,6 +76,6 @@ impl Circle {
 
     pub fn draw(&mut self, renderer: &mut render::Canvas<video::Window>) {
         let _ = renderer.filled_pie(self.x, self.y, CIRCLE_RADIUS,
-                                    self.radius + self.direction, self.direction, self.color);
+                                    self.radius + self.direction.value(), self.direction.value(), self.color);
     }
 }

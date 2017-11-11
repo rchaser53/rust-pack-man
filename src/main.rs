@@ -68,19 +68,19 @@ fn handle_event(events: &mut EventPump, field: &mut Field) {
             },
             Event::KeyDown { keycode: Some(Keycode::Left), ..}
                 | Event::KeyDown { keycode: Some(Keycode::H), ..} => {
-                field.circle.direction = West.value();
+                field.circle.direction = West;
             },
             Event::KeyDown { keycode: Some(Keycode::Right), ..}
                 | Event::KeyDown { keycode: Some(Keycode::L), ..} => {
-                field.circle.direction = East.value();
+                field.circle.direction = East;
             },
             Event::KeyDown { keycode: Some(Keycode::Up), ..}
                 | Event::KeyDown { keycode: Some(Keycode::K), ..} => {
-                field.circle.direction = North.value();
+                field.circle.direction = North;
             },
             Event::KeyDown { keycode: Some(Keycode::Down), ..}
                 | Event::KeyDown { keycode: Some(Keycode::J), ..} => {
-                field.circle.direction = South.value();
+                field.circle.direction = South;
             },
             Event::KeyDown {keycode: Some(Keycode::Space), ..} => {
                 field.game_status.is_pause = !field.game_status.is_pause;
