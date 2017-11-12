@@ -2,7 +2,7 @@ use sdl2::gfx::primitives::DrawRenderer;
 use sdl2::{render, video, rect};
 
 use game_field::cell_status::{CellStatus};
-use circle::{Circle};
+use circle::circle::{Circle};
 use collision_handler::{CollisionFrame};
 use error_handling::{GameOverError};
 use constants::{BackgroundColor};
@@ -25,7 +25,7 @@ pub trait DrawMyself {
 
     #[allow(unused)]
     fn effect(&self, circle: &mut Circle, cell_status: &mut CellStatus) -> Result<(), GameOverError> {
-        circle.is_stoped = false;
+        circle.status.is_stoped = false;
         Ok(())
     }
 }
@@ -51,7 +51,7 @@ impl DrawMyself for BlockFeature {
 pub struct WallFeature {}
 impl DrawMyself for WallFeature {
     fn effect(&self, circle: &mut Circle, cell_status: &mut CellStatus) -> Result<(), GameOverError> {
-        circle.is_stoped = true;
+        circle.status.is_stoped = true;
         Ok(())
     }
 }

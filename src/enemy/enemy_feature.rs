@@ -4,7 +4,7 @@ use rand;
 use rand::Rng;
 
 use game_field::field::Field;
-use circle::Circle;
+use circle::circle::Circle;
 use constants::{Direction, CellType};
 use constants::Direction::{East, West, South, North};
 use constants::CellType::{
@@ -37,22 +37,22 @@ pub trait EnemyAction {
   }
 
   fn calculate_x_moving_distance(&self, circle: &Circle, enemy_status: &mut EnemyStatus) -> i16 {
-    self.get_direction(circle.x, enemy_status.x) * enemy_status.move_speed
+    self.get_direction(circle.status.hitbox.x, enemy_status.x) * enemy_status.move_speed
   }
 
   fn calculate_y_moving_distance(&self, circle: &Circle, enemy_status: &mut EnemyStatus) -> i16 {
-    self.get_direction(circle.y, enemy_status.y) * enemy_status.move_speed
+    self.get_direction(circle.status.hitbox.y, enemy_status.y) * enemy_status.move_speed
   }
 
   fn change_direction(&self, circle: &Circle, enemy_status: &mut EnemyStatus) {
-    if (circle.x - enemy_status.x).abs() < (circle.y - enemy_status.y).abs() {
-      if self.get_direction(circle.y, enemy_status.y) == 1 {
+    if (circle.status.hitbox.x - enemy_status.x).abs() < (circle.status.hitbox.y - enemy_status.y).abs() {
+      if self.get_direction(circle.status.hitbox.y, enemy_status.y) == 1 {
         enemy_status.direction = South;
       } else {
         enemy_status.direction = North;
       }
     } else {
-      if self.get_direction(circle.x, enemy_status.x) == 1 {
+      if self.get_direction(circle.status.hitbox.x, enemy_status.x) == 1 {
         enemy_status.direction = East;
       } else {
         enemy_status.direction = West;
@@ -122,6 +122,8 @@ impl EnemyAction for NormalFeature {
   fn update(&self, field: &Field, enemy_status: &mut EnemyStatus) {
     let circle = &field.circle;
     let (row, column) = self.get_next_index(field, enemy_status);
+
+    // println!("row: {} - column: {} - cell: {:?} ", row, column, field.field_rows[row].field_cells[column].status.borrow().cell_type);
 
     match field.field_rows[row].field_cells[column].status.borrow().cell_type {
       Block => { return; }

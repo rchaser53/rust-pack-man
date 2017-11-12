@@ -38,6 +38,7 @@ impl BackgroundColor {
     }
 }
 
+#[derive(Copy)]
 pub enum Direction {
     East, South, West, North
 }
@@ -50,6 +51,9 @@ impl Direction {
             Direction::North => 270
         }
     }
+}
+impl Clone for Direction {
+    fn clone(&self) -> Direction { *self }
 }
 
 #[derive(Copy)]

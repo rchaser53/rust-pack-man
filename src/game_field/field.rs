@@ -7,7 +7,7 @@ use constants::{FILE_PATHS};
 
 use error_handling::{Result as CustomResult};
 use game_status::{GameStatus};
-use circle::{Circle};
+use circle::circle::{Circle};
 use game_field::field_row::FieldRow;
 use game_field::position_handler::PositionHandler;
 use game_field::game_event_handler::GameEventHandler;
@@ -69,7 +69,9 @@ impl Field  {
     pub fn renew(&mut self, renderer: &mut render::Canvas<video::Window>) -> CustomResult<()> {
         if self.game_status.is_pause { return Ok(()) }
         let _ = GameEventHandler::handle_game_event(&self);
-        let (row, column) = self.position_handler.get_current_cell_position(self.circle.x, self.circle.y, &self.circle.direction)?;
+        let (row, column) = self.position_handler
+                                .get_current_cell_position( self.circle.status.hitbox.x,
+                                                            self.circle.status.hitbox.y, &self.circle.status.direction)?;
         self.take_action_by_cell(row, column)?;
 
         self.renew_each(renderer);
@@ -88,7 +90,7 @@ impl Field  {
     pub fn renew_each(&mut self, renderer: &mut render::Canvas<video::Window>) {
         self.renew_rows(renderer);
         self.renew_enemies(renderer);
-        self.circle.renew(renderer);
+        self.circle.feature.renew(&mut self.circle.status, renderer);
     }
 
     pub fn renew_rows(&self, renderer: &mut render::Canvas<video::Window>) {

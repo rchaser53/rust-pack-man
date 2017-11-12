@@ -23,6 +23,7 @@ use constants::{FILE_PATHS, BackgroundColor, Direction};
 use BackgroundColor::{White, Black};
 use Direction::{East, West, South, North};
 
+pub mod hitbox;
 pub mod mixer_music;
 use mixer_music::{setup_sdl2_mixier, play_bgm};
 
@@ -68,19 +69,19 @@ fn handle_event(events: &mut EventPump, field: &mut Field) {
             },
             Event::KeyDown { keycode: Some(Keycode::Left), ..}
                 | Event::KeyDown { keycode: Some(Keycode::H), ..} => {
-                field.circle.direction = West;
+                field.circle.status.direction = West;
             },
             Event::KeyDown { keycode: Some(Keycode::Right), ..}
                 | Event::KeyDown { keycode: Some(Keycode::L), ..} => {
-                field.circle.direction = East;
+                field.circle.status.direction = East;
             },
             Event::KeyDown { keycode: Some(Keycode::Up), ..}
                 | Event::KeyDown { keycode: Some(Keycode::K), ..} => {
-                field.circle.direction = North;
+                field.circle.status.direction = North;
             },
             Event::KeyDown { keycode: Some(Keycode::Down), ..}
                 | Event::KeyDown { keycode: Some(Keycode::J), ..} => {
-                field.circle.direction = South;
+                field.circle.status.direction = South;
             },
             Event::KeyDown {keycode: Some(Keycode::Space), ..} => {
                 field.game_status.is_pause = !field.game_status.is_pause;
