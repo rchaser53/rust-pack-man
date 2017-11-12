@@ -12,11 +12,6 @@ use constants::CellType::{
 };
 use enemy::enemy_status::{EnemyStatus};
 
-pub struct CellInformation {
-  cell_type: CellType,
-  direction: Direction
-}
-
 pub trait EnemyAction {
   fn renew(&self, field: &Field, enemy_status: &mut EnemyStatus, renderer: &mut render::Canvas<video::Window>) {
     self.update(&field, enemy_status);
@@ -69,25 +64,12 @@ pub trait EnemyAction {
     -1
   }
 
-  fn is_correct_index(&self, row: i16, column: i16, field: &Field) -> bool {
-    if row < 0 || column < 0 {
-      return false;
-    }
-
+  fn is_correct_index(&self, row: usize, column: usize, field: &Field) -> bool {
     if field.field_rows.len() <= row as usize || field.field_rows[0].field_cells.len() <= column as usize {
       return false;
     }
 
     true
-  }
-
-  fn change_index_by_direction(&self, row: i16, column: i16, direction: &Direction) -> (i16, i16) {
-    match *direction {
-      East => (row, column + 1),
-      South => (row + 1, column),
-      West => (row - 1, column),
-      North => (row, column - 1)
-    }
   }
 
   fn convert_next_direction(&self, direction: Direction) -> Direction {
@@ -100,22 +82,11 @@ pub trait EnemyAction {
   }
 
   fn get_next_index(&self, field: &Field, enemy_status: &mut EnemyStatus) -> (usize, usize) {
-    let mut continuous_flag = true;
-    let mut return_row = 0;
-    let mut return_column = 0;
     let circle = &field.circle;
-
     self.change_direction(circle, enemy_status);
-    while continuous_flag {
-      let (row, column) = field.position_handler
-                              .get_target_cell_index(enemy_status.hitbox.x, enemy_status.hitbox.y);
-      let (next_row, next_column) = self.change_index_by_direction(row, column, &enemy_status.direction);
-      return_row = next_row;
-      return_column = next_column;
-      continuous_flag = !self.is_correct_index(return_row, return_column, &field);
-    }
+    let (row, column) = field.position_handler.get_next_cell_index(&enemy_status.hitbox, &enemy_status.direction);
 
-    (return_row as usize, return_column as usize)
+    (row as usize, column as usize)
   }
 
 }
@@ -141,4 +112,4 @@ impl EnemyAction for NormalFeature {
     }
   }
 }
-    // println!("row: {} - column: {} - cell: {:?} ", row, column, field.field_rows[row].field_cells[column].status.borrow().cell_type);
+      // println!("row: {} - column: {} - cell: {:?} ", row, column, field.field_rows[row as usize].field_cells[column as usize].status.borrow().cell_type);

@@ -107,7 +107,7 @@ fn main() {
 
     setup_sdl2_mixier(2);
     let music = play_bgm(Path::new(FILE_PATHS.get("BGM_PATH").unwrap()));
-    let _ = music.play(1);
+    // let _ = music.play(1);
 
     let mut field = Field::new();
 

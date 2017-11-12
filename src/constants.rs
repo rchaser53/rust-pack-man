@@ -56,7 +56,7 @@ impl Clone for Direction {
     fn clone(&self) -> Direction { *self }
 }
 
-#[derive(Copy)]
+#[derive(Copy, Debug)]
 pub enum CellType {
     Normal, Block, Damage, Wall, Item
 }

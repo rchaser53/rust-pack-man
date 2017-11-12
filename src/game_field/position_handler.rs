@@ -37,12 +37,6 @@ impl PositionHandler {
          || column < 0 || (self.column_number - 1) < column
     }
 
-    pub fn get_target_cell_index(&self, x: i16, y: i16) -> (i16, i16) {
-        let row = (y * ROWS_NUMBER) as f32 / SCREEN_HEIGHT as f32;
-        let column = (x * COLUMUNS_NUMBER) as f32 / SCREEN_WIDTH as f32;
-        (row.round() as i16, column.round() as i16)
-    }
-
     pub fn get_next_cell_index(&self, hitbox: &Hitbox, direction: &Direction) -> (i16, i16) {
         let column = (hitbox.x * COLUMUNS_NUMBER) as f32 / SCREEN_WIDTH as f32;
         let row = (hitbox.y * ROWS_NUMBER) as f32 / SCREEN_HEIGHT as f32;
