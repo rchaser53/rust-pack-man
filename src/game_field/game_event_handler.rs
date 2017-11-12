@@ -40,8 +40,8 @@ impl GameEventHandler {
     pub fn is_hit_enemy(circle: &Circle, enemies: &Vec<Enemy>) -> bool {
         let enemies = enemies.iter();
         for enemy in enemies {
-            let is_x_hit_range = (enemy.status.borrow().x - circle.status.hitbox.x).abs() <= 20;
-            let is_y_hit_range = (enemy.status.borrow().y - circle.status.hitbox.y).abs() <= 20;
+            let is_x_hit_range = (enemy.status.borrow().hitbox.x - circle.status.hitbox.x).abs() <= 20;
+            let is_y_hit_range = (enemy.status.borrow().hitbox.y - circle.status.hitbox.y).abs() <= 20;
 
             if is_x_hit_range && is_y_hit_range {
                 return true

@@ -4,6 +4,7 @@ use constants::Direction::{East};
 use constants::BackgroundColor::{
   Black, White
 };
+use hitbox::Hitbox;
 
 const MOVE_SPEED: i16 = 1;
 const ENEMY_WIDTH: i16 = 15;
@@ -19,10 +20,7 @@ pub struct UniqueStatus {
 }
 
 pub struct EnemyStatus {
-  pub width: i16,
-  pub height: i16,
-  pub x: i16,
-  pub y: i16,
+  pub hitbox: Hitbox,
   pub move_speed: i16,
   pub direction: Direction,
   pub enemy_type: EnemyType,
@@ -32,11 +30,15 @@ pub struct EnemyStatus {
 pub trait EnemyStatusFactory {
   fn create_enemy_status(&self, row_index: usize, cell_index: usize) -> EnemyStatus {
     let unique_status = self.create_unique_staus();
-    EnemyStatus {
+    let hitbox = Hitbox {
       width: ENEMY_WIDTH,
       height: ENEMY_HEIGHT,
       x: (cell_index * ENEMY_WIDTH as usize) as i16,
       y: (row_index * ENEMY_HEIGHT as usize) as i16,
+    };
+
+    EnemyStatus {
+      hitbox: hitbox,
       move_speed: MOVE_SPEED,
       direction: East,
       background_color: unique_status.background_color,

@@ -26,7 +26,8 @@ pub trait EnemyAction {
   fn update(&self, field: &Field, enemy_status: &mut EnemyStatus) {}
 
   fn draw(&self, enemy_status: &EnemyStatus, renderer: &mut render::Canvas<video::Window>) {
-    let _ = renderer.filled_ellipse(enemy_status.x, enemy_status.y, enemy_status.width, enemy_status.height, enemy_status.background_color);
+    let _ = renderer.filled_ellipse(enemy_status.hitbox.x, enemy_status.hitbox.y,
+                                    enemy_status.hitbox.width, enemy_status.hitbox.height, enemy_status.background_color);
   }
 
   fn get_direction(&self, circle_position: i16, enemy_position: i16) -> i16 {
@@ -37,22 +38,23 @@ pub trait EnemyAction {
   }
 
   fn calculate_x_moving_distance(&self, circle: &Circle, enemy_status: &mut EnemyStatus) -> i16 {
-    self.get_direction(circle.status.hitbox.x, enemy_status.x) * enemy_status.move_speed
+    self.get_direction(circle.status.hitbox.x, enemy_status.hitbox.x) * enemy_status.move_speed
   }
 
   fn calculate_y_moving_distance(&self, circle: &Circle, enemy_status: &mut EnemyStatus) -> i16 {
-    self.get_direction(circle.status.hitbox.y, enemy_status.y) * enemy_status.move_speed
+    self.get_direction(circle.status.hitbox.y, enemy_status.hitbox.y) * enemy_status.move_speed
   }
 
   fn change_direction(&self, circle: &Circle, enemy_status: &mut EnemyStatus) {
-    if (circle.status.hitbox.x - enemy_status.x).abs() < (circle.status.hitbox.y - enemy_status.y).abs() {
-      if self.get_direction(circle.status.hitbox.y, enemy_status.y) == 1 {
+    if (circle.status.hitbox.x - enemy_status.hitbox.x).abs()
+          < (circle.status.hitbox.y - enemy_status.hitbox.y).abs() {
+      if self.get_direction(circle.status.hitbox.y, enemy_status.hitbox.y) == 1 {
         enemy_status.direction = South;
       } else {
         enemy_status.direction = North;
       }
     } else {
-      if self.get_direction(circle.status.hitbox.x, enemy_status.x) == 1 {
+      if self.get_direction(circle.status.hitbox.x, enemy_status.hitbox.x) == 1 {
         enemy_status.direction = East;
       } else {
         enemy_status.direction = West;
@@ -105,7 +107,8 @@ pub trait EnemyAction {
 
     self.change_direction(circle, enemy_status);
     while continuous_flag {
-      let (row, column) = field.position_handler.get_target_cell_index(enemy_status.x, enemy_status.y);
+      let (row, column) = field.position_handler
+                              .get_target_cell_index(enemy_status.hitbox.x, enemy_status.hitbox.y);
       let (next_row, next_column) = self.change_index_by_direction(row, column, &enemy_status.direction);
       return_row = next_row;
       return_column = next_column;
@@ -123,8 +126,6 @@ impl EnemyAction for NormalFeature {
     let circle = &field.circle;
     let (row, column) = self.get_next_index(field, enemy_status);
 
-    // println!("row: {} - column: {} - cell: {:?} ", row, column, field.field_rows[row].field_cells[column].status.borrow().cell_type);
-
     match field.field_rows[row].field_cells[column].status.borrow().cell_type {
       Block => { return; }
       _ => {}
@@ -132,11 +133,12 @@ impl EnemyAction for NormalFeature {
 
     match enemy_status.direction {
       East | West => {
-        enemy_status.x += self.calculate_x_moving_distance(circle, enemy_status);
+        enemy_status.hitbox.x += self.calculate_x_moving_distance(circle, enemy_status);
       },
       _ => {
-        enemy_status.y += self.calculate_y_moving_distance(circle, enemy_status);
+        enemy_status.hitbox.y += self.calculate_y_moving_distance(circle, enemy_status);
       }
     }
   }
 }
+    // println!("row: {} - column: {} - cell: {:?} ", row, column, field.field_rows[row].field_cells[column].status.borrow().cell_type);
