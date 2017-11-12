@@ -1,6 +1,7 @@
 use constants::Direction;
 use constants::Direction::{East, West, South, North};
 use error_handling::{GameOverError};
+use hitbox::Hitbox;
 
 pub const SCREEN_WIDTH: i16 = 600;
 pub const SCREEN_HEIGHT: i16 = 600;
@@ -22,8 +23,8 @@ impl PositionHandler {
         }
     }
 
-    pub fn get_current_cell_position(&self, x: i16, y: i16, direction: &Direction) -> Result<(usize, usize), GameOverError> {
-        let (row, column) = self.get_next_cell_index(x, y, direction);
+    pub fn get_current_cell_position(&self, hitbox: &Hitbox, direction: &Direction) -> Result<(usize, usize), GameOverError> {
+        let (row, column) = self.get_next_cell_index(hitbox, direction);
 
         if self.is_outof_frame(row, column) {
             return Err(GameOverError::OtherError("out of the frame"));
@@ -42,14 +43,20 @@ impl PositionHandler {
         (row.round() as i16, column.round() as i16)
     }
 
-    pub fn get_next_cell_index(&self, x: i16, y: i16, direction: &Direction) -> (i16, i16) {
-        let column: f32 = (x * COLUMUNS_NUMBER) as f32 / SCREEN_WIDTH as f32;
-        let row: f32 = (y * ROWS_NUMBER) as f32 / SCREEN_HEIGHT as f32;
+    pub fn get_next_cell_index(&self, hitbox: &Hitbox, direction: &Direction) -> (i16, i16) {
+        let column = (hitbox.x * COLUMUNS_NUMBER) as f32 / SCREEN_WIDTH as f32;
+        let row = (hitbox.y * ROWS_NUMBER) as f32 / SCREEN_HEIGHT as f32;
 
         match *direction {
-            East => (row as i16, column.round() as i16),
+            East => {
+                let column = (hitbox.x * COLUMUNS_NUMBER + hitbox.width) as f32 / SCREEN_WIDTH as f32;
+                (row as i16, column.round() as i16)
+            },
             West => (row as i16, column.round() as i16 - 1),
-            South => (row.round() as i16, column as i16),
+            South => {
+                let row = (hitbox.y * ROWS_NUMBER + hitbox.height ) as f32 / SCREEN_HEIGHT as f32;
+                (row.round() as i16, column as i16)
+            },
             North => (row.round() as i16 - 1, column as i16)
         }
     }

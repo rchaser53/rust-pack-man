@@ -70,8 +70,7 @@ impl Field  {
         if self.game_status.is_pause { return Ok(()) }
         let _ = GameEventHandler::handle_game_event(&self);
         let (row, column) = self.position_handler
-                                .get_current_cell_position( self.circle.status.hitbox.x,
-                                                            self.circle.status.hitbox.y, &self.circle.status.direction)?;
+                                .get_current_cell_position(&self.circle.status.hitbox, &self.circle.status.direction)?;
         self.take_action_by_cell(row, column)?;
 
         self.renew_each(renderer);
