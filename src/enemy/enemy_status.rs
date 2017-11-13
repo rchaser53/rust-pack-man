@@ -24,7 +24,8 @@ pub struct EnemyStatus {
   pub move_speed: i16,
   pub direction: Direction,
   pub enemy_type: EnemyType,
-  pub background_color: Color
+  pub background_color: Color,
+  pub move_count: i16
 }
 
 pub trait EnemyStatusFactory {
@@ -34,7 +35,7 @@ pub trait EnemyStatusFactory {
       width: ENEMY_WIDTH,
       height: ENEMY_HEIGHT,
       x: (cell_index * ENEMY_WIDTH as usize) as i16,
-      y: (row_index * ENEMY_HEIGHT as usize) as i16,
+      y: (row_index * ENEMY_HEIGHT as usize) as i16
     };
 
     EnemyStatus {
@@ -42,7 +43,8 @@ pub trait EnemyStatusFactory {
       move_speed: MOVE_SPEED,
       direction: East,
       background_color: unique_status.background_color,
-      enemy_type: unique_status.enemy_type
+      enemy_type: unique_status.enemy_type,
+      move_count: 1
     }
   }
 

@@ -1,7 +1,5 @@
 use sdl2::gfx::primitives::DrawRenderer;
 use sdl2::{render, video};
-use rand;
-use rand::Rng;
 
 use game_field::field::Field;
 use circle::circle::Circle;
@@ -11,6 +9,8 @@ use constants::CellType::{
   Normal, Block, Damage, Wall, Item
 };
 use enemy::enemy_status::{EnemyStatus};
+
+pub const REACTION_RATE: i16 = 10;
 
 pub trait EnemyAction {
   fn renew(&self, field: &Field, enemy_status: &mut EnemyStatus, renderer: &mut render::Canvas<video::Window>) {
@@ -57,38 +57,22 @@ pub trait EnemyAction {
     }
   }
 
-  fn get_random_sign(&self) -> i16 {
-    if rand::thread_rng().gen::<bool>() {
-      return 1
-    }
-    -1
-  }
-
-  fn is_correct_index(&self, row: usize, column: usize, field: &Field) -> bool {
-    if field.field_rows.len() <= row as usize || field.field_rows[0].field_cells.len() <= column as usize {
-      return false;
-    }
-
-    true
-  }
-
-  fn convert_next_direction(&self, direction: Direction) -> Direction {
-    match direction {
-      East => South,
-      South => West,
-      West => North,
-      North => East
-    }
-  }
-
   fn get_next_index(&self, field: &Field, enemy_status: &mut EnemyStatus) -> (usize, usize) {
-    let circle = &field.circle;
-    self.change_direction(circle, enemy_status);
     let (row, column) = field.position_handler.get_next_cell_index(&enemy_status.hitbox, &enemy_status.direction);
 
     (row as usize, column as usize)
   }
 
+  fn should_change_direction(&self, field: &Field, row: usize, column: usize) -> bool {
+    match self.get_cell_type(field, row, column) {
+      Block => true,
+      _ => false
+    }
+  }
+
+  fn get_cell_type(&self, field: &Field, row: usize, column: usize) -> CellType {
+    field.field_rows[row].field_cells[column].status.borrow().cell_type
+  }
 }
 
 pub struct NormalFeature {}
@@ -97,19 +81,24 @@ impl EnemyAction for NormalFeature {
     let circle = &field.circle;
     let (row, column) = self.get_next_index(field, enemy_status);
 
-    match field.field_rows[row].field_cells[column].status.borrow().cell_type {
-      Block => { return; }
-      _ => {}
-    };
+    if enemy_status.move_count < REACTION_RATE {
+      enemy_status.move_count += 1;
+    } else {
+      self.change_direction(circle, enemy_status);
+      enemy_status.move_count = 1;
+    }
+
+    if self.should_change_direction(field, row, column) {
+      return;
+    }
 
     match enemy_status.direction {
-      East | West => {
-        enemy_status.hitbox.x += self.calculate_x_moving_distance(circle, enemy_status);
-      },
-      _ => {
-        enemy_status.hitbox.y += self.calculate_y_moving_distance(circle, enemy_status);
-      }
+      East => { enemy_status.hitbox.x += enemy_status.move_speed; },
+      West => { enemy_status.hitbox.x -= enemy_status.move_speed; },
+      North => { enemy_status.hitbox.y -= enemy_status.move_speed; },
+      South => { enemy_status.hitbox.y += enemy_status.move_speed; }
     }
   }
 }
-      // println!("row: {} - column: {} - cell: {:?} ", row, column, field.field_rows[row as usize].field_cells[column as usize].status.borrow().cell_type);
+
+  // println!("row: {} - column: {} - cell: {:?} ", row, column, field.field_rows[row as usize].field_cells[column as usize].status.borrow().cell_type);
