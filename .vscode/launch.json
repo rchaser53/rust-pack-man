@@ -8,9 +8,13 @@
       "type": "lldb",
       "request": "launch",
       "name": "Debug",
-      "program": "${workspaceRoot}/<your program>",
-      "args": [],
-      "cwd": "${workspaceRoot}"
+      "sourceLanguages": [
+          "rust"
+      ],
+      "preLaunchTask": "cargo build",
+      "internalConsoleOptions": "openOnSessionStart",
+      "program": "${workspaceRoot}/target/debug/rust_pack_man",
+      "args": []
     }
   ]
 }
