@@ -4,3 +4,10 @@ rust:
   - beta
   - nightly
 cache: cargo
+
+script:
+  - cargo test
+  - cargo build
+
+notifications:
+  email: false
