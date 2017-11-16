@@ -11,8 +11,8 @@ pub const COLUMUNS_NUMBER: i16 = SCREEN_WIDTH / CELL_WIDTH;
 pub const ROWS_NUMBER: i16 = SCREEN_HEIGHT / CELL_HEIGHT;
 
 pub struct PositionHandler {
-    row_number: i16,
-    column_number: i16
+    pub row_number: i16,
+    pub column_number: i16
 }
 
 impl PositionHandler {
@@ -23,8 +23,14 @@ impl PositionHandler {
         }
     }
 
-    pub fn get_current_cell_position(&self, hitbox: &Hitbox, direction: &Direction) -> Result<(usize, usize), GameOverError> {
-        let (row, column) = self.get_next_cell_index(hitbox, direction);
+    pub fn get_current_cell_position(&self, hitbox: &Hitbox) -> (usize, usize) {
+        let column = (hitbox.x * COLUMUNS_NUMBER) as f32 / SCREEN_WIDTH as f32;
+        let row = (hitbox.y * ROWS_NUMBER) as f32 / SCREEN_HEIGHT as f32;
+        (row as usize, column as usize)
+    }
+
+    pub fn get_next_cell_position(&self, hitbox: &Hitbox, direction: &Direction) -> Result<(usize, usize), GameOverError> {
+        let (row, column) = self.get_next_cell_index_from_direction(hitbox, direction);
 
         if self.is_outof_frame(row, column) {
             return Err(GameOverError::OtherError("out of the frame"));
@@ -37,7 +43,7 @@ impl PositionHandler {
          || column < 0 || (self.column_number - 1) < column
     }
 
-    pub fn get_next_cell_index(&self, hitbox: &Hitbox, direction: &Direction) -> (i16, i16) {
+    pub fn get_next_cell_index_from_direction(&self, hitbox: &Hitbox, direction: &Direction) -> (i16, i16) {
         let column = (hitbox.x * COLUMUNS_NUMBER) as f32 / SCREEN_WIDTH as f32;
         let row = (hitbox.y * ROWS_NUMBER) as f32 / SCREEN_HEIGHT as f32;
 

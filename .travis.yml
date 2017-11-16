@@ -1,14 +1,11 @@
 language: rust
 rust:
   - stable
-matrix:
-  include:
-    - os: linux
-      dist: trusty
-      sudo: required
-    - os: osx
+os:
+  - osx
 cache:
   - cargo
+  - build
 
 install:
   - wget https://www.libsdl.org/release/SDL2-2.0.5.tar.gz -O sdl2.tar.gz

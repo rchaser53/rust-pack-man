@@ -58,7 +58,7 @@ pub trait EnemyAction {
   }
 
   fn get_next_index(&self, field: &Field, enemy_status: &mut EnemyStatus) -> (usize, usize) {
-    let (row, column) = field.position_handler.get_next_cell_index(&enemy_status.hitbox, &enemy_status.direction);
+    let (row, column) = field.position_handler.get_next_cell_index_from_direction(&enemy_status.hitbox, &enemy_status.direction);
 
     (row as usize, column as usize)
   }
