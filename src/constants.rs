@@ -4,7 +4,7 @@ use std::collections::HashMap;
 lazy_static! {
   pub static ref FILE_PATHS: HashMap<&'static str, &'static str> = {
     let mut map = HashMap::new();
-    map.insert("BGM_PATH", "assets/musics/nyan.mp3");
+    map.insert("BGM_PATH", "assets/musics/loop1.wav");
     map.insert("HIT_EFFECT_PATH", "assets/musics/sine.wav");
 
     #[cfg(target_os = "emscripten")]
