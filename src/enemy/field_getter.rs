@@ -7,25 +7,27 @@ use constants::CellType::{
 };
 
 pub struct SearchField {
-  search_row: Vec<SearchRow>
+  pub search_row: Vec<SearchRow>
 }
 
 #[derive(Debug)]
 pub struct SearchRow {
-  cell_types: Vec<CellType>
+  pub cell_types: Vec<CellType>
 }
 
 pub struct FieldGetter {}
 impl FieldGetter {
-  pub fn get_search_field(field: &Field, enemy_status: EnemyStatus) -> SearchField {
+  pub fn get_search_field(field: &Field, enemy_status: &EnemyStatus) -> SearchField {
     let (row, column) = field.position_handler.get_current_cell_position(&enemy_status.hitbox);
+    println!("{} {}", row, column);
     let mut row_vec: Vec<SearchRow> = Vec::new();
     let seed_indexs: [i16; 5] = [-2, -1, 0, 1, 2];
 
     for seed_index in seed_indexs.into_iter() {
       if 0 < (row as i16 + seed_index)
           && (row as i16 + seed_index) < field.position_handler.row_number {
-        row_vec.push(FieldGetter::get_seach_row(&field, row, column));
+        let row_index = seed_index + row as i16;
+        row_vec.push(FieldGetter::get_seach_row(&field, row_index as usize, column));
       } else {
         let mut cell_vec: Vec<CellType> = Vec::new();
         for _ in 0..field.position_handler.row_number {
@@ -47,7 +49,8 @@ impl FieldGetter {
     for seed_index in seed_indexs.into_iter() {
       if 0 < (column as i16 + seed_index)
           && (column as i16 + seed_index) < field.position_handler.column_number {
-        cell_vec.push(field.field_rows[row].field_cells[column].status.borrow().cell_type);
+        let column_index = seed_index + column as i16;
+        cell_vec.push(field.field_rows[row].field_cells[column_index as usize].status.borrow().cell_type);
       } else {
         cell_vec.push(Wall);
       }
