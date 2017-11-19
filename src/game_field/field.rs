@@ -11,6 +11,7 @@ use circle::circle::{Circle};
 use game_field::field_row::FieldRow;
 use game_field::position_handler::PositionHandler;
 use game_field::game_event_handler::GameEventHandler;
+use game_field::position_handler::{CELL_WIDTH, CELL_HEIGHT};
 use enemy::enemy::{Enemy, EnemyCreater};
 
 pub fn read_file(file_name: &str) -> String {
@@ -22,12 +23,18 @@ pub fn read_file(file_name: &str) -> String {
     contents
 }
 
+pub struct FieldMetadata {
+    pub cell_width: i16,
+    pub cell_height: i16
+}
+
 pub struct Field {
     pub field_rows: Vec<FieldRow>,
     pub enemies: Vec<Enemy>,
     pub circle: Circle,
     pub game_status: GameStatus,
-    pub position_handler: PositionHandler
+    pub position_handler: PositionHandler,
+    pub metadata: FieldMetadata
 }
 
 impl Field  {
@@ -42,7 +49,10 @@ impl Field  {
             enemies: Field::create_enemies(&map_config),
             circle: Circle::new(),
             game_status: GameStatus::new(),
-            position_handler: PositionHandler::new(row_number, column_number)
+            position_handler: PositionHandler::new(row_number, column_number),
+            metadata: FieldMetadata {
+                cell_width: CELL_WIDTH, cell_height: CELL_HEIGHT
+            }
         }
     }
 

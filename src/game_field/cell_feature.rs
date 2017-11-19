@@ -35,6 +35,7 @@ impl DrawMyself for NormalFeature {}
 
 #[allow(unused)]
 pub struct DamageFeature {}
+#[allow(unused)]
 impl DrawMyself for DamageFeature {
     fn effect(&self, circle: &mut Circle, cell_status: &mut CellStatus) -> Result<(), GameOverError> {
         Err(CollisionFrame::hit_enemy())
@@ -42,6 +43,7 @@ impl DrawMyself for DamageFeature {
 }
 
 pub struct BlockFeature {}
+#[allow(unused)]
 impl DrawMyself for BlockFeature {
     fn effect(&self, circle: &mut Circle, cell_status: &mut CellStatus) -> Result<(), GameOverError> {
         Err(CollisionFrame::hit_enemy())
@@ -49,6 +51,7 @@ impl DrawMyself for BlockFeature {
 }
 
 pub struct WallFeature {}
+#[allow(unused)]
 impl DrawMyself for WallFeature {
     fn effect(&self, circle: &mut Circle, cell_status: &mut CellStatus) -> Result<(), GameOverError> {
         circle.status.is_stoped = true;
