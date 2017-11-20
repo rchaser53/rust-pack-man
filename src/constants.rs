@@ -62,4 +62,5 @@ pub enum CellType {
 }
 impl Clone for CellType {
     fn clone(&self) -> CellType { *self }
-}
+}pub const CELL_WIDTH: i16 = 30;
+pub const CELL_HEIGHT: i16 = 30;

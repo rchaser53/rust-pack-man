@@ -3,7 +3,7 @@ use std::io::prelude::*;
 
 use sdl2::{render, video};
 
-use constants::{FILE_PATHS};
+use constants::{FILE_PATHS, CELL_WIDTH, CELL_HEIGHT};
 
 use error_handling::{Result as CustomResult};
 use game_status::{GameStatus};
@@ -11,7 +11,6 @@ use circle::circle::{Circle};
 use game_field::field_row::FieldRow;
 use game_field::position_handler::PositionHandler;
 use game_field::game_event_handler::GameEventHandler;
-use game_field::position_handler::{CELL_WIDTH, CELL_HEIGHT};
 use enemy::enemy::{Enemy, EnemyCreater};
 
 pub fn read_file(file_name: &str) -> String {

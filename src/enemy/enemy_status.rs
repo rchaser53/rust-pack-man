@@ -1,5 +1,5 @@
 use sdl2::pixels::Color;
-use constants::Direction;
+use constants::{Direction, CELL_WIDTH, CELL_HEIGHT};
 use constants::Direction::{East};
 use constants::BackgroundColor::{
   Black, White
@@ -34,8 +34,8 @@ pub trait EnemyStatusFactory {
     let hitbox = Hitbox {
       width: ENEMY_WIDTH,
       height: ENEMY_HEIGHT,
-      x: (cell_index * ENEMY_WIDTH as usize) as i16,
-      y: (row_index * ENEMY_HEIGHT as usize) as i16
+      x: (cell_index * CELL_WIDTH as usize) as i16,
+      y: (row_index * CELL_HEIGHT as usize) as i16
     };
 
     EnemyStatus {

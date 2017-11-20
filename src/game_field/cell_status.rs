@@ -1,7 +1,6 @@
 use sdl2::pixels::Color;
 
-use game_field::position_handler::{CELL_WIDTH, CELL_HEIGHT};
-use constants::{CellType};
+use constants::{CellType, CELL_WIDTH, CELL_HEIGHT};
 use constants::CellType::{
   Normal, Block, Damage, Wall, Item
 };

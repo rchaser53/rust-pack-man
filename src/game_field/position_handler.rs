@@ -1,12 +1,10 @@
-use constants::Direction;
+use constants::{Direction, CELL_WIDTH, CELL_HEIGHT};
 use constants::Direction::{East, West, South, North};
 use error_handling::{GameOverError};
 use hitbox::Hitbox;
 
 pub const SCREEN_WIDTH: i16 = 600;
 pub const SCREEN_HEIGHT: i16 = 600;
-pub const CELL_WIDTH: i16 = 30;
-pub const CELL_HEIGHT: i16 = 30;
 pub const COLUMUNS_NUMBER: i16 = SCREEN_WIDTH / CELL_WIDTH;
 pub const ROWS_NUMBER: i16 = SCREEN_HEIGHT / CELL_HEIGHT;
 
