@@ -21,9 +21,18 @@ impl PositionHandler {
         }
     }
 
-    pub fn get_current_cell_position(&self, hitbox: &Hitbox) -> (usize, usize) {
-        let column = (hitbox.x * COLUMUNS_NUMBER) as f32 / SCREEN_WIDTH as f32;
-        let row = (hitbox.y * ROWS_NUMBER) as f32 / SCREEN_HEIGHT as f32;
+    pub fn get_a_bit_next_position(&self, hitbox: &Hitbox, direction: &Direction) -> (usize, usize) {
+        match *direction {
+            East => self.get_current_cell_position(hitbox.x + hitbox.width, hitbox.y),
+            West => self.get_current_cell_position(hitbox.x, hitbox.y),
+            South => self.get_current_cell_position(hitbox.x, hitbox.y + hitbox.height),
+            North => self.get_current_cell_position(hitbox.x, hitbox.y)
+        }
+    }
+
+    pub fn get_current_cell_position(&self, x: i16, y: i16) -> (usize, usize) {
+        let column = (x * COLUMUNS_NUMBER) as f32 / SCREEN_WIDTH as f32;
+        let row = (y * ROWS_NUMBER) as f32 / SCREEN_HEIGHT as f32;
         (row as usize, column as usize)
     }
 

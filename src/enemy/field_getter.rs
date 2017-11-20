@@ -18,8 +18,7 @@ pub struct SearchRow {
 pub struct FieldGetter {}
 impl FieldGetter {
   pub fn get_search_field(field: &Field, enemy_status: &EnemyStatus) -> SearchField {
-    let (row, column) = field.position_handler.get_current_cell_position(&enemy_status.hitbox);
-    println!("{} {}", row, column);
+    let (row, column) = field.position_handler.get_a_bit_next_position(&enemy_status.hitbox, &enemy_status.direction);
     let mut row_vec: Vec<SearchRow> = Vec::new();
     let seed_indexs: [i16; 5] = [-2, -1, 0, 1, 2];
 

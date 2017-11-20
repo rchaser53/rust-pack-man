@@ -3,11 +3,13 @@ use sdl2::{render, video};
 
 use game_field::field::{Field, FieldMetadata};
 use circle::circle::Circle;
+use constants::{CellType, Direction};
 use constants::Direction::{East, West, South, North};
 use constants::CellType::{
   Block, Wall
 };
 use enemy::enemy_status::{EnemyStatus};
+use enemy::field_getter::{FieldGetter};
 
 pub trait EnemyAction {
   fn renew(&self, field: &Field, enemy_status: &mut EnemyStatus, renderer: &mut render::Canvas<video::Window>) {
@@ -38,26 +40,35 @@ pub trait EnemyAction {
     self.get_direction(circle.status.hitbox.y, enemy_status.hitbox.y) * enemy_status.move_speed
   }
 
-  fn change_direction(&self, circle: &Circle, enemy_status: &mut EnemyStatus) {
-    if (circle.status.hitbox.x - enemy_status.hitbox.x).abs()
-          < (circle.status.hitbox.y - enemy_status.hitbox.y).abs() {
-      if self.get_direction(circle.status.hitbox.y, enemy_status.hitbox.y) == 1 {
-        enemy_status.direction = South;
+  fn change_direction(&self, field: &Field, enemy_status: &mut EnemyStatus) {
+    let hitbox = &field.circle.status.hitbox;
+    let search_field = FieldGetter::get_search_field(field, enemy_status);
+    if (hitbox.x - enemy_status.hitbox.x).abs()
+          < (hitbox.y - enemy_status.hitbox.y).abs() {
+      if self.get_direction(hitbox.y, enemy_status.hitbox.y) == 1 {
+        self.avoid_wall(search_field.search_row[3].cell_types[2], South, enemy_status);
       } else {
-        enemy_status.direction = North;
+        self.avoid_wall(search_field.search_row[1].cell_types[2], North, enemy_status);
       }
     } else {
-      if self.get_direction(circle.status.hitbox.x, enemy_status.hitbox.x) == 1 {
-        enemy_status.direction = East;
+      if self.get_direction(hitbox.x, enemy_status.hitbox.x) == 1 {
+        self.avoid_wall(search_field.search_row[2].cell_types[3], East, enemy_status);
       } else {
-        enemy_status.direction = West;
+        self.avoid_wall(search_field.search_row[2].cell_types[1], West, enemy_status);
       }
+    }
+  }
+
+  fn avoid_wall(&self, cell_type: CellType, direction: Direction, enemy_status: &mut EnemyStatus) {
+    if cell_type == Block || cell_type == Wall {
+      enemy_status.direction = direction.clockwise();
+    } else {
+      enemy_status.direction = direction;
     }
   }
 
   fn get_next_index(&self, field: &Field, enemy_status: &mut EnemyStatus) -> (usize, usize) {
     let (row, column) = field.position_handler.get_next_cell_index_from_direction(&enemy_status.hitbox, &enemy_status.direction);
-
     (row as usize, column as usize)
   }
 
@@ -98,11 +109,7 @@ pub trait EnemyAction {
 pub struct NormalFeature {}
 impl EnemyAction for NormalFeature {
   fn update(&self, field: &Field, enemy_status: &mut EnemyStatus) {
-    self.initialize_movecount(&field.metadata, enemy_status);
-
-    if enemy_status.move_count == 0 {
-      self.change_direction(&field.circle, enemy_status);
-    }
+    self.change_direction(&field, enemy_status);
 
     let (row, column) = self.get_next_index(field, enemy_status);
     if self.should_stop_moving(field, row, column) {

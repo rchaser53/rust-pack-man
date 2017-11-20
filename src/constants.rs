@@ -51,16 +51,36 @@ impl Direction {
             Direction::North => 270
         }
     }
+
+    pub fn opposite(&self) -> Direction {
+        match *self {
+            Direction::East => Direction::West,
+            Direction::South => Direction::North,
+            Direction::West => Direction::East,
+            Direction::North => Direction::South
+        }
+    }
+
+    pub fn clockwise(&self) -> Direction {
+        match *self {
+            Direction::East => Direction::South,
+            Direction::South => Direction::West,
+            Direction::West => Direction::North,
+            Direction::North => Direction::East
+        }
+    }
 }
 impl Clone for Direction {
     fn clone(&self) -> Direction { *self }
 }
 
-#[derive(Copy, Debug)]
+#[derive(Copy, Debug, PartialEq)]
 pub enum CellType {
     Normal, Block, Damage, Wall, Item
 }
 impl Clone for CellType {
     fn clone(&self) -> CellType { *self }
-}pub const CELL_WIDTH: i16 = 30;
+}
+
+pub const CELL_WIDTH: i16 = 30;
 pub const CELL_HEIGHT: i16 = 30;
