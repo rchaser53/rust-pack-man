@@ -73,8 +73,7 @@ pub trait EnemyAction {
   }
 
   fn should_stop_moving(&self, field: &Field, row: usize, column: usize) -> bool {
-    let cell_type = field.field_rows[row].field_cells[column].status.borrow().cell_type;
-    match cell_type {
+    match field.get_cell_type(row, column) {
       Block | Wall => true,
       _ => false
     }

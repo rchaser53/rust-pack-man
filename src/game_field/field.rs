@@ -3,7 +3,7 @@ use std::io::prelude::*;
 
 use sdl2::{render, video};
 
-use constants::{FILE_PATHS, CELL_WIDTH, CELL_HEIGHT};
+use constants::{FILE_PATHS, CELL_WIDTH, CELL_HEIGHT, CellType};
 
 use error_handling::{Result as CustomResult};
 use game_status::{GameStatus};
@@ -115,5 +115,9 @@ impl Field  {
         for enemy in &self.enemies {
             enemy.feature.renew(self, &mut enemy.status.borrow_mut(), renderer);
         }
+    }
+
+    pub fn get_cell_type(&self, row: usize, column: usize) -> CellType {
+        self.field_rows[row].field_cells[column].status.borrow().cell_type
     }
 }

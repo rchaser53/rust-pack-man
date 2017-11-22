@@ -49,7 +49,7 @@ impl FieldGetter {
       if 0 < (column as i16 + seed_index)
           && (column as i16 + seed_index) < field.position_handler.column_number {
         let column_index = seed_index + column as i16;
-        cell_vec.push(field.field_rows[row].field_cells[column_index as usize].status.borrow().cell_type);
+        cell_vec.push(field.get_cell_type(row, column_index as usize));
       } else {
         cell_vec.push(Wall);
       }
