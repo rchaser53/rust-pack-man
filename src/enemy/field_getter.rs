@@ -1,7 +1,11 @@
 use game_field::field::Field;
 
 use enemy::enemy_status::{EnemyStatus};
-use constants::CellType;
+use hitbox::Hitbox;
+use constants::{CellType, Direction};
+use constants::Direction::{
+  East, South, West, North
+};
 use constants::CellType::{
   Normal, Block, Damage, Wall, Item
 };
@@ -55,6 +59,32 @@ impl FieldGetter {
       }
     }
     SearchRow { cell_types: cell_vec }
+  }
+
+  pub fn get_distance_from_enemy_to_circle(field: &Field, enemy_hit_box: &Hitbox, circle_hit_box: &Hitbox) -> (i16, i16) {
+    let (enemy_row, enemy_column) = field.position_handler.get_current_cell_position(enemy_hit_box.x, enemy_hit_box.y);
+    let (circle_row, circle_column) = field.position_handler.get_current_cell_position(circle_hit_box.x, circle_hit_box.y);
+
+    (enemy_row as i16 - circle_row as i16, enemy_column as i16 - circle_column as i16)
+  }
+
+  pub fn should_go_y(field: &Field, enemy_hit_box: &Hitbox, circle_hit_box: &Hitbox) -> bool {
+    let (row, column) = FieldGetter::get_distance_from_enemy_to_circle(field, enemy_hit_box, circle_hit_box);
+
+    let (enemy_row, enemy_column) = field.position_handler.get_current_cell_position(enemy_hit_box.x, enemy_hit_box.y);
+    if row.abs() <= column.abs() {
+      for index in 0..column {
+        let cell_type = field.get_cell_type(enemy_row, (enemy_column as i16 - index) as usize);
+        if cell_type == Block && cell_type == Wall { return true; }
+      }
+      return false
+    }
+
+    for index in 0..row {
+      let cell_type = field.get_cell_type((enemy_row as i16 - index) as usize, enemy_column);
+      if cell_type == Block && cell_type == Wall { return false; }
+    }
+    true
   }
 }
 

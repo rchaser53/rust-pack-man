@@ -40,11 +40,14 @@ pub trait EnemyAction {
     self.get_direction(circle.status.hitbox.y, enemy_status.hitbox.y) * enemy_status.move_speed
   }
 
+  fn should_go_y(&self, field: &Field, enemy_status: &mut EnemyStatus) -> bool {
+    FieldGetter::should_go_y(field, &enemy_status.hitbox, &field.circle.status.hitbox)
+  }
+
   fn change_direction(&self, field: &Field, enemy_status: &mut EnemyStatus) {
     let hitbox = &field.circle.status.hitbox;
     let search_field = FieldGetter::get_search_field(field, enemy_status);
-    if (hitbox.x - enemy_status.hitbox.x).abs()
-          < (hitbox.y - enemy_status.hitbox.y).abs() {
+    if self.should_go_y(field, enemy_status) {
       if self.get_direction(hitbox.y, enemy_status.hitbox.y) == 1 {
         self.avoid_wall(search_field.search_row[3].cell_types[2], South, enemy_status);
       } else {
