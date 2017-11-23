@@ -1,26 +1,26 @@
 use std::process;
 
 use sdl2::messagebox::{show_simple_message_box, MESSAGEBOX_INFORMATION};
-use error_handling::{Result as CustomResult};
+// use error_handling::{Result as CustomResult};
 use circle::circle::{Circle};
 use enemy::enemy::{Enemy};
+use error_handling::{GameOverError};
+use collision_handler::{CollisionFrame};
 use game_field::field_row::FieldRow;
 use game_field::field::Field;
 
 const GAME_CLEAR: &'static str = "Game Clear!";
-const HIT_ENEMY: &'static str = "Hit Enemy!";
 
 pub struct GameEventHandler {}
 impl GameEventHandler {
-    pub fn handle_game_event(field: &Field) -> CustomResult<()> {
+    pub fn handle_game_event(field: &Field) -> Result<(), GameOverError> {
         if GameEventHandler::is_game_clear(&field.field_rows) {
             let _ = show_simple_message_box(MESSAGEBOX_INFORMATION, GAME_CLEAR, GAME_CLEAR, None);
             process::exit(0);
         }
 
         if GameEventHandler::is_hit_enemy(&field.circle, &field.enemies) {
-            let _ = show_simple_message_box(MESSAGEBOX_INFORMATION, HIT_ENEMY, HIT_ENEMY, None);
-            process::exit(0);
+            return Err(CollisionFrame::hit_enemy());
         }
 
         Ok(())

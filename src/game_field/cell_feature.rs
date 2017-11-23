@@ -46,7 +46,7 @@ pub struct BlockFeature {}
 #[allow(unused)]
 impl DrawMyself for BlockFeature {
     fn effect(&self, circle: &mut Circle, cell_status: &mut CellStatus) -> Result<(), GameOverError> {
-        Err(CollisionFrame::hit_enemy())
+        Err(CollisionFrame::hit_wall())
     }
 }
 

@@ -116,7 +116,9 @@ fn main() {
         handle_event(&mut events, &mut field);
 
         canvas.setup_draw_background();
-        let _ = field.renew(&mut canvas).map_err(|err| println!("{}", err));
+        let _ = field.renew(&mut canvas).map_err(|err| {
+            println!("{}", err)
+        });
         canvas.present();
     };
 

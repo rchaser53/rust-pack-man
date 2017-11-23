@@ -5,12 +5,19 @@ use std::{fmt, process, result};
 
 #[derive(Debug)]
 pub enum GameOverError {
-    OtherError(&'static str)
+    OtherError(&'static str),
+    HitEnemy(&'static str)
 }
 impl fmt::Display for GameOverError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
-            GameOverError::OtherError(ref e) => write!(f, "{}", e.to_string()),
+            GameOverError::OtherError(ref e) => {
+                write!(f, "{}", e.to_string())
+            },
+            GameOverError::HitEnemy(e) => {
+                show_message("title", &e.to_string());
+                process::exit(1);
+            }
         }
     }
 }
@@ -18,6 +25,7 @@ impl Error for GameOverError {
     fn description(&self) -> &str {
         match *self {
             GameOverError::OtherError(error_message) => error_message,
+            GameOverError::HitEnemy(error_message) => error_message,
         }
     }
     fn cause(&self) -> Option<&Error> { None }
@@ -58,10 +66,7 @@ impl fmt::Display for CustomError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result<> {
         match *self {
             CustomError::ParseWindowBuildError(_) => write!(f, "nya-n"),
-            CustomError::ParseGameOverError(ref e) => {
-                show_message("title", e.description());
-                process::exit(1);
-            },
+            CustomError::ParseGameOverError(_) => { process::exit(1); },
             CustomError::ParseString(ref e) => panic!("{}", e),
         }
     }
