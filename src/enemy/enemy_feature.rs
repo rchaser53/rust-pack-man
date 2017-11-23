@@ -2,7 +2,7 @@ use sdl2::gfx::primitives::DrawRenderer;
 use sdl2::{render, video};
 
 use game_field::field::{Field, FieldMetadata};
-use circle::circle::Circle;
+use hitbox::Hitbox;
 use constants::{CellType, Direction};
 use constants::Direction::{East, West, South, North};
 use constants::CellType::{
@@ -25,46 +25,45 @@ pub trait EnemyAction {
                                     enemy_status.hitbox.width, enemy_status.hitbox.height, enemy_status.background_color);
   }
 
-  fn get_direction(&self, circle_position: i16, enemy_position: i16) -> i16 {
-    if 0 < (circle_position - enemy_position) {
-      return 1
-    }
-    -1
-  }
-
-  fn calculate_x_moving_distance(&self, circle: &Circle, enemy_status: &mut EnemyStatus) -> i16 {
-    self.get_direction(circle.status.hitbox.x, enemy_status.hitbox.x) * enemy_status.move_speed
-  }
-
-  fn calculate_y_moving_distance(&self, circle: &Circle, enemy_status: &mut EnemyStatus) -> i16 {
-    self.get_direction(circle.status.hitbox.y, enemy_status.hitbox.y) * enemy_status.move_speed
+  fn should_increment(&self, circle_position: i16, enemy_position: i16) -> bool {
+    0 < (circle_position - enemy_position)
   }
 
   fn should_go_y(&self, field: &Field, enemy_status: &mut EnemyStatus) -> bool {
     FieldGetter::should_go_y(field, &enemy_status.hitbox, &field.circle.status.hitbox)
   }
 
+  fn get_directions_to_circle(&self, circle_hitbox: &Hitbox, enemy_hitbox: &Hitbox) -> (Direction, Direction) {
+    let x_direction = if self.should_increment(circle_hitbox.x, enemy_hitbox.x)
+                      { East } else { West };
+    let y_direction = if self.should_increment(circle_hitbox.y, enemy_hitbox.y)
+                      { South } else { North };
+    (x_direction, y_direction)
+  }
+
   fn change_direction(&self, field: &Field, enemy_status: &mut EnemyStatus) {
-    let hitbox = &field.circle.status.hitbox;
+    let circle_hitbox = &field.circle.status.hitbox;
     let search_field = FieldGetter::get_search_field(field, enemy_status);
+    let (x_direction, y_direction) = self.get_directions_to_circle(circle_hitbox, &enemy_status.hitbox);
+
     if self.should_go_y(field, enemy_status) {
-      if self.get_direction(hitbox.y, enemy_status.hitbox.y) == 1 {
-        self.avoid_wall(search_field.search_row[3].cell_types[2], South, enemy_status);
+      if self.should_increment(circle_hitbox.y, enemy_status.hitbox.y) {
+        self.avoid_wall(search_field.search_row[3].cell_types[2], enemy_status, South, x_direction);
       } else {
-        self.avoid_wall(search_field.search_row[1].cell_types[2], North, enemy_status);
+        self.avoid_wall(search_field.search_row[1].cell_types[2], enemy_status, North, x_direction);
       }
     } else {
-      if self.get_direction(hitbox.x, enemy_status.hitbox.x) == 1 {
-        self.avoid_wall(search_field.search_row[2].cell_types[3], East, enemy_status);
+      if self.should_increment(circle_hitbox.x, enemy_status.hitbox.x) {
+        self.avoid_wall(search_field.search_row[2].cell_types[3], enemy_status, East, y_direction);
       } else {
-        self.avoid_wall(search_field.search_row[2].cell_types[1], West, enemy_status);
+        self.avoid_wall(search_field.search_row[2].cell_types[1], enemy_status, West, y_direction);
       }
     }
   }
 
-  fn avoid_wall(&self, cell_type: CellType, direction: Direction, enemy_status: &mut EnemyStatus) {
+  fn avoid_wall(&self, cell_type: CellType, enemy_status: &mut EnemyStatus, direction: Direction, other_direction: Direction) {
     if cell_type == Block || cell_type == Wall {
-      enemy_status.direction = direction.clockwise();
+      enemy_status.direction = other_direction;
     } else {
       enemy_status.direction = direction;
     }

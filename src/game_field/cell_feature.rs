@@ -67,6 +67,7 @@ impl DrawMyself for ItemFeature {
                     (cell_status.y + CELL_PADDING) as i16, ITEM_RADIUS, BackgroundColor::Yellow.value());
     }
 
+    #[allow(unused)]
     fn effect(&self, circle: &mut Circle, cell_status: &mut CellStatus) -> Result<(), GameOverError> {
         cell_status.exist_item = false;
         Ok(())

@@ -2,12 +2,9 @@ use game_field::field::Field;
 
 use enemy::enemy_status::{EnemyStatus};
 use hitbox::Hitbox;
-use constants::{CellType, Direction};
-use constants::Direction::{
-  East, South, West, North
-};
+use constants::{CellType};
 use constants::CellType::{
-  Normal, Block, Damage, Wall, Item
+  Block, Wall
 };
 
 pub struct SearchField {
