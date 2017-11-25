@@ -1,4 +1,4 @@
-use constants::{Direction, CELL_WIDTH, CELL_HEIGHT};
+use constants::{Direction, CELL_WIDTH, CELL_HEIGHT, OUT_OF_THE_FRAME};
 use constants::Direction::{East, West, South, North};
 use error_handling::{GameOverError};
 use hitbox::Hitbox;
@@ -40,7 +40,7 @@ impl PositionHandler {
         let (row, column) = self.get_next_cell_index_from_direction(hitbox, direction);
 
         if self.is_outof_frame(row, column) {
-            return Err(GameOverError::OtherError("out of the frame"));
+            return Err(GameOverError::OtherError(OUT_OF_THE_FRAME));
         }
         Ok((row as usize, column as usize))
     }

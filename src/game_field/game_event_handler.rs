@@ -1,15 +1,12 @@
 use std::process;
 
 use sdl2::messagebox::{show_simple_message_box, MESSAGEBOX_INFORMATION};
-// use error_handling::{Result as CustomResult};
 use circle::circle::{Circle};
 use enemy::enemy::{Enemy};
 use error_handling::{GameOverError};
-use collision_handler::{CollisionFrame};
+use constants::{HIT_ENEMY_MESSAGE, GAME_CLEAR};
 use game_field::field_row::FieldRow;
 use game_field::field::Field;
-
-const GAME_CLEAR: &'static str = "Game Clear!";
 
 pub struct GameEventHandler {}
 impl GameEventHandler {
@@ -20,7 +17,7 @@ impl GameEventHandler {
         }
 
         if GameEventHandler::is_hit_enemy(&field.circle, &field.enemies) {
-            return Err(CollisionFrame::hit_enemy());
+            return Err(GameOverError::HitEnemy(HIT_ENEMY_MESSAGE));
         }
 
         Ok(())

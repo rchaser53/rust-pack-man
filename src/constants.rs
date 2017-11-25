@@ -16,6 +16,11 @@ lazy_static! {
   };
 }
 
+pub const HIT_ENEMY_MESSAGE: &'static str = "Hit the Enemy!";
+pub const HIT_ENEMY_WALL: &'static str = "Hit the Wall!";
+pub const OUT_OF_THE_FRAME: &'static str = "Out of the Frame!";
+pub const GAME_CLEAR: &'static str = "Game Clear!";
+
 enum_from_primitive! {
     #[derive(Copy)]
     pub enum BackgroundColor {

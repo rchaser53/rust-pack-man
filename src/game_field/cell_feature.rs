@@ -3,9 +3,8 @@ use sdl2::{render, video, rect};
 
 use game_field::cell_status::{CellStatus};
 use circle::circle::{Circle};
-use collision_handler::{CollisionFrame};
 use error_handling::{GameOverError};
-use constants::{BackgroundColor};
+use constants::{BackgroundColor, HIT_ENEMY_MESSAGE, HIT_ENEMY_WALL};
 
 const ITEM_RADIUS: i16 = 10;
 const CELL_PADDING: i32 = 15;
@@ -38,7 +37,7 @@ pub struct DamageFeature {}
 #[allow(unused)]
 impl DrawMyself for DamageFeature {
     fn effect(&self, circle: &mut Circle, cell_status: &mut CellStatus) -> Result<(), GameOverError> {
-        Err(CollisionFrame::hit_enemy())
+        Err(GameOverError::HitEnemy(HIT_ENEMY_MESSAGE))
     }
 }
 
@@ -46,7 +45,7 @@ pub struct BlockFeature {}
 #[allow(unused)]
 impl DrawMyself for BlockFeature {
     fn effect(&self, circle: &mut Circle, cell_status: &mut CellStatus) -> Result<(), GameOverError> {
-        Err(CollisionFrame::hit_wall())
+        Err(GameOverError::OtherError(HIT_ENEMY_WALL))
     }
 }
 

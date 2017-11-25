@@ -30,7 +30,6 @@ use mixer_music::{setup_sdl2_mixier, play_bgm};
 pub mod error_handling;
 use error_handling::{Result, CustomError};
 
-pub mod collision_handler;
 pub mod game_status;
 pub mod circle;
 
