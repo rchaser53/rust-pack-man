@@ -1,7 +1,10 @@
+use std::{path, fmt, process, result};
+
 use sdl2::video::WindowBuildError;
 use sdl2::messagebox::{show_simple_message_box, MESSAGEBOX_ERROR};
 
-use std::{fmt, process, result};
+use constants::FILE_PATHS;
+use mixer_music::play_sound_effect;
 
 #[derive(Debug)]
 pub enum GameOverError {
@@ -11,13 +14,8 @@ pub enum GameOverError {
 impl fmt::Display for GameOverError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
-            GameOverError::OtherError(ref e) => {
-                write!(f, "{}", e.to_string())
-            },
-            GameOverError::HitEnemy(e) => {
-                show_message("title", &e.to_string());
-                process::exit(1);
-            }
+            GameOverError::OtherError(ref e) => write!(f, "{}", e.to_string()),
+            GameOverError::HitEnemy(e) => write!(f, "{}", e.to_string())
         }
     }
 }
@@ -25,7 +23,7 @@ impl Error for GameOverError {
     fn description(&self) -> &str {
         match *self {
             GameOverError::OtherError(error_message) => error_message,
-            GameOverError::HitEnemy(error_message) => error_message,
+            GameOverError::HitEnemy(error_message) => error_message
         }
     }
     fn cause(&self) -> Option<&Error> { None }
@@ -46,6 +44,8 @@ pub enum CustomError {
 
 impl From<GameOverError> for CustomError {
     fn from(err: GameOverError) -> CustomError {
+        play_sound_effect(path::Path::new(FILE_PATHS.get("HIT_EFFECT_PATH").unwrap()));
+        show_message("title", err.description());
         CustomError::ParseGameOverError(err)
     }
 }
