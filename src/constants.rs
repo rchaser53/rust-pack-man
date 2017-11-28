@@ -1,10 +1,11 @@
 use sdl2::pixels::Color;
 use std::collections::HashMap;
 
+pub static BGM_BUFFER: &[u8] = include_bytes!("../assets/musics/loop1.wav");
+
 lazy_static! {
   pub static ref FILE_PATHS: HashMap<&'static str, &'static str> = {
     let mut map = HashMap::new();
-    map.insert("BGM_PATH", "assets/musics/loop1.wav");
     map.insert("HIT_EFFECT_PATH", "assets/musics/sine.wav");
 
     #[cfg(target_os = "emscripten")]

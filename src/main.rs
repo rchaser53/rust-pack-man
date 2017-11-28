@@ -10,22 +10,21 @@ extern crate rand;
 pub mod emscripten;
 
 use std::{thread, process, time};
-use std::path::Path;
 
 use sdl2::video;
 use sdl2::EventPump;
+use sdl2::mixer::{Music};
 use sdl2::event::{Event};
 use sdl2::keyboard::Keycode;
-// use sdl2::image::{LoadTexture};
 
 pub mod constants;
-use constants::{FILE_PATHS, BackgroundColor, Direction};
+use constants::{BGM_BUFFER, BackgroundColor, Direction};
 use BackgroundColor::{White, Black};
 use Direction::{East, West, South, North};
 
 pub mod hitbox;
 pub mod mixer_music;
-use mixer_music::{setup_sdl2_mixier, play_bgm};
+use mixer_music::{setup_sdl2_mixier};
 
 pub mod error_handling;
 use error_handling::{Result, CustomError};
@@ -105,7 +104,7 @@ fn main() {
                             .unwrap_or_else(|err| panic!("{}", err));
 
     setup_sdl2_mixier(2);
-    let music = play_bgm(Path::new(FILE_PATHS.get("BGM_PATH").unwrap()));
+    let music = Music::from_static_bytes(BGM_BUFFER).unwrap();
     let _ = music.play(1);
 
     let mut field = Field::new();

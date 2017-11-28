@@ -24,12 +24,6 @@
           'sample_map1.txt',
           '/sample_map1.txt',
           true, false);
-      FS.createPreloadedFile(
-          '/',
-          'loop.wav',
-          '/loop.wav',
-          true, false);
-      SDL.rwops = [{ filename: 'loop.wav'}];
     };
     fetch(`${name}.wasm`)
       .then(resp => resp.arrayBuffer())
