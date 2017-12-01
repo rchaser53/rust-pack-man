@@ -127,20 +127,20 @@ mod tests {
   fn get_inside_field() {
     let field = get_field();
     let enemy_status = get_enemy_status(5, 5);
-    FieldGetter::get_search_field(&field, enemy_status);
+    FieldGetter::get_search_field(&field, &enemy_status);
   }
 
   #[test]
   fn get_outside_field_below() {
     let field = get_field();
     let enemy_status = get_enemy_status(1, 5);
-    FieldGetter::get_search_field(&field, enemy_status);
+    FieldGetter::get_search_field(&field, &enemy_status);
   }
 
   #[test]
   fn get_outside_field_over() {
     let field = get_field();
     let enemy_status = get_enemy_status(9, 5);
-    FieldGetter::get_search_field(&field, enemy_status);
+    FieldGetter::get_search_field(&field, &enemy_status);
   }
 }
