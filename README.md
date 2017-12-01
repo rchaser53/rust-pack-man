@@ -1,3 +1,5 @@
+![build_status](https://travis-ci.org/rchaser53/rust_pack_man.svg?branch=master)
+
 <img alt="" src="https://github.com/rchaser53/rust_pack_man/blob/master/packman.gif" width="100%" >
 
 # dependencies
