@@ -2,7 +2,7 @@ use sdl2::pixels::Color;
 use constants::{Direction, CELL_WIDTH, CELL_HEIGHT};
 use constants::Direction::{East};
 use constants::BackgroundColor::{
-  Black, White
+  Black, Red
 };
 use hitbox::Hitbox;
 
@@ -50,7 +50,7 @@ pub trait EnemyStatusFactory {
 
   fn create_unique_staus(&self) -> UniqueStatus {
     UniqueStatus {
-      background_color: White.value(),
+      background_color: Red.value(),
       enemy_type: EnemyType::Normal
     }
   }

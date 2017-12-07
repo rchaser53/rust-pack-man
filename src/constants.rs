@@ -25,7 +25,7 @@ pub const GAME_CLEAR: &'static str = "Game Clear!";
 enum_from_primitive! {
     #[derive(Copy)]
     pub enum BackgroundColor {
-        Black, White, Aqua, Gray, Yellow
+        Black, White, Aqua, Gray, Yellow, Red
     }
 }
 impl Clone for BackgroundColor {
@@ -40,6 +40,7 @@ impl BackgroundColor {
             BackgroundColor::White => Color::RGB(255, 255, 255),
             BackgroundColor::Gray => Color::RGB(200, 200, 200),
             BackgroundColor::Yellow => Color::RGB(255, 155, 0),
+            BackgroundColor::Red => Color::RGB(255, 0, 0)
         }
     }
 }
