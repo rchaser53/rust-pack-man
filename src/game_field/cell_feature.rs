@@ -1,4 +1,3 @@
-use sdl2::gfx::primitives::DrawRenderer;
 use sdl2::{render, video, rect};
 
 use game_field::cell_status::{CellStatus};
@@ -62,8 +61,10 @@ pub struct ItemFeature {}
 impl DrawMyself for ItemFeature {
     fn draw_unique_feature(&self, cell_status: &CellStatus, renderer: &mut render::Canvas<video::Window>) {
         if !cell_status.exist_item { return; }
-        let _ = renderer.filled_circle((cell_status.x + CELL_PADDING) as i16,
-                    (cell_status.y + CELL_PADDING) as i16, ITEM_RADIUS, BackgroundColor::Yellow.value());
+        renderer.set_draw_color(BackgroundColor::Yellow.value());
+
+        let rect = rect::Rect::new(cell_status.x as i32 + CELL_PADDING, cell_status.y  as i32  + CELL_PADDING, ITEM_RADIUS as u32, ITEM_RADIUS as u32);
+        let _ = renderer.fill_rect(rect);
     }
 
     #[allow(unused)]

@@ -1,5 +1,4 @@
-use sdl2::gfx::primitives::DrawRenderer;
-use sdl2::{render, video};
+use sdl2::{render, rect, pixels, video};
 
 use circle::circle_status::CircleStatus;
 use circle::circle::{
@@ -59,8 +58,9 @@ impl CircleFeature {
     }
 
     pub fn draw(&self, circle_status: &mut CircleStatus, renderer: &mut render::Canvas<video::Window>) {
-        let _ = renderer.filled_pie(circle_status.hitbox.x, circle_status.hitbox.y, CIRCLE_RADIUS,
-                                    circle_status.radius + circle_status.direction.value(),
-                                    circle_status.direction.value(), circle_status.color);
+        renderer.set_draw_color(circle_status.color as pixels::Color);
+
+        let rect = rect::Rect::new(circle_status.hitbox.x as i32 - 10, circle_status.hitbox.y  as i32 - 10, 20, 20);
+        let _ = renderer.fill_rect(rect);
     }
 }

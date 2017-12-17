@@ -1,5 +1,4 @@
-use sdl2::gfx::primitives::DrawRenderer;
-use sdl2::{render, video};
+use sdl2::{render, rect, pixels, video};
 
 use game_field::field::{Field, FieldMetadata};
 use hitbox::Hitbox;
@@ -21,8 +20,10 @@ pub trait EnemyAction {
   fn update(&self, field: &Field, enemy_status: &mut EnemyStatus) {}
 
   fn draw(&self, enemy_status: &EnemyStatus, renderer: &mut render::Canvas<video::Window>) {
-    let _ = renderer.filled_ellipse(enemy_status.hitbox.x, enemy_status.hitbox.y,
-                                    enemy_status.hitbox.width, enemy_status.hitbox.height, enemy_status.background_color);
+    renderer.set_draw_color(enemy_status.background_color as pixels::Color);
+
+    let rect = rect::Rect::new(enemy_status.hitbox.x as i32 - 10, enemy_status.hitbox.y  as i32 - 10, 20, 20);
+    let _ = renderer.fill_rect(rect);
   }
 
   fn should_increment(&self, circle_position: i16, enemy_position: i16) -> bool {
@@ -120,5 +121,3 @@ impl EnemyAction for NormalFeature {
     self.move_enemy(enemy_status);
   }
 }
-
-  // println!("row: {} - column: {} - cell: {:?} ", row, column, field.field_rows[row as usize].field_cells[column as usize].status.borrow().cell_type);
